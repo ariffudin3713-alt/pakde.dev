@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pasar UMKM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5EFE3;
+    --card: #FFFBF3;
+    --ink: #1B2620;
+    --muted: #5C6B61;
+    --pine: #1E5B4A;
+    --pine-deep: #163F34;
+    --saffron: #E8A33D;
+    --line: #D9CFBC;
+    --danger: #9B3D2E;
+    --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #142019;
+      --card: #1C2B23;
+      --ink: #F1EADB;
+      --muted: #A9B8AD;
+      --pine: #7FC4AA;
+      --pine-deep: #5FAE92;
+      --saffron: #E8A33D;
+      --line: #33463B;
+      --danger: #E08A78;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #142019;
+    --card: #1C2B23;
+    --ink: #F1EADB;
+    --muted: #A9B8AD;
+    --pine: #7FC4AA;
+    --pine-deep: #5FAE92;
+    --line: #33463B;
+    --danger: #E08A78;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { html { color-scheme: dark; } }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  img { max-width: 100%; }
+  a { color: var(--pine); }
+  :focus-visible { outline: 3px solid var(--saffron); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap { width: min(1120px, 92%); margin-inline: auto; }
+
+  /* Header */
+  header.top {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  header.top .wrap { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 1.35rem; color: var(--ink); text-decoration: none; }
+  .brand span { color: var(--pine); }
+  nav a { color: var(--ink); text-decoration: none; font-weight: 500; margin-left: 20px; font-size: .95rem; }
+  nav a:hover { color: var(--pine); }
+
+  /* Hero */
+  .hero { padding: clamp(56px, 10vw, 120px) 0 clamp(48px, 7vw, 88px); }
+  .hero .wrap { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(32px, 5vw, 64px); align-items: end; }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height: .98;
+    letter-spacing: -.02em;
+    margin: 0 0 24px;
+  }
+  .hero p.lead { font-size: 1.12rem; color: var(--muted); max-width: 46ch; margin: 0 0 32px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 46px; padding: 0 22px; border-radius: 999px;
+    border: 1.5px solid var(--pine); background: var(--pine); color: #fff;
+    font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+  }
+  .btn:hover { background: var(--pine-deep); border-color: var(--pine-deep); }
+  .btn.ghost { background: transparent; color: var(--pine); }
+  .btn.ghost:hover { background: color-mix(in srgb, var(--pine) 10%, transparent); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.small { min-height: 36px; padding: 0 14px; font-size: .9rem; }
+  .btn.danger { background: transparent; border-color: var(--danger); color: var(--danger); }
+
+  .steps {
+    background: var(--saffron); color: #1B2620;
+    border-radius: 18px; padding: 28px;
+  }
+  .steps h2 { font-family: var(--display); font-size: 1.4rem; margin: 0 0 14px; }
+  .steps ol { margin: 0; padding-left: 22px; }
+  .steps li { margin-bottom: 10px; }
+  .steps li:last-child { margin-bottom: 0; }
+
+  /* Sections */
+  section.block { padding: clamp(48px, 7vw, 80px) 0; border-top: 1px solid var(--line); }
+  .head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+  h2.title { font-family: var(--display); font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.1; margin: 0; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 6px 0 0; }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 26px; }
+  .search {
+    flex: 1 1 260px; min-height: 46px; border-radius: 999px; border: 1.5px solid var(--line);
+    background: var(--card); color: var(--ink); font: inherit; padding: 0 18px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--line);
+    background: transparent; color: var(--ink); font: inherit; font-size: .9rem; cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .ico { font-size: 2rem; line-height: 1; }
+  .tag { font-size: .8rem; color: var(--muted); font-weight: 600; }
+  .card h3 { font-family: var(--display); font-size: 1.3rem; margin: 2px 0 0; line-height: 1.2; }
+  .card p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .card .actions { margin-top: auto; padding-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .card .actions a, .card .actions button {
+    min-height: 36px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--pine);
+    color: var(--pine); font: inherit; font-size: .9rem; font-weight: 600; text-decoration: none;
+    display: inline-flex; align-items: center; background: transparent; cursor: pointer;
+  }
+  .card .actions a:hover { background: color-mix(in srgb, var(--pine) 10%, transparent); }
+  .card .actions button { border-color: var(--danger); color: var(--danger); }
+
+  .empty {
+    grid-column: 1 / -1; text-align: center; padding: 56px 20px;
+    border: 1.5px dashed var(--line); border-radius: 14px; color: var(--muted);
+  }
+  .empty strong { display: block; color: var(--ink); font-family: var(--display); font-size: 1.3rem; margin-bottom: 6px; }
+
+  /* Form */
+  form.reg { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; max-width: 760px; }
+  form.reg .full { grid-column: 1 / -1; }
+  form.reg label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: .92rem; }
+  form.reg .hint { font-weight: 400; color: var(--muted); font-size: .85rem; }
+  form.reg input, form.reg select, form.reg textarea {
+    font: inherit; font-weight: 400; color: var(--ink); background: var(--card);
+    border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 14px; min-height: 46px;
+  }
+  form.reg textarea { min-height: 110px; resize: vertical; }
+  form.reg fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: contents; }
+  form.reg .actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .notice {
+    border: 1.5px solid var(--line); border-left: 5px solid var(--saffron);
+    background: var(--card); padding: 14px 18px; border-radius: 10px; color: var(--muted);
+    margin-bottom: 22px; max-width: 760px;
+  }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+    background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 999px;
+    font-size: .95rem; opacity: 0; pointer-events: none; transition: opacity .2s; max-width: 90%; text-align: center;
+  }
+  .toast.show { opacity: 1; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 calc(28px + env(safe-area-inset-bottom, 0px)); color: var(--muted); font-size: .9rem; }
+
+  @media (max-width: 760px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    form.reg { grid-template-columns: 1fr; }
+    nav a { margin-left: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .toast { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">Pasar<span>UMKM</span></a>
+    <nav aria-label="Navigasi utama">
+      <a href="#jelajahi">Jelajahi</a>
+      <a href="#daftar">Daftarkan usaha</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Usaha kecil, kabar yang sampai lebih jauh.</h1>
+        <p class="lead">Tampilkan usaha Anda di satu tempat yang dilihat pembeli sekitar. Gratis, tanpa komisi, dan pembeli bisa langsung menghubungi Anda lewat WhatsApp.</p>
+        <div class="btns">
+          <a class="btn" href="#daftar">Daftarkan usaha saya</a>
+          <a class="btn ghost" href="#jelajahi">Lihat usaha lain</a>
+        </div>
+      </div>
+      <aside class="steps" aria-label="Cara kerja">
+        <h2>Cara kerjanya</h2>
+        <ol>
+          <li>Isi formulir pendaftaran usaha.</li>
+          <li>Usaha Anda langsung tampil di daftar.</li>
+          <li>Pembeli menghubungi Anda lewat WhatsApp atau Instagram.</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+
+  <section class="block" id="jelajahi">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <h2 class="title">Jelajahi usaha</h2>
+          <p class="sub">Cari nama usaha, produk, atau kota.</p>
+        </div>
+      </div>
+      <div class="tools">
+        <input class="search" id="q" type="search" placeholder="Cari kopi, batik, keripik, Surakarta…" aria-label="Cari usaha">
+        <div class="chips" id="chips" role="group" aria-label="Filter kategori"></div>
+      </div>
+      <div class="grid" id="grid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="block" id="daftar">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <h2 class="title">Daftarkan usaha Anda</h2>
+          <p class="sub">Data yang Anda isi akan tampil untuk semua pengunjung.</p>
+        </div>
+      </div>
+      <div class="notice" id="notice" hidden></div>
+      <form class="reg" id="form" novalidate>
+        <fieldset id="fs">
+          <label>Nama usaha
+            <input name="nama" required maxlength="80" placeholder="Contoh: Warung Bu Sri">
+          </label>
+          <label>Kategori
+            <select name="kategori" required>
+              <option value="Kuliner">Kuliner</option>
+              <option value="Fashion">Fashion</option>
+              <option value="Kerajinan">Kerajinan</option>
+              <option value="Jasa">Jasa</option>
+              <option value="Pertanian">Pertanian</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </label>
+          <label>Kota atau kecamatan
+            <input name="kota" maxlength="60" placeholder="Contoh: Surakarta">
+          </label>
+          <label>Ikon usaha <span class="hint">Satu emoji, misalnya 🍜 atau 🧵</span>
+            <input name="ikon" maxlength="4" placeholder="🏪">
+          </label>
+          <label class="full">Deskripsi singkat
+            <textarea name="deskripsi" required maxlength="400" placeholder="Apa yang Anda jual, keunggulannya, dan jam buka."></textarea>
+          </label>
+          <label>Nomor WhatsApp
+            <input name="wa" required inputmode="tel" maxlength="20" placeholder="0812xxxxxxx">
+          </label>
+          <label>Instagram <span class="hint">Opsional, tanpa @</span>
+            <input name="ig" maxlength="40" placeholder="namausaha">
+          </label>
+          <div class="full actions">
+            <button class="btn" type="submit" id="submit">Tampilkan usaha saya</button>
+            <span class="hint" id="formHint"></span>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Pasar UMKM. Dibuat untuk mendukung pelaku usaha kecil.</div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var CATS = ["Semua", "Kuliner", "Fashion", "Kerajinan", "Jasa", "Pertanian", "Lainnya"];
+  var state = { items: [], cat: "Semua", query: "" };
+  var db = null, user = null, me = null;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("grid"), chips = $("chips"), q = $("q"), form = $("form"), fs = $("fs");
+  var submitBtn = $("submit"), notice = $("notice"), hint = $("formHint"), toastEl = $("toast");
+
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { toastEl.classList.remove("show"); }, 2800);
+  }
+
+  function waLink(phone) {
+    var d = String(phone || "").replace(/\D/g, "");
+    if (d.indexOf("0") === 0) d = "62" + d.slice(1);
+    return "https://wa.me/" + d;
+  }
+
+  function newId() {
+    return "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  function renderChips() {
+    chips.innerHTML = CATS.map(function (c) {
+      return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === state.cat) + '">' + esc(c) + "</button>";
+    }).join("");
+  }
+
+  function card(x) {
+    var ig = x.ig
+      ? '<a href="https://instagram.com/' + encodeURIComponent(x.ig) + '" target="_blank" rel="noopener">Instagram</a>'
+      : "";
+    var del = (me && x.ownerId === me)
+      ? '<button type="button" data-del="' + esc(x.id) + '">Hapus</button>'
+      : "";
+    return '<article class="card">' +
+      '<div class="ico" aria-hidden="true">' + esc(x.ikon || "🏪") + "</div>" +
+      '<span class="tag">' + esc(x.kategori) + (x.kota ? " • " + esc(x.kota) : "") + "</span>" +
+      "<h3>" + esc(x.nama) + "</h3>" +
+      "<p>" + esc(x.deskripsi) + "</p>" +
+      '<div class="actions">' +
+        '<a href="' + esc(waLink(x.wa)) + '" target="_blank" rel="noopener">WhatsApp</a>' +
+        ig + del +
+      "</div></article>";
+  }
+
+  function render() {
+    var term = state.query.trim().toLowerCase();
+    var list = state.items.filter(function (x) {
+      var catOk = state.cat === "Semua" || x.kategori === state.cat;
+      var hay = [x.nama, x.deskripsi, x.kota, x.kategori].join(" ").toLowerCase();
+      return catOk && (!term || hay.indexOf(term) !== -1);
+    });
+    if (list.length === 0) {
+      grid.innerHTML = state.items.length === 0
+        ? '<div class="empty"><strong>Belum ada usaha yang terdaftar.</strong>Jadilah yang pertama. Daftarkan usaha Anda di bagian bawah halaman.</div>'
+        : '<div class="empty"><strong>Tidak ada usaha yang cocok.</strong>Coba kata kunci lain atau pilih kategori lain.</div>';
+      return;
+    }
+    grid.innerHTML = list.map(card).join("");
+  }
+
+  chips.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-cat]");
+    if (!b) return;
+    state.cat = b.getAttribute("data-cat");
+    renderChips();
+    render();
+  });
+
+  q.addEventListener("input", function () {
+    state.query = q.value;
+    render();
+  });
+
+  grid.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-del]");
+    if (!b || !db) return;
+    if (!confirm("Hapus usaha ini dari daftar?")) return;
+    var id = b.getAttribute("data-del");
+    db.collection("umkm").doc(id).delete()
+      .then(function () { toast("Usaha sudah dihapus."); })
+      .catch(function () { toast("Gagal menghapus. Coba lagi."); });
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!db) { toast("Masuk ke akun Claude untuk mendaftarkan usaha."); return; }
+
+    var f = new FormData(form);
+    var data = {
+      nama: String(f.get("nama") || "").trim(),
+      kategori: String(f.get("kategori") || "Lainnya"),
+      kota: String(f.get("kota") || "").trim(),
+      ikon: String(f.get("ikon") || "").trim() || "🏪",
+      deskripsi: String(f.get("deskripsi") || "").trim(),
+      wa: String(f.get("wa") || "").trim(),
+      ig: String(f.get("ig") || "").trim().replace(/^@+/, "").replace(/\s+/g, ""),
+      ownerId: me || "anon",
+      createdAt: Date.now()
+    };
+
+    if (!data.nama) { hint.textContent = "Nama usaha wajib diisi."; return; }
+    if (!data.deskripsi) { hint.textContent = "Deskripsi singkat wajib diisi."; return; }
+    if (data.wa.replace(/\D/g, "").length < 9) { hint.textContent = "Nomor WhatsApp belum valid."; return; }
+
+    hint.textContent = "";
+    submitBtn.disabled = true;
+    db.collection("umkm").doc(newId()).set(data)
+      .then(function () {
+        form.reset();
+        toast("Usaha Anda sudah tampil di daftar.");
+        document.getElementById("jelajahi").scrollIntoView();
+      })
+      .catch(function () {
+        toast("Gagal menyimpan. Periksa koneksi lalu coba lagi.");
+      })
+      .then(function () { submitBtn.disabled = false; });
+  });
+
+  function setupForm(ok) {
+    fs.disabled = !ok;
+    if (!ok) {
+      notice.hidden = false;
+      notice.textContent = "Pendaftaran belum tersedia. Buka halaman ini saat Anda sudah masuk ke akun Claude agar bisa menyimpan data usaha.";
+    } else {
+      notice.hidden = true;
+    }
+  }
+
+  function subscribe() {
+    db.collection("umkm").orderBy("createdAt", "desc").onSnapshot(
+      function (snap) {
+        state.items = snap.docs.map(function (d) {
+          var v = d.data() || {};
+          v.id = d.id;
+          return v;
+        });
+        render();
+      },
+      function () { toast("Gagal memuat daftar usaha."); }
+    );
+  }
+
+  renderChips();
+  render();
+
+  (async function init() {
+    var c = window.claude;
+    try {
+      db = c ? await c.use("db") : null;
+      user = c ? await c.use("user") : null;
+    } catch (err) {
+      db = null;
+    }
+    try {
+      me = user ? await user.id() : null;
+    } catch (err) {
+      me = null;
+    }
+    setupForm(!!db);
+    if (db) subscribe();
+  })();
+})();
+</script>
+</body>
+</html>

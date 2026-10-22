@@ -1,0 +1,22 @@
+{
+  "name": "pasar-umkm",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pasar UMKM — direktori gratis untuk pelaku usaha kecil. Statis + Vercel Serverless Function dengan Vercel Blob.",
+  "scripts": {
+    "dev:local": "vercel dev",
+    "check": "node scripts/check.cjs",
+    "test:api": "node scripts/smoke.mjs",
+    "test:ui": "node scripts/dom-test.mjs",
+    "deploy": "vercel --prod",
+    "seed": "node scripts/seed.mjs",
+    "cleanup": "node scripts/cleanup-test.mjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.8.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
