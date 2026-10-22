@@ -61,21 +61,42 @@
       <span class="blob blob-1"></span>
       <span class="blob blob-2"></span>
       <span class="blob blob-3"></span>
-      <span class="grid-lines"></span>
+      <span class="dots"></span>
     </div>
 
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <span class="badge reveal" data-reveal>Gratis selamanya · Tanpa komisi</span>
-        <h1 class="reveal" data-reveal>Usaha kecil, kabar yang <span class="grad">sampai lebih jauh</span>.</h1>
+        <span class="hello reveal" data-reveal>
+          <span class="wave" aria-hidden="true">👋</span> Halo, selamat datang!
+        </span>
+
+        <h1 class="reveal" data-reveal>
+          Punya usaha kecil? <span class="grad">Biarkan pembeli yang mencari Anda.</span>
+        </h1>
+
         <p class="lead reveal" data-reveal>
-          Tampilkan usaha Anda di satu tempat yang dilihat pembeli sekitar.
-          Buyers bisa langsung menghubungi Anda lewat WhatsApp — tanpa biaya, tanpa registrasi rumit.
+          Daftar sekali, lalu orang di sekitar Anda bisa menemukan usaha Anda lewat pencarian
+          yang sederhana. Gratis, tanpa komisi, tanpa ribet.
         </p>
-        <div class="btns reveal" data-reveal>
+
+        <form class="hero-search reveal" data-reveal id="heroSearch" role="search">
+          <label class="sr-only" for="heroQ">Cari usaha</label>
+          <span class="hero-search-ico" aria-hidden="true">🔎</span>
+          <input id="heroQ" name="heroQ" type="search" placeholder="Cari kopi, batik, keripik…" autocomplete="off">
+          <button class="btn" type="submit">Cari</button>
+        </form>
+
+        <ul class="hero-perks reveal" data-reveal>
+          <li><span aria-hidden="true">💸</span> Tanpa biaya</li>
+          <li><span aria-hidden="true">⚡</span> Tampil seketika</li>
+          <li><span aria-hidden="true">💬</span> Dihubungi via WhatsApp</li>
+        </ul>
+
+        <div class="btns hero-cta reveal" data-reveal>
           <a class="btn" href="#daftar">Daftarkan usaha saya</a>
-          <a class="btn ghost" href="#jelajahi">Lihat usaha lain</a>
+          <a class="btn ghost" href="#jelajahi">Lihat usaha lainnya</a>
         </div>
+
         <p class="hero-note reveal" data-reveal>
           <span class="pulse" aria-hidden="true"></span>
           <span id="liveCount">Memuat data…</span>
@@ -83,9 +104,9 @@
       </div>
 
       <div class="hero-side reveal" data-reveal>
-        <div class="phone" id="heroCard" aria-hidden="true"></div>
-        <div class="float-chip chip-a"><span aria-hidden="true">💬</span> Pembeli menghubungi via WhatsApp</div>
-        <div class="float-chip chip-b"><span aria-hidden="true">⭐</span> Gratis tanpa komisi</div>
+        <div class="chat-card" id="heroCard" aria-hidden="true"></div>
+        <div class="float-chip chip-a"><span aria-hidden="true">💬</span> Pembeli chat langsung</div>
+        <div class="float-chip chip-b"><span aria-hidden="true">🌿</span> Gratis selamanya</div>
       </div>
     </div>
   </section>
@@ -185,13 +206,25 @@
 
       <div class="chips" id="chips" role="group" aria-label="Filter kategori"></div>
 
-      <p class="result-info" id="resultInfo" aria-live="polite">Memuat daftar usaha…</p>
+      <div class="result-bar">
+        <p class="result-info" id="resultInfo" aria-live="polite">Memuat daftar usaha…</p>
+        <label class="per-page" id="perPageWrap">
+          <span class="sr-only">Jumlah usaha per halaman</span>
+          <select id="perPage" aria-label="Jumlah usaha per halaman">
+            <option value="4">4 per halaman</option>
+            <option value="8">8 per halaman</option>
+            <option value="12">12 per halaman</option>
+          </select>
+        </label>
+      </div>
 
       <div class="grid" id="grid" aria-busy="true"></div>
 
       <div class="more-wrap">
         <button type="button" class="btn ghost" id="moreBtn" hidden>Muat lebih banyak</button>
       </div>
+
+      <nav class="pager" id="pager" aria-label="Navigasi halaman" hidden></nav>
     </div>
   </section>
 
@@ -351,6 +384,22 @@
     <span class="footer-note">Gratis · Tanpa komisi · Data tersimpan aman</span>
   </div>
 </footer>
+
+<!-- Navigasi bawah khusus layar kecil -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Navigasi cepat">
+  <button type="button" class="mnav-item" data-go="#top" data-tab="top">
+    <span class="mnav-ico" aria-hidden="true">🏠</span><span class="mnav-label">Beranda</span>
+  </button>
+  <button type="button" class="mnav-item" data-go="#jelajahi" data-tab="jelajahi">
+    <span class="mnav-ico" aria-hidden="true">🔎</span><span class="mnav-label">Jelajahi</span>
+  </button>
+  <button type="button" class="mnav-item mnav-main" data-go="#daftar" data-tab="daftar">
+    <span class="mnav-ico" aria-hidden="true">➕</span><span class="mnav-label">Daftar</span>
+  </button>
+  <button type="button" class="mnav-item" data-go="#jelajahi" data-tab="favorit" data-fav="1">
+    <span class="mnav-ico" aria-hidden="true">♥</span><span class="mnav-label">Favorit</span>
+  </button>
+</nav>
 
 <!-- Modal detail -->
 <div class="modal" id="modal" hidden>

@@ -103,6 +103,13 @@ function hl(text, term) {
 const CATS = ["Semua", "Kuliner", "Fashion", "Kerajinan", "Jasa", "Pertanian", "Lainnya"];
 const EMOJIS = ["🍜", "☕", "🍰", "🥘", "🍡", "🍚", "🍛", "🥟", "🍫", "🧋", "🧵", "👘", "🧶", "🎨", "🪵", "🧺", "💻", "🔧", "🧹", "🌾", "🥬", "🍯", "🐟", "🐔", "🧀", "🛍️", "📦", "🧴", "🪑", "🏪", "⚡", "💼", "🎓", "🩺", "🎁"];
 
+/* Layar kecil memakai tampilan ber halaman, layar besar memakai daftar panjang. */
+const MOBILE_QUERY = "(max-width: 760px)";
+function isMobile() {
+  try { return !!(window.matchMedia && window.matchMedia(MOBILE_QUERY).matches); }
+  catch (e) { return false; }
+}
+
 const state = {
   items: [],
   cat: "Semua",
@@ -110,14 +117,21 @@ const state = {
   city: "Semua",
   sort: "terbaru",
   onlyFavs: false,
-  page: 1,
+  page: 1,          /* halaman aktif (mode halaman / mobile) */
+  loaded: 12,       /* jumlah item yang sudah dimuat (mode desktop) */
   perPage: 12,
+  mobilePerPage: 4,
   loading: true,
   offline: false,
   lastSync: 0,
   ownerId: store.get("ownerId", null) || createOwnerId(),
   favs: store.get("favs", [])
 };
+
+function resetPaging() {
+  state.page = 1;
+  state.loaded = state.perPage;
+}
 
 function createOwnerId() {
   const id = (crypto && crypto.randomUUID)
@@ -202,6 +216,7 @@ const sortSelect = $("#sort");
 const favToggle = $("#favToggle");
 const resultInfo = $("#resultInfo");
 const moreBtn = $("#moreBtn");
+const pager = $("#pager");
 const noticeEl = $("#notice");
 
 function showNotice(type, message) {
@@ -298,13 +313,21 @@ function renderCityOptions() {
 
 function renderGrid() {
   const list = filteredItems();
-  const shown = list.slice(0, state.page * state.perPage);
+  const mobile = isMobile();
+  const per = mobile ? state.mobilePerPage : state.perPage;
+  const total = list.length;
+  const pageCount = Math.max(1, Math.ceil(total / per));
+  const current = Math.min(Math.max(1, state.page), pageCount);
+  const shown = mobile ? list.slice((current - 1) * per, current * per) : list.slice(0, state.loaded);
+  const suffix = (state.onlyFavs ? " (favorit saja)" : "") +
+    (state.query.trim() ? ` untuk “${esc(state.query.trim())}”` : "");
 
   if (state.loading) {
     grid.innerHTML = skeletonTemplate();
     grid.setAttribute("aria-busy", "true");
     resultInfo.innerHTML = "Memuat daftar usaha…";
     moreBtn.hidden = true;
+    renderPager(per, 1, 1);
     return;
   }
   grid.setAttribute("aria-busy", "false");
@@ -318,6 +341,7 @@ function renderGrid() {
     </div>`;
     resultInfo.innerHTML = "Belum ada usaha terdaftar.";
     moreBtn.hidden = true;
+    renderPager(per, 1, 1);
     return;
   }
 
@@ -330,16 +354,50 @@ function renderGrid() {
     </div>`;
     resultInfo.innerHTML = `Tidak ada hasil untuk filter aktif.`;
     moreBtn.hidden = true;
+    renderPager(per, 1, 1);
     return;
   }
 
   const term = state.query.trim();
   grid.innerHTML = shown.map((item) => cardTemplate(item, term)).join("");
-  const total = list.length;
-  resultInfo.innerHTML = `Menampilkan <b>${shown.length}</b> dari <b>${total}</b> usaha` +
-    (state.onlyFavs ? " (favorit saja)" : "") +
-    (term ? ` untuk “${esc(term)}”` : "");
-  moreBtn.hidden = shown.length >= total;
+  resultInfo.innerHTML = mobile
+    ? `Halaman <b>${current}</b> dari <b>${pageCount}</b> · <b>${total}</b> usaha${suffix}`
+    : `Menampilkan <b>${shown.length}</b> dari <b>${total}</b> usaha${suffix}`;
+  moreBtn.hidden = mobile || shown.length >= total;
+  renderPager(per, pageCount, current);
+}
+
+/* Navigasi halaman — dipakai di layar kecil */
+function pageNumbers(current, pageCount) {
+  if (pageCount <= 7) return Array.from({ length: pageCount }, (_, i) => i + 1);
+  const keep = [1, pageCount, current, current - 1, current + 1]
+    .filter((n) => n >= 1 && n <= pageCount)
+    .sort((a, b) => a - b);
+  const out = [];
+  keep.forEach((n, i) => {
+    if (i > 0 && n - keep[i - 1] > 1) out.push("…");
+    out.push(n);
+  });
+  return out;
+}
+
+function renderPager(per, pageCount, current) {
+  if (!pager) return;
+  if (!isMobile() || pageCount <= 1) {
+    pager.hidden = true;
+    pager.innerHTML = "";
+    return;
+  }
+  pager.hidden = false;
+  const parts = [
+    `<button type="button" data-page="${current - 1}" ${current === 1 ? "disabled" : ""} aria-label="Halaman sebelumnya">‹</button>`
+  ];
+  pageNumbers(current, pageCount).forEach((n) => {
+    if (n === "…") parts.push(`<span class="pager-gap" aria-hidden="true">…</span>`);
+    else parts.push(`<button type="button" data-page="${n}" ${n === current ? 'aria-current="page"' : ""}>${n}</button>`);
+  });
+  parts.push(`<button type="button" data-page="${current + 1}" ${current === pageCount ? "disabled" : ""} aria-label="Halaman berikutnya">›</button>`);
+  pager.innerHTML = parts.join("");
 }
 
 function renderMyList() {
@@ -381,14 +439,14 @@ chipsEl.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-cat]");
   if (!btn) return;
   state.cat = btn.getAttribute("data-cat");
-  state.page = 1;
+  resetPaging();
   renderChips();
   renderGrid();
 });
 
 qInput.addEventListener("input", debounce(() => {
   state.query = qInput.value;
-  state.page = 1;
+  resetPaging();
   $("#clearSearch").hidden = !qInput.value;
   renderGrid();
 }, 160));
@@ -396,7 +454,7 @@ qInput.addEventListener("input", debounce(() => {
 $("#clearSearch").addEventListener("click", () => {
   qInput.value = "";
   state.query = "";
-  state.page = 1;
+  resetPaging();
   $("#clearSearch").hidden = true;
   renderGrid();
   qInput.focus();
@@ -404,27 +462,51 @@ $("#clearSearch").addEventListener("click", () => {
 
 citySelect.addEventListener("change", () => {
   state.city = citySelect.value;
-  state.page = 1;
+  resetPaging();
   renderGrid();
 });
 
 sortSelect.addEventListener("change", () => {
   state.sort = sortSelect.value;
-  state.page = 1;
+  resetPaging();
   renderGrid();
 });
 
 favToggle.addEventListener("click", () => {
   state.onlyFavs = !state.onlyFavs;
   favToggle.setAttribute("aria-pressed", String(state.onlyFavs));
+  resetPaging();
+  renderGrid();
+});
+
+/* Tombol "muat lebih banyak" hanya dipakai di layar lebar */
+moreBtn.addEventListener("click", () => {
+  state.loaded += state.perPage;
+  renderGrid();
+});
+
+/* Jumlah usaha per halaman (layar kecil) */
+$("#perPage").addEventListener("change", (e) => {
+  const value = Number(e.target.value);
+  if (!value) return;
+  state.mobilePerPage = value;
   state.page = 1;
   renderGrid();
 });
 
-moreBtn.addEventListener("click", () => {
-  state.page += 1;
-  renderGrid();
-});
+/* Navigasi halaman */
+if (pager) {
+  pager.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-page]");
+    if (!btn || btn.disabled) return;
+    const target = Number(btn.getAttribute("data-page"));
+    if (!target || target < 1) return;
+    state.page = target;
+    renderGrid();
+    const top = grid.getBoundingClientRect().top + window.scrollY - 88;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  });
+}
 
 $("#refreshBtn").addEventListener("click", async () => {
   const btn = $("#refreshBtn");
@@ -439,6 +521,7 @@ grid.addEventListener("click", (e) => {
     state.query = ""; state.cat = "Semua"; state.city = "Semua"; state.onlyFavs = false;
     qInput.value = "";
     favToggle.setAttribute("aria-pressed", "false");
+    resetPaging();
     renderChips(); renderCityOptions(); renderGrid();
     return;
   }
@@ -759,7 +842,7 @@ form.addEventListener("submit", async (e) => {
       item = await api.create(payload);
     }
     state.items.unshift(item);
-    state.page = 1;
+    resetPaging();
     state.query = ""; state.cat = "Semua"; state.city = "Semua"; state.onlyFavs = false;
     qInput.value = "";
     favToggle.setAttribute("aria-pressed", "false");
@@ -897,6 +980,20 @@ window.addEventListener("scroll", () => {
   top.hidden = window.scrollY < 600;
 }, { passive: true });
 
+/* Tab aktif pada navigasi bawah */
+window.addEventListener("scroll", debounce(() => {
+  if (!mobileNav || !isMobile()) return;
+  const jelajahi = $("#jelajahi");
+  const daftar = $("#daftar");
+  if (!jelajahi || !daftar) return;
+  const y = window.scrollY + 150;
+  if (jelajahi.offsetTop === 0 && daftar.offsetTop === 0) return;
+  let tab = "top";
+  if (y >= daftar.offsetTop) tab = "daftar";
+  else if (y >= jelajahi.offsetTop) tab = state.onlyFavs ? "favorit" : "jelajahi";
+  setActiveTab(tab);
+}, 140), { passive: true });
+
 $("#toTop").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
 /* Steps accordion */
@@ -936,33 +1033,107 @@ function animateCounter(el, target) {
   requestAnimationFrame(step);
 }
 
-/* Hero card rotasi */
+/* Kartu obrolan di halaman depan */
 const HERO_SAMPLES = [
-  { nama: "Kopi Randu", kategori: "Kuliner", ikon: "☕", kota: "Bandung", deskripsi: "Single origin, roasting mingguan." },
-  { nama: "Tenun Adil", kategori: "Kerajinan", ikon: "🧶", kota: "Yogyakarta", deskripsi: "Tenun ikat pewarna alami." },
-  { nama: "Batik Soko", kategori: "Fashion", ikon: "👘", kota: "Solo", deskripsi: "Batik tulis cap, custom motif." },
-  { nama: "Sayur Segar", kategori: "Pertanian", ikon: "🥬", kota: "Bandung", deskripsi: "Panen lokal setiap pagi." }
+  {
+    nama: "Kopi Randu", kategori: "Kuliner", ikon: "☕", kota: "Bandung",
+    pesan: ["Kak, kopi susu arennya masih ada?",
+            "Masih ada Bang, mau 2 ya — 15 menit lagi siap 👌"]
+  },
+  {
+    nama: "Tenun Adil", kategori: "Kerajinan", ikon: "🧶", kota: "Yogyakarta",
+    pesan: ["Motif warna alamnya ada yang baru?",
+            "Ada kak, minggu lalu baru selesai dijemur 🌿"]
+  },
+  {
+    nama: "Batik Soko", kategori: "Fashion", ikon: "👘", kota: "Solo",
+    pesan: ["Bisa jahit seragam sekolah 30 pcs?",
+            "Bisa kak, sekitar 4 hari selesai ✂️"]
+  },
+  {
+    nama: "Sayur Segar", kategori: "Pertanian", ikon: "🥬", kota: "Bandung",
+    pesan: ["Tomatonya masih ada hari ini?",
+            "Masih ada Bang, baru dipanen pagi ini 🍅"]
+  }
 ];
 let heroIndex = 0;
 function renderHeroCard() {
+  const el = $("#heroCard");
+  if (!el) return;
   const s = HERO_SAMPLES[heroIndex % HERO_SAMPLES.length];
-  $("#heroCard").innerHTML = `<div class="ph-body">
-      <div class="tags"><span class="tag">${esc(s.kategori)}</span><span class="tag alt">${esc(s.kota)}</span></div>
-      <div class="card-top" style="margin-top:6px">
-        <div class="ico" aria-hidden="true">${esc(s.ikon)}</div>
-        <span class="hint" style="margin-left:auto">Baru hari ini</span>
+  el.innerHTML = `<div class="chat-inner">
+      <div class="chat-head">
+        <div class="chat-avatar" aria-hidden="true">${esc(s.ikon)}</div>
+        <div class="chat-id">
+          <strong>${esc(s.nama)}</strong>
+          <span class="chat-sub">${esc(s.kategori)} · ${esc(s.kota)}</span>
+        </div>
+        <span class="chat-online">aktif</span>
       </div>
-      <h3 style="font-family:var(--display);font-weight:600;font-size:1.32rem;margin:0">${esc(s.nama)}</h3>
-      <p style="margin:0;color:var(--muted);font-size:.92rem">${esc(s.deskripsi)}</p>
-      <div class="actions" style="display:flex;gap:8px;margin-top:auto">
-        <span class="mini solid">WhatsApp</span>
-        <span class="mini muted">Detail</span>
+      <div class="chat-body">
+        <div class="bubble in">${esc(s.pesan[0])}</div>
+        <div class="bubble out">${esc(s.pesan[1])}</div>
+      </div>
+      <div class="chat-foot">
+        <span class="typing" aria-hidden="true"><i></i><i></i><i></i></span> Sedang mengetik…
       </div>
     </div>`;
   heroIndex += 1;
 }
 renderHeroCard();
 setInterval(renderHeroCard, 4500);
+
+/* Pencarian cepat di halaman depan */
+const heroSearch = $("#heroSearch");
+if (heroSearch) {
+  heroSearch.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const value = heroSearch.elements.heroQ.value.trim();
+    qInput.value = value;
+    state.query = value;
+    resetPaging();
+    $("#clearSearch").hidden = !value;
+    renderGrid();
+    $("#jelajahi").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
+/* Navigasi bawah untuk layar kecil */
+const mobileNav = $("#mobileNav");
+function setActiveTab(tab) {
+  if (!mobileNav) return;
+  $$(".mnav-item", mobileNav).forEach((btn) => {
+    if (btn.getAttribute("data-tab") === tab) btn.setAttribute("aria-current", "true");
+    else btn.removeAttribute("aria-current");
+  });
+}
+
+if (mobileNav) {
+  mobileNav.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-go]");
+    if (!btn) return;
+    if (btn.hasAttribute("data-fav")) {
+      state.onlyFavs = !state.onlyFavs;
+      favToggle.setAttribute("aria-pressed", String(state.onlyFavs));
+      resetPaging();
+      renderGrid();
+    }
+    const target = document.querySelector(btn.getAttribute("data-go"));
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    setActiveTab(btn.getAttribute("data-tab"));
+  });
+  setActiveTab("top");
+}
+
+/* Tampilan berubah saat lebar layar berpindah */
+let lastMobile = isMobile();
+window.addEventListener("resize", debounce(() => {
+  const mobile = isMobile();
+  if (mobile === lastMobile) return;
+  lastMobile = mobile;
+  resetPaging();
+  renderGrid();
+}, 150));
 
 /* Confetti */
 function confetti() {

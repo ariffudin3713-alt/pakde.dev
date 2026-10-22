@@ -34,11 +34,16 @@ const dom = new JSDOM(html, {
 const { window } = dom;
 
 /* Periplasan browser yang dipakai app.js */
-window.matchMedia = window.matchMedia || ((query) => ({
-  matches: false, media: query, onchange: null,
-  addListener() {}, removeListener() {},
-  addEventListener() {}, removeEventListener() {}, dispatchEvent() { return false; }
-}));
+let mobileMode = false;
+window.matchMedia = (query) => {
+  const mobileQuery = /max-width:\s*760px/.test(String(query));
+  return {
+    matches: mobileQuery ? mobileMode : false,
+    media: query, onchange: null,
+    addListener() {}, removeListener() {},
+    addEventListener() {}, removeEventListener() {}, dispatchEvent() { return false; }
+  };
+};
 window.IntersectionObserver = class {
   constructor(cb) { this.cb = cb; }
   observe(el) { this.cb([{ isIntersecting: true, target: el }], this); }
@@ -195,7 +200,60 @@ if (hapusBtn) {
   check("Konfirmasi hapus terbuka", true, "tidak ada usaha milik uji");
 }
 
-/* 17. Pesan error konsol */
+/* 17. Navigasi bawah khusus mobile */
+check("Navigasi bawah mobile tersedia", $$("#mobileNav .mnav-item").length === 4,
+  $$("#mobileNav .mnav-item").length + " tombol");
+
+/* 18. Pencarian cepat di halaman depan */
+const heroSearch = $("#heroSearch");
+heroSearch.elements.heroQ.value = "Batik";
+heroSearch.dispatchEvent(new window.Event("submit", { bubbles: true, cancelable: true }));
+await new Promise((r) => setTimeout(r, 400));
+check("Pencarian halaman depan bekerja",
+  $("#q").value === "Batik" && $$("#grid .card").length >= 1,
+  $("#q").value + " → " + $$("#grid .card").length + " kartu");
+$("#clearSearch").dispatchEvent(new window.Event("click", { bubbles: true }));
+await new Promise((r) => setTimeout(r, 250));
+
+/* 19. Tampilan mobile: daftar ber halaman */
+mobileMode = true;
+window.dispatchEvent(new window.Event("resize"));
+await new Promise((r) => setTimeout(r, 400));
+const pager = $("#pager");
+check("Paginasi muncul di mobile", pager.hidden === false, pager.textContent.replace(/\s+/g, " ").trim());
+check("Tombol muat lebih banyak disembunyikan di mobile", $("#moreBtn").hidden === true);
+const mobileCards = $$("#grid .card").length;
+check("Jumlah kartu dibatasi per halaman", mobileCards === 4, mobileCards + " kartu");
+check("Info hasil menyebut nomor halaman", /Halaman/.test($("#resultInfo").textContent), $("#resultInfo").textContent.trim());
+
+const firstBefore = ($$("#grid .card h3")[0] || {}).textContent || "";
+const pageTwo = $$("#pager button[data-page]").find((b) => b.getAttribute("data-page") === "2");
+if (pageTwo) {
+  pageTwo.dispatchEvent(new window.Event("click", { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 300));
+  const firstAfter = ($$("#grid .card h3")[0] || {}).textContent || "";
+  check("Pindah halaman mengganti isi daftar", firstBefore !== firstAfter, firstBefore + " → " + firstAfter);
+} else {
+  check("Pindah halaman mengganti isi daftar", false, "tombol halaman 2 tidak ada");
+}
+
+/* 20. Jumlah per halaman bisa diubah */
+const perSelect = $("#perPage");
+perSelect.value = "8";
+perSelect.dispatchEvent(new window.Event("change", { bubbles: true }));
+await new Promise((r) => setTimeout(r, 300));
+check("Jumlah per halaman bisa diubah", $$("#grid .card").length > mobileCards,
+  mobileCards + " → " + $$("#grid .card").length + " kartu");
+
+/* 21. Kembali ke tampilan desktop */
+perSelect.value = "4";
+perSelect.dispatchEvent(new window.Event("change", { bubbles: true }));
+mobileMode = false;
+window.dispatchEvent(new window.Event("resize"));
+await new Promise((r) => setTimeout(r, 400));
+check("Tampilan desktop kembali tanpa paginasi", pager.hidden === true);
+
+/* 22. Pesan error konsol */
 check("Tidak ada error JavaScript", consoleErrors.length === 0, consoleErrors.slice(0, 2).join(" | "));
 
 console.log(failed ? "\nAda " + failed + " pengujian gagal." : "\nSemua pengujian antarmuka lolos.");

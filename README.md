@@ -15,9 +15,15 @@ Direktori gratis untuk pelaku usaha kecil. Pengunjung bisa mencari, memfilter, l
 - Filter kategori (dengan jumlah usaha per kategori) dan filter kota
 - Urutkan: terbaru, terlama, nama A–Z, nama Z–A
 - Favorit tersimpan di perangkat, tombol “favorit saya” untuk menyaring
-- Paginasi “muat lebih banyak”, status kosong, dan skeleton saat memuat
-- Auto refresh tiap 30 detik + tombol muat ulang manual
+- **Layar lebar:** daftar panjang dengan tombol “muat lebih banyak”
+- **Layar kecil:** daftar ber halaman (4/8/12 usaha per halaman) dengan nomor halaman
+- Status kosong, skeleton saat memuat, dan auto refresh tiap 30 detik
 - Modal detail: deskripsi lengkap, salin nomor, bagikan tautan
+
+**Halaman depan**
+- Sapaan hangat, pencarian cepat, dan daftar manfaat singkat
+- Kartu obrolan yang berganti isi (simulasi pembeli menghubungi lewat WhatsApp)
+- Angka statistik dalam kartu melayang
 
 **Daftarkan usaha**
 - Validasi langsung per field dengan pesan error yang jelas
@@ -29,8 +35,9 @@ Direktori gratis untuk pelaku usaha kecil. Pengunjung bisa mencari, memfilter, l
 
 **Tampilan**
 - Mode terang/gelap (mengikuti sistem, bisa diganti manual dan diingat)
-- Animasi muncul saat digulir, penghitung statistik, kartu yang bergantian di hero
-- Navigasi mobile, tombol kembali ke atas, toast notifikasi, konfirmasi hapus
+- **Navigasi bawah khusus mobile** (Beranda, Jelajahi, Daftar, Favorit) dengan tab aktif
+- Tampilan berbeda per ukuran layar: mobile memakai paging + navigasi bawah, desktop memakai daftar panjang + navigasi atas
+- Animasi muncul saat digulir, penghitung statistik, toast notifikasi, konfirmasi hapus
 - Fokus keyboard, label ARIA, dan dukungan `prefers-reduced-motion`
 
 ---
