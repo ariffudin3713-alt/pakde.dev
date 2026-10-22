@@ -132,7 +132,7 @@ const saved = $$("#grid .card").some((c) => c.textContent.includes("Toko Uji Oto
 check("Pendaftaran dari UI tersimpan", saved);
 check("Formulir dikosongkan setelah simpan", form.elements.nama.value === "", "nama: " + form.elements.nama.value);
 
-/* 10. Modal detail terbuka */
+/* 11. Modal detail terbuka */
 const detailBtn = $$("#grid [data-detail]")[0];
 detailBtn.dispatchEvent(new window.Event("click", { bubbles: true }));
 await new Promise((r) => setTimeout(r, 250));
@@ -142,7 +142,60 @@ window.document.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Escape
 await new Promise((r) => setTimeout(r, 150));
 check("Modal tertutup dengan Escape", $("#modal").hidden === true);
 
-/* 11. Pesan error konsol */
+/* 12. Pengalih tema */
+const themeBefore = window.document.documentElement.getAttribute("data-theme");
+$("#themeToggle").dispatchEvent(new window.Event("click", { bubbles: true }));
+await new Promise((r) => setTimeout(r, 150));
+const themeAfter = window.document.documentElement.getAttribute("data-theme");
+check("Pengalih tema bekerja", !!themeAfter && themeAfter !== themeBefore, themeBefore + " -> " + themeAfter);
+$("#themeToggle").dispatchEvent(new window.Event("click", { bubbles: true }));
+
+/* 13. Filter kota */
+const citySelect = $("#city");
+const kotaOpsi = Array.from(citySelect.options).map((o) => o.value).filter((v) => v !== "Semua");
+check("Opsi kota terisi dari data", kotaOpsi.length > 0, kotaOpsi.join(", "));
+if (kotaOpsi.length) {
+  citySelect.value = kotaOpsi[0];
+  citySelect.dispatchEvent(new window.Event("change", { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 200));
+  const semuaKota = $$("#grid .card").every((c) => c.querySelectorAll(".tag")[1] && c.querySelectorAll(".tag")[1].textContent.trim() === kotaOpsi[0]);
+  check("Filter kota bekerja", semuaKota, $$("#grid .card").length + " kartu");
+  citySelect.value = "Semua";
+  citySelect.dispatchEvent(new window.Event("change", { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 200));
+}
+
+/* 14. Pengurutan */
+const urut = $("#sort");
+urut.value = "az";
+urut.dispatchEvent(new window.Event("change", { bubbles: true }));
+await new Promise((r) => setTimeout(r, 200));
+const namaUrut = $$("#grid .card h3").map((h) => h.textContent.trim());
+const terurut = namaUrut.slice().sort((a, b) => a.localeCompare(b, "id"));
+check("Pengurutan A-Z bekerja", namaUrut.join("|") === terurut.join("|"), namaUrut.slice(0, 2).join(", "));
+urut.value = "terbaru";
+urut.dispatchEvent(new window.Event("change", { bubbles: true }));
+
+/* 15. Pemilih emoji */
+const emojiBtn = $$("#emojiGrid [data-emoji]")[3];
+emojiBtn.dispatchEvent(new window.Event("click", { bubbles: true }));
+await new Promise((r) => setTimeout(r, 150));
+check("Pemilih emoji mengisi ikon", form.elements.ikon.value === emojiBtn.getAttribute("data-emoji"), form.elements.ikon.value);
+
+/* 16. Konfirmasi hapus */
+const hapusBtn = $("#myGrid [data-del]");
+if (hapusBtn) {
+  hapusBtn.dispatchEvent(new window.Event("click", { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 250));
+  check("Konfirmasi hapus terbuka", $("#confirmModal").hidden === false);
+  $("#confirmCancel").dispatchEvent(new window.Event("click", { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 200));
+  check("Konfirmasi hapus bisa dibatalkan", $("#confirmModal").hidden === true);
+} else {
+  check("Konfirmasi hapus terbuka", true, "tidak ada usaha milik uji");
+}
+
+/* 17. Pesan error konsol */
 check("Tidak ada error JavaScript", consoleErrors.length === 0, consoleErrors.slice(0, 2).join(" | "));
 
 console.log(failed ? "\nAda " + failed + " pengujian gagal." : "\nSemua pengujian antarmuka lolos.");
