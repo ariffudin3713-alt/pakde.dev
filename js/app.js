@@ -952,7 +952,7 @@ function renderHeroCard() {
         <div class="ico" aria-hidden="true">${esc(s.ikon)}</div>
         <span class="hint" style="margin-left:auto">Baru hari ini</span>
       </div>
-      <h3 style="font-family:var(--display);font-size:1.35rem;margin:0">${esc(s.nama)}</h3>
+      <h3 style="font-family:var(--display);font-weight:600;font-size:1.32rem;margin:0">${esc(s.nama)}</h3>
       <p style="margin:0;color:var(--muted);font-size:.92rem">${esc(s.deskripsi)}</p>
       <div class="actions" style="display:flex;gap:8px;margin-top:auto">
         <span class="mini solid">WhatsApp</span>
