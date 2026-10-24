@@ -1,4 +1,5 @@
-/* =========================================================
+
+   /* =========================================================
    Pasar UMKM — application logic
    Struktur:
    1. Utilitas      5. Filter & pencarian
@@ -1140,7 +1141,7 @@ function confetti() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const wrap = document.createElement("div");
   wrap.className = "confetti";
-  const colors = ["#1E5B4A", "#E8A33D", "#F5EFE3", "#7FC4AA", "#9B3D2E"];
+  const colors = ["#2D4F45", "#9AA39E", "#D8DAD5", "#C3C8C4"];
   for (let i = 0; i < 60; i++) {
     const piece = document.createElement("i");
     piece.style.left = Math.random() * 100 + "%";
