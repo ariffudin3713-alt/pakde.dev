@@ -626,7 +626,7 @@ form.reg .actions { display: flex; align-items: center; gap: 10px; flex-wrap: wr
 .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, .7); animation: fadeIn .2s ease both; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .modal-card {
-  position: relative; width: min(560px, 100%); max-height: 90vh; overflow: auto;
+  position: relative; width: min(600px, 100%); max-height: 90vh; overflow: auto;
   background: var(--card); border: 1px solid var(--line-strong);
   padding: 40px; animation: pop .2s var(--ease) both;
 }
@@ -647,6 +647,27 @@ form.reg .actions { display: flex; align-items: center; gap: 10px; flex-wrap: wr
 .detail-meta div { display: flex; gap: 12px; align-items: center; font-size: .875rem; letter-spacing: -0.01em; }
 .detail-meta b { color: var(--muted); font-weight: 400; min-width: 90px; }
 .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.review-section { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--line); }
+.review-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.review-header h4 { margin: 0; font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+.review-count { font-size: .8125rem; color: var(--muted); }
+.review-list { display: grid; gap: 16px; margin-bottom: 28px; }
+.review-item { padding: 16px; background: var(--paper-2); border: 1px solid var(--line); }
+.review-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.review-name { font-weight: 500; font-size: .875rem; }
+.review-stars { color: var(--accent-2); font-size: .75rem; letter-spacing: 2px; }
+.review-text { font-size: .8125rem; color: var(--muted); line-height: 1.7; margin: 0; }
+.review-form { display: grid; gap: 12px; }
+.review-form h5 { margin: 0; font-size: .875rem; font-weight: 600; }
+.star-picker { display: flex; gap: 4px; }
+.star-picker button { background: none; border: none; font-size: 1.25rem; color: var(--line-strong); cursor: pointer; padding: 0 2px; }
+.star-picker button.active { color: var(--accent-2); }
+.review-form input, .review-form textarea {
+  font: inherit; padding: 10px 12px; border: 1px solid var(--line-strong); background: var(--card);
+  font-size: .8125rem;
+}
+.review-form textarea { min-height: 80px; resize: vertical; }
 
 /* ---------------- Toasts ---------------- */
 .toasts {

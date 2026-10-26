@@ -2,11 +2,11 @@
  * API data Pasar UMKM — Vercel Serverless Function (Node.js).
  *
  * Penyimpanan: Vercel Blob (store privat) dengan optimistic concurrency
- * control (ETag / ifMatch) supaya dua pendaftaran bersamaan tidak saling
- * menimpa data.
+ * control (ETag / ifMatch).
  *
  *   GET    /api/umkm            → daftar usaha
  *   POST   /api/umkm            → tambah usaha baru
+ *   PUT    /api/umkm            → tambah ulasan
  *   DELETE /api/umkm?id=&owner= → hapus usaha (pemilik saja)
  */
 import { get, head, put } from "@vercel/blob";
@@ -15,7 +15,7 @@ const DATA_PATH = "data/umkm.json";
 const MAX_ITEMS = 500;
 const MAX_ATTEMPTS = 5;
 
-const CATS = new Set(["Kuliner", "Fashion", "Kerajinan", "Jasa", "Pertanian", "Lainnya"]);
+const CATS = new Set(["Kuliner", "Fashion", "Kerajinan", "Jasa", "Pertanian", "Kesehatan", "Pendidikan", "Lainnya"]);
 
 /* ---------- utilitas ---------- */
 function json(res, status, body) {
@@ -130,10 +130,13 @@ function sanitizeInput(body) {
   const errors = {};
   const nama = text(body.nama, 80);
   const kategori = CATS.has(body.kategori) ? body.kategori : "Lainnya";
-  const kota = text(body.kota, 60);
-  const deskripsi = text(body.deskripsi, 400);
+  const kota = text(body.kota, 80);
+  const alamat = text(body.alamat, 200);
+  const deskripsi = text(body.deskripsi, 500);
   const wa = waDigits(body.wa);
   const ig = text(body.ig, 40).replace(/^@+/, "").replace(/[^A-Za-z0-9._]/g, "");
+  const jamBuka = text(body.jamBuka, 60);
+  const harga = text(body.harga, 40);
   let ikon = text(body.ikon, 8);
   ikon = Array.from(ikon).slice(0, 4).join("") || "🏪";
 
@@ -143,7 +146,7 @@ function sanitizeInput(body) {
 
   return {
     errors,
-    item: { nama, kategori, kota, deskripsi, wa, ig, ikon }
+    item: { nama, kategori, kota, alamat, deskripsi, wa, ig, ikon, jamBuka, harga }
   };
 }
 
@@ -164,10 +167,15 @@ export default async function handler(req, res) {
           nama: item.nama,
           kategori: item.kategori,
           kota: item.kota,
+          alamat: item.alamat || "",
           ikon: item.ikon,
           deskripsi: item.deskripsi,
           wa: item.wa,
           ig: item.ig,
+          jamBuka: item.jamBuka || "",
+          harga: item.harga || "",
+          ulasan: Array.isArray(item.ulasan) ? item.ulasan : [],
+          rating: item.rating || 0,
           ownerId: item.ownerId,
           createdAt: item.createdAt
         }));
@@ -189,7 +197,7 @@ export default async function handler(req, res) {
       if (Object.keys(errors).length) return json(res, 400, { error: "Data belum lengkap.", errors });
 
       const ownerId = text(body.ownerId, 64) || "anon";
-      const created = Object.assign({ id: newId(), ownerId, createdAt: Date.now() }, item);
+      const created = Object.assign({ id: newId(), ownerId, createdAt: Date.now(), ulasan: [], rating: 0 }, item);
 
       await mutate((items) => ({
         items: [created].concat(items).slice(0, MAX_ITEMS),
@@ -197,6 +205,43 @@ export default async function handler(req, res) {
       }));
 
       return json(res, 201, { item: created });
+    }
+
+    if (req.method === "PUT") {
+      let body = {};
+      if (typeof req.body === "string") {
+        try { body = JSON.parse(req.body || "{}"); } catch { body = {}; }
+      } else if (req.body && typeof req.body === "object") {
+        body = req.body;
+      }
+
+      const id = text(body.id, 64);
+      if (!id) return json(res, 400, { error: "ID usaha wajib diisi." });
+
+      const nama = text(body.nama, 40) || "Pengunjung";
+      const pesan = text(body.pesan, 200);
+      const bintang = Math.max(1, Math.min(5, Number(body.bintang) || 5));
+
+      if (pesan.length < 3) return json(res, 400, { error: "Ulasan minimal 3 karakter." });
+
+      let resultItem = null;
+      await mutate((items) => {
+        const idx = items.findIndex((x) => x.id === id);
+        if (idx === -1) return { items, result: null };
+        const ulasan = Array.isArray(items[idx].ulasan) ? items[idx].ulasan : [];
+        const review = { id: "r" + Date.now().toString(36), nama, pesan, bintang, createdAt: Date.now() };
+        ulasan.unshift(review);
+        if (ulasan.length > 20) ulasan.length = 20;
+        const total = ulasan.reduce((s, r) => s + (Number(r.bintang) || 0), 0);
+        const rating = Math.round((total / ulasan.length) * 10) / 10;
+        items[idx].ulasan = ulasan;
+        items[idx].rating = rating;
+        resultItem = items[idx];
+        return { items, result: items[idx] };
+      });
+
+      if (!resultItem) return json(res, 404, { error: "Usaha tidak ditemukan." });
+      return json(res, 201, { item: resultItem });
     }
 
     if (req.method === "DELETE") {
@@ -221,7 +266,7 @@ export default async function handler(req, res) {
       return json(res, 200, { ok: true, removed: removed.id });
     }
 
-    res.setHeader("Allow", "GET, POST, DELETE");
+    res.setHeader("Allow", "GET, POST, PUT, DELETE");
     return json(res, 405, { error: "Metode tidak diizinkan." });
   } catch (err) {
     const status = err && err.status ? err.status : 500;

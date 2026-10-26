@@ -280,15 +280,33 @@
               <option value="Kerajinan">Kerajinan</option>
               <option value="Jasa">Jasa</option>
               <option value="Pertanian">Pertanian</option>
+              <option value="Kesehatan">Kesehatan</option>
+              <option value="Pendidikan">Pendidikan</option>
               <option value="Lainnya">Lainnya</option>
             </select>
             <p class="err" data-err="kategori"></p>
           </div>
 
           <div class="field">
-            <label for="f-kota">Kota atau kecamatan</label>
-            <input id="f-kota" name="kota" maxlength="60" placeholder="Contoh: Surakarta" autocomplete="address-level2">
+            <label for="f-kota">Kota/Kabupaten</label>
+            <input id="f-kota" name="kota" maxlength="80" placeholder="Contoh: Surakarta" autocomplete="address-level2">
             <p class="err" data-err="kota"></p>
+          </div>
+
+          <div class="field">
+            <label for="f-alamat">Alamat lengkap</label>
+            <input id="f-alamat" name="alamat" maxlength="200" placeholder="Jl. Contoh No. 123">
+            <p class="err" data-err="alamat"></p>
+          </div>
+
+          <div class="field">
+            <label for="f-jam">Jam buka</label>
+            <input id="f-jam" name="jamBuka" maxlength="60" placeholder="Contoh: 08.00 - 17.00">
+          </div>
+
+          <div class="field">
+            <label for="f-harga">Range harga</label>
+            <input id="f-harga" name="harga" maxlength="40" placeholder="Contoh: Rp 10.000 - Rp 50.000">
           </div>
 
           <div class="field">
@@ -312,9 +330,9 @@
           </div>
 
           <div class="field full">
-            <label for="f-deskripsi">Deskripsi singkat <span class="req">*</span></label>
-            <textarea id="f-deskripsi" name="deskripsi" required maxlength="400" placeholder="Apa yang Anda jual, keunggulannya, dan jam buka."></textarea>
-            <p class="hint counter"><span id="descCount">0</span>/400 karakter</p>
+            <label for="f-deskripsi">Deskripsi usaha <span class="req">*</span></label>
+            <textarea id="f-deskripsi" name="deskripsi" required maxlength="500" placeholder="Ceritakan produk/jasa, keunggulan, dan hal menarik lainnya."></textarea>
+            <p class="hint counter"><span id="descCount">0</span>/500 karakter</p>
             <p class="err" data-err="deskripsi"></p>
           </div>
 
@@ -429,6 +447,27 @@
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button type="button" class="modal-close" data-close aria-label="Tutup">✕</button>
     <div id="modalBody"></div>
+    <div class="review-section">
+      <div class="review-header">
+        <h4>Ulasan Pembeli</h4>
+        <span class="review-count" id="reviewCount">0 ulasan</span>
+      </div>
+      <div class="review-list" id="reviewList"></div>
+      <div class="review-form">
+        <h5>Tulis Ulasan</h5>
+        <div class="star-picker" id="starPicker">
+          <button type="button" data-star="1">★</button>
+          <button type="button" data-star="2">★</button>
+          <button type="button" data-star="3">★</button>
+          <button type="button" data-star="4">★</button>
+          <button type="button" data-star="5">★</button>
+        </div>
+        <input type="text" id="reviewName" placeholder="Nama Anda (opsional)" maxlength="40">
+        <textarea id="reviewMsg" placeholder="Ceritakan pengalaman Anda..." maxlength="200"></textarea>
+        <button type="button" class="btn small" id="submitReview">Kirim Ulasan</button>
+        <p class="hint" id="reviewHint"></p>
+      </div>
+    </div>
   </div>
 </div>
 

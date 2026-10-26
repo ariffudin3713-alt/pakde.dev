@@ -641,6 +641,60 @@ async function copyText(text) {
 const modal = $("#modal");
 const confirmModal = $("#confirmModal");
 let lastFocused = null;
+let currentStars = 5;
+
+const starPicker = document.getElementById("starPicker");
+if (starPicker) {
+  starPicker.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-star]");
+    if (!btn) return;
+    currentStars = Number(btn.getAttribute("data-star"));
+    starPicker.querySelectorAll("button").forEach((b, i) => {
+      b.classList.toggle("active", i < currentStars);
+    });
+  });
+  starPicker.querySelectorAll("button").forEach((b, i) => b.classList.toggle("active", i < 5));
+}
+
+const submitReview = document.getElementById("submitReview");
+if (submitReview) {
+  submitReview.addEventListener("click", async () => {
+    const id = modal.dataset.currentId;
+    if (!id) return;
+    const nama = document.getElementById("reviewName").value;
+    const pesan = document.getElementById("reviewMsg").value;
+    const hint = document.getElementById("reviewHint");
+    if (pesan.trim().length < 3) {
+      hint.textContent = "Ulasan minimal 3 karakter.";
+      return;
+    }
+    hint.textContent = "Mengirim...";
+    submitReview.disabled = true;
+    try {
+      const res = await fetch("/api/umkm", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, nama, pesan, bintang: currentStars })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal mengirim ulasan");
+      const item = state.items.find(x => x.id === id);
+      if (item) {
+        item.ulasan = data.item.ulasan;
+        item.rating = data.item.rating;
+      }
+      document.getElementById("reviewName").value = "";
+      document.getElementById("reviewMsg").value = "";
+      hint.textContent = "Ulasan berhasil dikirim!";
+      toast("Ulasan berhasil dikirim!", "ok");
+      openDetail(id);
+    } catch (err) {
+      hint.textContent = err.message;
+    } finally {
+      submitReview.disabled = false;
+    }
+  });
+}
 
 function openModal(el) {
   lastFocused = document.activeElement;
@@ -661,6 +715,8 @@ function openDetail(id) {
   if (!item) return;
   const isFav = state.favs.includes(item.id);
   const ig = item.ig ? `<a class="btn ghost" href="${esc(igLink(item.ig))}" target="_blank" rel="noopener">Buka Instagram</a>` : "";
+  const stars = item.rating ? "★".repeat(Math.round(item.rating)) + "☆".repeat(5 - Math.round(item.rating)) : "Belum ada rating";
+  const ulasan = Array.isArray(item.ulasan) ? item.ulasan : [];
   $("#modalBody").innerHTML = `
     <div class="detail-head">
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
@@ -669,14 +725,19 @@ function openDetail(id) {
         <div class="tags">
           <span class="tag">${esc(item.kategori || "Lainnya")}</span>
           ${item.kota ? `<span class="tag alt">${esc(item.kota)}</span>` : ""}
+          ${item.rating ? `<span class="tag alt">${stars} ${item.rating}</span>` : ""}
         </div>
       </div>
     </div>
     <p class="detail-desc">${esc(item.deskripsi)}</p>
     <div class="detail-meta">
+      ${item.alamat ? `<div><b>Alamat</b><span>${esc(item.alamat)}</span></div>` : ""}
+      ${item.kota ? `<div><b>Lokasi</b><span>${esc(item.kota)}</span></div>` : ""}
+      ${item.jamBuka ? `<div><b>Jam Buka</b><span>${esc(item.jamBuka)}</span></div>` : ""}
+      ${item.harga ? `<div><b>Harga</b><span>${esc(item.harga)}</span></div>` : ""}
       <div><b>WhatsApp</b><span>+${esc(waNumber(item.wa))}</span></div>
       ${item.ig ? `<div><b>Instagram</b><span>@${esc(item.ig)}</span></div>` : ""}
-      <div><b>Ditambahkan</b><span>${esc(formatDate(item.createdAt))}</span></div>
+      <div><b>Terdaftar</b><span>${esc(formatDate(item.createdAt))}</span></div>
     </div>
     <div class="detail-actions">
       <a class="btn" href="${esc(waLink(item))}" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
@@ -685,6 +746,25 @@ function openDetail(id) {
       <button type="button" class="btn ghost" data-modal-fav="${esc(item.id)}">${isFav ? "♥ Hapus favorit" : "♡ Favorit"}</button>
       <button type="button" class="btn ghost" data-modal-share="${esc(item.id)}">Bagikan</button>
     </div>`;
+  const reviewList = document.getElementById("reviewList");
+  const reviewCount = document.getElementById("reviewCount");
+  if (reviewList) {
+    reviewCount.textContent = ulasan.length + " ulasan";
+    if (ulasan.length === 0) {
+      reviewList.innerHTML = '<p class="hint">Belum ada ulasan. Jadilah yang pertama!</p>';
+    } else {
+      reviewList.innerHTML = ulasan.map(r => `
+        <div class="review-item">
+          <div class="review-top">
+            <span class="review-name">${esc(r.nama || "Pengunjung")}</span>
+            <span class="review-stars">${"★".repeat(Number(r.bintang)||5)}${"☆".repeat(5-(Number(r.bintang)||5))}</span>
+          </div>
+          <p class="review-text">${esc(r.pesan)}</p>
+        </div>
+      `).join("");
+    }
+  }
+  document.getElementById("modal").dataset.currentId = item.id;
   openModal(modal);
 }
 
@@ -780,6 +860,9 @@ function formValues() {
     nama: String(f.get("nama") || "").trim(),
     kategori: String(f.get("kategori") || "Lainnya"),
     kota: String(f.get("kota") || "").trim(),
+    alamat: String(f.get("alamat") || "").trim(),
+    jamBuka: String(f.get("jamBuka") || "").trim(),
+    harga: String(f.get("harga") || "").trim(),
     ikon: String(f.get("ikon") || "").trim() || "🏪",
     deskripsi: String(f.get("deskripsi") || "").trim(),
     wa: String(f.get("wa") || "").trim(),
@@ -828,6 +911,9 @@ form.addEventListener("submit", async (e) => {
     nama: values.nama,
     kategori: values.kategori,
     kota: values.kota,
+    alamat: values.alamat,
+    jamBuka: values.jamBuka,
+    harga: values.harga,
     ikon: values.ikon,
     deskripsi: values.deskripsi,
     wa: values.wa,
@@ -869,7 +955,7 @@ form.addEventListener("submit", async (e) => {
 
 form.addEventListener("reset", () => {
   setTimeout(() => {
-    Object.keys({ nama: 1, kategori: 1, kota: 1, wa: 1, ig: 1, ikon: 1, deskripsi: 1 }).forEach((k) => setError(k, ""));
+    Object.keys({ nama: 1, kategori: 1, kota: 1, wa: 1, ig: 1, ikon: 1, deskripsi: 1, alamat: 1, jamBuka: 1, harga: 1 }).forEach((k) => setError(k, ""));
     $("#descCount").textContent = "0";
     formHint.textContent = "";
     syncEmojiSelection();
@@ -907,10 +993,10 @@ function syncEmojiSelection() {
 
 /* Isi data contoh */
 const DEMOS = [
-  { nama: "Warung Bu Sri", kategori: "Kuliner", kota: "Surakarta", ikon: "🍜", deskripsi: "Nasi campur dan sate ayam legendaris sejak 1998. Buka setiap hari 07.00–21.00, pesanan bisa dibuat untuk acara.", wa: "081234567890", ig: "warungbusri" },
-  { nama: "Tenun Ikat Puspa", kategori: "Kerajinan", kota: "Yogyakarta", ikon: "🧶", deskripsi: "Tenun ikat tangan dengan pewarna alami. Melayani custom motif dan pengiriman ke seluruh Jawa.", wa: "081298765432", ig: "tenunikatpuspa" },
-  { nama: "Kopi Randu Pak Rendi", kategori: "Kuliner", kota: "Semarang", ikon: "☕", deskripsi: "Kopi susu gula aren dan single origin pilihan. Roasting mingguan, bisa kiriman ke seluruh Indonesia.", wa: "085611223344", ig: "" },
-  { nama: "Batik Larisan", kategori: "Fashion", kota: "Solo", ikon: "👘", deskripsi: "Batik tulis dan cap untuk harian, atasan, dan seragam. Melayani penjahit custom.", wa: "081377788899", ig: "batiklarisan" }
+  { nama: "Warung Bu Sri", kategori: "Kuliner", kota: "Surakarta", alamat: "Jl. Diponegoro No. 45", jamBuka: "07.00 - 21.00", harga: "Rp 15.000 - Rp 40.000", ikon: "🍜", deskripsi: "Nasi campur dan sate ayam legendaris sejak 1998. Makanan rumahan dengan cita rasa autentik Jawa.", wa: "081234567890", ig: "warungbusri" },
+  { nama: "Tenun Ikat Puspa", kategori: "Kerajinan", kota: "Yogyakarta", alamat: "Kawasan Kasongan", jamBuka: "09.00 - 17.00", harga: "Rp 150.000 - Rp 2.000.000", ikon: "🧶", deskripsi: "Tenun ikat tangan dengan pewarna alami. Melayani custom motif, souvenir, dan pesanan khusus.", wa: "081298765432", ig: "tenunikatpuspa" },
+  { nama: "Kopi Randu", kategori: "Kuliner", kota: "Bandung", alamat: "Jl. Braga No. 12", jamBuka: "08.00 - 22.00", harga: "Rp 12.000 - Rp 35.000", ikon: "☕", deskripsi: "Kopi susu gula aren, manual brew, dan single origin. Roasting mingguan dengan biji pilihan.", wa: "085611223344", ig: "kopirandu" },
+  { nama: "Batik Larisan", kategori: "Fashion", kota: "Solo", alamat: "Pasar Klewer", jamBuka: "09.00 - 16.00", harga: "Rp 100.000 - Rp 1.500.000", ikon: "👘", deskripsi: "Batik tulis dan cap berkualitas. Melayani pemesanan seragam, kado, dan custom desain.", wa: "081377788899", ig: "batiklarisan" }
 ];
 
 $("#fillDemo").addEventListener("click", () => {
@@ -918,6 +1004,9 @@ $("#fillDemo").addEventListener("click", () => {
   form.elements.nama.value = demo.nama;
   form.elements.kategori.value = demo.kategori;
   form.elements.kota.value = demo.kota;
+  if (form.elements.alamat) form.elements.alamat.value = demo.alamat || "";
+  if (form.elements.jamBuka) form.elements.jamBuka.value = demo.jamBuka || "";
+  if (form.elements.harga) form.elements.harga.value = demo.harga || "";
   form.elements.ikon.value = demo.ikon;
   form.elements.deskripsi.value = demo.deskripsi;
   form.elements.wa.value = demo.wa;
