@@ -414,9 +414,10 @@ function renderStats() {
   animateCounter($("#statTotal"), state.items.length);
   animateCounter($("#statCats"), cats.size);
   animateCounter($("#statCities"), cities.size);
-  $("#liveCount").textContent = state.items.length
-    ? state.items.length + " usaha aktif saat ini"
-    : "Belum ada usaha — jadilah yang pertama!";
+  const liveNum = $("#liveCountNum");
+  if (liveNum) {
+    liveNum.textContent = state.items.length || 0;
+  }
 }
 
 function renderAll() {

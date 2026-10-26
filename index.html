@@ -58,20 +58,19 @@
   <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="hero-bg" aria-hidden="true">
-      <span class="blob blob-1"></span>
-      <span class="blob blob-2"></span>
-      <span class="blob blob-3"></span>
-      <span class="dots"></span>
+      <div class="grid-overlay"></div>
     </div>
 
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <span class="hello reveal" data-reveal>
-          <span class="wave" aria-hidden="true">👋</span> Halo, selamat datang!
-        </span>
+        <div class="kicker reveal" data-reveal>
+          <span class="kicker-line"></span>
+          <span>Direktori UMKM</span>
+        </div>
 
         <h1 class="reveal" data-reveal>
-          Punya usaha kecil? <span class="grad">Biarkan pembeli yang mencari Anda.</span>
+          Usaha Kecil.<br>
+          <span class="emphasis">Terlihat Lebih Jauh.</span>
         </h1>
 
         <p class="lead reveal" data-reveal>
@@ -81,43 +80,67 @@
 
         <form class="hero-search reveal" data-reveal id="heroSearch" role="search">
           <label class="sr-only" for="heroQ">Cari usaha</label>
-          <span class="hero-search-ico" aria-hidden="true">🔎</span>
-          <input id="heroQ" name="heroQ" type="search" placeholder="Cari kopi, batik, keripik…" autocomplete="off">
-          <button class="btn" type="submit">Cari</button>
+          <input id="heroQ" name="heroQ" type="search" placeholder="Cari nama usaha, kategori, atau lokasi..." autocomplete="off">
+          <button class="btn" type="submit">Cari →</button>
         </form>
 
-        <ul class="hero-perks reveal" data-reveal>
-          <li><span aria-hidden="true">💸</span> Tanpa biaya</li>
-          <li><span aria-hidden="true">⚡</span> Tampil seketika</li>
-          <li><span aria-hidden="true">💬</span> Dihubungi via WhatsApp</li>
-        </ul>
-
         <div class="btns hero-cta reveal" data-reveal>
-          <a class="btn" href="#daftar">Daftarkan usaha saya</a>
-          <a class="btn ghost" href="#jelajahi">Lihat usaha lainnya</a>
+          <a class="btn" href="#daftar">Daftarkan Usaha</a>
+          <a class="btn ghost" href="#jelajahi">Jelajahi Direktori</a>
         </div>
 
-        <p class="hero-note reveal" data-reveal>
-          <span class="pulse" aria-hidden="true"></span>
-          <span id="liveCount">Memuat data…</span>
-        </p>
+        <div class="hero-meta reveal" data-reveal>
+          <div class="meta-item">
+            <span class="meta-num" id="liveCountNum">—</span>
+            <span class="meta-label">Usaha Terdaftar</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-num">100%</span>
+            <span class="meta-label">Gratis</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-num">Langsung</span>
+            <span class="meta-label">Via WhatsApp</span>
+          </div>
+        </div>
       </div>
 
       <div class="hero-side reveal" data-reveal>
-        <div class="chat-card" id="heroCard" aria-hidden="true"></div>
-        <div class="float-chip chip-a"><span aria-hidden="true">💬</span> Pembeli chat langsung</div>
-        <div class="float-chip chip-b"><span aria-hidden="true">🌿</span> Gratis selamanya</div>
+        <div class="showcase-card" aria-label="Pratinjau usaha">
+          <div class="showcase-header">
+            <span class="showcase-dot"></span>
+            <span class="showcase-dot"></span>
+            <span class="showcase-dot"></span>
+          </div>
+          <div class="showcase-body">
+            <div class="showcase-row">
+              <span class="showcase-ico">☕</span>
+              <div>
+                <div class="showcase-name">Kopi Randu</div>
+                <div class="showcase-meta">Kuliner · Bandung</div>
+              </div>
+            </div>
+            <div class="showcase-desc">Kopi susu gula aren dan single origin pilihan. Roasting mingguan.</div>
+            <div class="showcase-actions">
+              <span class="showcase-tag">WhatsApp</span>
+              <span class="showcase-tag">Instagram</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ============ STATS ============ -->
   <section class="stats-wrap">
-    <div class="wrap stats" id="stats">
-      <div class="stat"><b class="counter" data-count="0" id="statTotal">0</b><span>Usaha terdaftar</span></div>
-      <div class="stat"><b class="counter" data-count="0" id="statCats">0</b><span>Kategori aktif</span></div>
-      <div class="stat"><b class="counter" data-count="0" id="statCities">0</b><span>Kota &amp; kecamatan</span></div>
-      <div class="stat"><b>100%</b><span>Tanpa biaya</span></div>
+    <div class="wrap stats-bar" id="stats">
+      <div class="stat-item"><b class="counter" data-count="0" id="statTotal">0</b><span>Usaha</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><b class="counter" data-count="0" id="statCats">0</b><span>Kategori</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><b class="counter" data-count="0" id="statCities">0</b><span>Lokasi</span></div>
     </div>
   </section>
 
@@ -359,19 +382,18 @@
 <footer class="footer">
   <div class="wrap footer-grid">
     <div>
-      <a class="brand" href="#top">Pasar<span class="brand-accent">UMKM</span></a>
-      <p class="hint">Dibuat untuk mendukung pelaku usaha kecil di Indonesia.</p>
+      <a class="brand" href="#top">PASAR UMKM</a>
+      <p class="hint" style="margin-top: 12px;">Direktori gratis untuk pelaku usaha kecil di Indonesia.</p>
     </div>
     <div>
       <h4>Jelajahi</h4>
-      <a href="#jelajahi">Semua usaha</a>
-      <a href="#cara-kerja">Cara kerja</a>
+      <a href="#jelajahi">Semua Usaha</a>
+      <a href="#cara-kerja">Cara Kerja</a>
       <a href="#faq">FAQ</a>
     </div>
     <div>
       <h4>Mulai</h4>
-      <a href="#daftar">Daftarkan usaha</a>
-      <a href="#daftar">Perbarui usaha</a>
+      <a href="#daftar">Daftarkan Usaha</a>
     </div>
     <div>
       <h4>Kontak</h4>
@@ -381,7 +403,7 @@
   </div>
   <div class="wrap footer-bottom">
     <span>© <span id="year"></span> Pasar UMKM</span>
-    <span class="footer-note">Gratis · Tanpa komisi · Data tersimpan aman</span>
+    <span>Gratis · Tanpa Komisi</span>
   </div>
 </footer>
 
