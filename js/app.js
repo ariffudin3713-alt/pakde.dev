@@ -306,6 +306,7 @@ function cardTemplate(item, term, options = {}) {
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
       ${fav}
     </div>
+    <span class="local-story-badge"><span aria-hidden="true">✿</span> Dari usaha lokal</span>
     <div class="tags">
       <span class="tag">${esc(category)}</span>
       ${item.kota ? `<span class="tag alt">${esc(item.kota)}</span>` : ""}
@@ -388,9 +389,9 @@ function renderGrid() {
   if (state.items.length === 0) {
     grid.innerHTML = `<div class="empty">
       <span class="empty-ico" aria-hidden="true">🏪</span>
-      <strong>Belum ada usaha yang terdaftar.</strong>
-      Jadilah yang pertama. Daftarkan usaha Anda di bagian bawah halaman.
-      <br><a class="btn" href="#daftar">Daftarkan usaha sekarang</a>
+      <strong>Yuk, jadi tetangga pertama di pasar ini!</strong>
+      Ceritakan usaha Anda agar lebih banyak orang bisa mengenal dan mendukungnya.
+      <br><a class="btn" href="#daftar">Mulai kenalkan usaha</a>
     </div>`;
     resultInfo.innerHTML = "Belum ada usaha terdaftar.";
     moreBtn.hidden = true;
@@ -401,9 +402,9 @@ function renderGrid() {
   if (list.length === 0) {
     grid.innerHTML = `<div class="empty">
       <span class="empty-ico" aria-hidden="true">🔍</span>
-      <strong>Tidak ada usaha yang cocok.</strong>
-      Coba kata kunci lain atau pilih kategori lain.
-      <br><button type="button" class="btn ghost" data-reset>Reset pencarian</button>
+      <strong>Belum ketemu yang dicari?</strong>
+      Coba kata lain atau lihat semua usaha. Bisa jadi ada kejutan menarik di sana.
+      <br><button type="button" class="btn ghost" data-reset>Lihat semua usaha</button>
     </div>`;
     resultInfo.innerHTML = `Tidak ada hasil untuk filter aktif.`;
     moreBtn.hidden = true;
@@ -904,6 +905,15 @@ function renderDetail(item) {
       </div>
     </div>
     <p class="detail-desc" id="modalDesc">${esc(item.deskripsi)}</p>
+    <section class="seller-story" aria-labelledby="sellerStoryTitle">
+      <div class="seller-avatar" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
+      <div class="seller-story-copy">
+        <p class="seller-eyebrow">Cerita dari usaha lokal</p>
+        <h4 id="sellerStoryTitle">Kenalan dengan ${esc(item.nama)}</h4>
+        <p>${esc(item.deskripsi)}</p>
+        ${item.kota ? `<span class="seller-place"><span aria-hidden="true">⌖</span> Berasal dari ${esc(item.kota)}</span>` : ""}
+      </div>
+    </section>
     <div class="detail-meta">
       ${item.alamat ? `<div><b>Alamat</b><span>${esc(item.alamat)}</span></div>` : ""}
       ${item.kota ? `<div><b>Lokasi</b><span>${esc(item.kota)}</span></div>` : ""}

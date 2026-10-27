@@ -1894,6 +1894,39 @@ input, select, textarea { font-size: 1rem; }
   .stats-bar button.stat-item { min-height: 156px; padding: 18px 20px; }
 }
 
+/* Sentuhan manusia: bahasa akrab, cerita penjual, dan gerak yang lembut. */
+.greeting-mark { display: inline-grid; width: 30px; height: 30px; margin-right: 5px; place-items: center; border-radius: 50%; background: #F5E5BF; color: #A3652C; }
+.local-story-badge {
+  display: inline-flex; align-items: center; gap: 7px; width: fit-content; margin: 4px 0 12px;
+  padding: 6px 11px; border: 1px solid #E4D8BE; border-radius: 999px;
+  background: #F8F0DF; color: #795A2E; font-size: .9rem; font-weight: 700;
+}
+.seller-story {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: start;
+  margin: 22px 0; padding: 20px; border: 1px solid #E8DDCA; border-radius: 22px;
+  background: linear-gradient(135deg, #FBF3E6, #F1F4E9);
+}
+.seller-avatar { display: grid; width: 64px; height: 64px; place-items: center; border: 3px solid rgba(255,255,255,.85); border-radius: 22px; background: #E7EDDD; box-shadow: 0 4px 14px rgba(65, 68, 46, .1); font-size: 2rem; }
+.seller-story-copy { min-width: 0; }
+.seller-eyebrow { margin: 0 0 3px; color: #80633C; font-size: .9rem; font-weight: 700; }
+.seller-story-copy h4 { margin: 0 0 7px; color: var(--ink); font-family: var(--font-display); font-size: 1.2rem; }
+.seller-story-copy > p:not(.seller-eyebrow) { margin: 0 0 10px; color: var(--muted); }
+.seller-place { display: inline-flex; align-items: center; gap: 6px; color: #48664F; font-size: .95rem; font-weight: 700; }
+.empty { background: linear-gradient(145deg, #FFFCF5, #F3F5EC); border-style: solid; border-color: #E9DFCC; }
+.empty .empty-ico { background: linear-gradient(145deg, #F8E8C8, #E4EEE0); border-color: #E5DCC8; }
+.card { animation: market-arrive .48s both; }
+.card:nth-child(2) { animation-delay: 35ms; }
+.card:nth-child(3) { animation-delay: 70ms; }
+.card:nth-child(4) { animation-delay: 105ms; }
+.card:nth-child(5) { animation-delay: 140ms; }
+.card:nth-child(6) { animation-delay: 175ms; }
+@keyframes market-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.btn, .chip, .fav-btn, .mini { transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, background-color .2s ease; }
+.btn:active, .chip:active, .fav-btn:active, .mini:active { transform: scale(.97); }
+.card { border-radius: 24px; }
+@media (max-width: 520px) { .seller-story { grid-template-columns: 52px minmax(0, 1fr); gap: 12px; padding: 16px; } .seller-avatar { width: 52px; height: 52px; border-radius: 18px; } }
+@media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+
 @media (prefers-contrast: more) {
   .card, .step, .tools, .faq-item, .preview, form.reg, .stats-bar, .modal-card,
   .icon-btn, .btn.ghost, .chip, .mini, .fav-btn {
