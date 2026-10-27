@@ -39,7 +39,8 @@ Direktori gratis untuk pelaku usaha kecil. Pengunjung bisa mencari, memfilter, l
 - Tampilan berbeda per ukuran layar: mobile memakai paging + navigasi bawah, desktop memakai daftar panjang + navigasi atas
 - Animasi muncul saat digulir, penghitung statistik, toast notifikasi, konfirmasi hapus
 - Fokus keyboard, label ARIA, kontras tinggi, target sentuh 48px, dan dukungan `prefers-reduced-motion`
-- Tipografi mudah dibaca: Atkinson Hyperlegible untuk teks dan Fraunces untuk judul
+- Tipografi modern dan mudah dibaca: Plus Jakarta Sans untuk teks dan Bricolage Grotesque untuk judul
+- Tampilan “Aurora Glass”: aksen indigo–violet–emerald–amber, glassmorphism halus, border gradasi, dan mikrointeraksi lembut
 
 ---
 

@@ -293,7 +293,7 @@ function cardTemplate(item, term, options = {}) {
   const del = (isMine && options.allowDelete !== false && !preview)
     ? `<button type="button" class="mini danger" data-del="${esc(item.id)}" aria-label="Hapus ${name} dari direktori">Hapus</button>` : "";
 
-  return `<article class="card" data-id="${esc(item.id)}">
+  return `<article class="card" data-id="${esc(item.id)}" data-cat="${esc(item.kategori || "Lainnya")}">
     <div class="card-top">
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
       ${fav}
@@ -855,7 +855,7 @@ function renderDetail(item) {
   const phone = item.wa ? "+" + esc(waNumber(item.wa)) : "Belum diisi";
 
   $("#modalBody").innerHTML = `
-    <div class="detail-head">
+    <div class="detail-head" data-cat="${esc(item.kategori || "Lainnya")}">
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
       <div>
         <h3 id="modalTitle" tabindex="-1">${esc(item.nama)}</h3>
@@ -1395,7 +1395,7 @@ function confetti() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const wrap = document.createElement("div");
   wrap.className = "confetti";
-  const colors = ["#1E6B3A", "#A63D18", "#D9B382", "#6F7D73"];
+  const colors = ["#6366F1", "#8B5CF6", "#10B981", "#FBBF24", "#F43F5E", "#06B6D4"];
   for (let i = 0; i < 60; i++) {
     const piece = document.createElement("i");
     piece.style.left = Math.random() * 100 + "%";
