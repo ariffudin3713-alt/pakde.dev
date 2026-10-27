@@ -251,7 +251,7 @@ function filteredItems() {
     const catOk = state.cat === "Semua" || normalizeCategory(item.kategori) === state.cat;
     const cityOk = state.city === "Semua" || normalizeCity(item.kota) === normalizeCity(state.city);
     const favOk = !state.onlyFavs || state.favs.includes(item.id);
-    const hay = [item.nama, item.deskripsi, item.kota, item.kategori].join(" ").toLowerCase();
+    const hay = [item.nama, item.deskripsi, item.kota, item.kategori, item.harga].join(" ").toLowerCase();
     const termOk = !term || hay.indexOf(term) !== -1;
     return catOk && cityOk && favOk && termOk;
   });
@@ -892,8 +892,13 @@ function renderDetail(item) {
       ${item.ig ? `<div><b>Instagram</b><span>@${esc(item.ig)}</span></div>` : ""}
       <div><b>Terdaftar</b><span>${esc(formatDate(item.createdAt))}</span></div>
     </div>
+    <div class="order-box">
+      <label for="orderQty">Jumlah pesanan</label>
+      <input id="orderQty" type="number" min="1" max="99" value="1" inputmode="numeric" aria-label="Jumlah pesanan">
+      <p class="hint">Pesan akan berisi nama usaha, jumlah, dan kisaran harga bila tersedia.</p>
+    </div>
     <div class="detail-actions">
-      <a class="btn" href="${esc(waLink(item))}" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
+      <a class="btn" data-order-wa="${esc(item.id)}" href="${esc(waLink(item, orderMessage(item, 1)))}" target="_blank" rel="noopener">Beli via WhatsApp</a>
       ${ig}
       <button type="button" class="btn ghost" data-modal-copy="${esc(item.wa || "")}">Salin nomor</button>
       <button type="button" class="btn ghost" data-modal-fav="${esc(item.id)}" aria-pressed="${isFav}">${isFav ? "Hapus dari favorit" : "Simpan ke favorit"}</button>
@@ -903,6 +908,20 @@ function renderDetail(item) {
   renderReviews(item);
   modal.dataset.currentId = item.id;
 }
+
+function orderMessage(item, quantity) {
+  return `Halo ${item.nama || ""}, saya ingin memesan:\n\nNama usaha/produk: ${item.nama || ""}\nJumlah: ${quantity} ${Number(quantity) === 1 ? "buah/porsi" : "buah/porsi"}${item.harga ? `\nKisaran harga: ${item.harga}` : ""}\n\nSaya melihat usaha Anda di Pasar UMKM.`;
+}
+
+$("#modalBody").addEventListener("input", (e) => {
+  if (e.target.id !== "orderQty") return;
+  const link = $("[data-order-wa]", $("#modalBody"));
+  if (!link) return;
+  const item = state.items.find((x) => x.id === link.getAttribute("data-order-wa"));
+  const quantity = Math.max(1, Math.min(99, Number.parseInt(e.target.value, 10) || 1));
+  e.target.value = quantity;
+  if (item) link.href = waLink(item, orderMessage(item, quantity));
+});
 
 function openDetail(id) {
   const item = state.items.find((x) => x.id === id);

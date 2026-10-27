@@ -1762,6 +1762,51 @@ form.reg .actions #submit { flex: 1 1 220px; }
   .hero-bg::before, .hero-bg::after { animation: none; }
 }
 
+/* Palet Pasar Lokal: krem hangat, hijau tepercaya, dan sentuhan terracotta. */
+:root {
+  --paper: #FBF8F1;
+  --paper-2: #F3EDE1;
+  --paper-3: #E9DFCF;
+  --card: #FFFEFA;
+  --card-solid: #FFFEFA;
+  --field: #FFFFFF;
+  --glass: rgba(255, 254, 250, .92);
+  --glass-border: #E8DFD0;
+  --header-bg: rgba(251, 248, 241, .96);
+  --ink: #202B24;
+  --muted: #536157;
+  --accent: #145C42;
+  --accent-hover: #104B36;
+  --accent-soft: #E5F0E9;
+  --accent-solid: #176747;
+  --accent-2: #A94F35;
+  --accent-2-soft: #F8E9E2;
+  --line: rgba(32, 43, 36, .13);
+  --line-strong: rgba(32, 43, 36, .25);
+  --focus: #A94F35;
+  --grid-dot: rgba(20, 92, 66, .12);
+  --aurora-1: rgba(217, 175, 108, .18);
+  --aurora-2: rgba(30, 111, 76, .11);
+  --aurora-3: rgba(169, 79, 53, .08);
+  --grad-primary: linear-gradient(135deg, #145C42, #247451);
+  --grad-primary-hover: linear-gradient(135deg, #104B36, #145C42);
+  --grad-text: linear-gradient(100deg, #145C42, #A94F35);
+}
+
+body { background-image: radial-gradient(900px 540px at 8% 0%, #F2E6D2, transparent 65%), radial-gradient(820px 560px at 100% 12%, #E4EFE7, transparent 62%); }
+.top { backdrop-filter: blur(14px); }
+.card, .step, .preview, .faq-item, .showcase-card { border-color: #E8DFD0; box-shadow: 0 8px 28px rgba(68, 55, 35, .07); }
+.card { background: var(--card-solid); border-radius: 22px; transition: transform .2s ease, box-shadow .2s ease; }
+.card:hover { box-shadow: 0 16px 34px rgba(39, 70, 51, .14); }
+.btn, .icon-btn, .chip, .mini, .fav-btn, .mobile-nav .mnav-item { min-height: 48px; }
+input, select, textarea { font-size: 1rem; }
+.order-box { display: grid; grid-template-columns: 1fr 100px; gap: 8px 14px; align-items: center; margin: 18px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+.order-box label { font-weight: 800; }
+.order-box input { width: 100%; min-height: 48px; padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--field); color: var(--ink); }
+.order-box .hint { grid-column: 1 / -1; margin: 0; }
+.detail-actions .btn:first-child { background: #176747; }
+@media (max-width: 520px) { .order-box { grid-template-columns: 1fr 88px; } }
+
 @media (prefers-contrast: more) {
   .card, .step, .tools, .faq-item, .preview, form.reg, .stats-bar, .modal-card,
   .icon-btn, .btn.ghost, .chip, .mini, .fav-btn {
