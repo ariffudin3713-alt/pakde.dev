@@ -1814,6 +1814,86 @@ input, select, textarea { font-size: 1rem; }
 .detail-actions .btn:first-child { background: #176747; }
 @media (max-width: 520px) { .order-box { grid-template-columns: 1fr 88px; } }
 
+/* Tiga pintasan direktori tampil sebagai kartu statistik yang hangat dan ringan. */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.stats-bar .stat-divider { display: none; }
+.stats-bar button.stat-item {
+  position: relative;
+  display: grid;
+  min-height: 196px;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 22px 24px;
+  overflow: hidden;
+  border: 1px solid #E7E5D9;
+  border-radius: 22px;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(49, 67, 49, .06);
+}
+.stats-bar button.stat-businesses { background: #EEF5EE; }
+.stats-bar button.stat-categories { background: #F8F1E5; }
+.stats-bar button.stat-locations { background: #F7ECE7; }
+.stats-bar button.stat-item:hover { box-shadow: 0 14px 30px rgba(49, 67, 49, .12); }
+.stats-bar .stat-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  grid-column: 1;
+  grid-row: 1;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(255,255,255,.72);
+  font-size: 1.45rem;
+}
+.stats-bar .stat-label {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.stats-bar button.stat-item b {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--accent);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+.stats-bar .stat-categories b { color: #8B642A; }
+.stats-bar .stat-locations b { color: #9B4C38; }
+.stats-bar .stat-link {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  margin: 0;
+  color: var(--accent);
+  font-size: .95rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.stats-bar button.stat-item:hover .stat-link span { display: inline-block; transform: translateX(4px); }
+@media (max-width: 680px) {
+  .stats-bar { grid-template-columns: 1fr; gap: 12px; }
+  .stats-bar button.stat-item { min-height: 156px; padding: 18px 20px; }
+}
+
 @media (prefers-contrast: more) {
   .card, .step, .tools, .faq-item, .preview, form.reg, .stats-bar, .modal-card,
   .icon-btn, .btn.ghost, .chip, .mini, .fav-btn {
