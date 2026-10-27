@@ -683,6 +683,13 @@ header.top.scrolled {
   backdrop-filter: blur(14px);
 }
 .stat-item { flex: 1 1 0; text-align: center; }
+.stats-bar button.stat-item {
+  min-width: 0; min-height: 72px; padding: 8px 12px; border: 0; border-radius: 14px;
+  background: transparent; color: inherit; font: inherit; cursor: pointer;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.stats-bar button.stat-item:hover { background: var(--accent-soft); transform: translateY(-2px); }
+.stats-bar button.stat-item:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .stat-item b {
   display: block;
   font-family: var(--font-display);
@@ -694,7 +701,7 @@ header.top.scrolled {
 .stat-item:nth-child(5) b { background-image: var(--grad-amber); }
 .stat-item span {
   display: block; margin-top: 8px; color: var(--muted);
-  font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  font-size: 1rem; font-weight: 700; letter-spacing: 0; text-transform: none;
 }
 .stat-divider { width: 1px; height: 52px; background: var(--line); flex: none; }
 

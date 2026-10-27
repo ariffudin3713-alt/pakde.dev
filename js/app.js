@@ -462,7 +462,7 @@ function renderMyList() {
 
 function renderStats() {
   const cats = new Set(state.items.map((i) => normalizeCategory(i.kategori)));
-  const cities = new Set(state.items.map((i) => (i.kota || "").trim()).filter(Boolean));
+  const cities = new Set(state.items.map((i) => normalizeCity(i.kota)).filter(Boolean));
   animateCounter($("#statTotal"), state.items.length);
   animateCounter($("#statCats"), cats.size);
   animateCounter($("#statCities"), cities.size);
@@ -471,6 +471,27 @@ function renderStats() {
     liveNum.textContent = state.items.length || 0;
   }
 }
+
+$("#stats").addEventListener("click", (e) => {
+  const action = e.target.closest("[data-stat-action]");
+  if (!action) return;
+  const target = action.getAttribute("data-stat-action");
+  document.querySelector("#jelajahi").scrollIntoView({ behavior: scrollMode(), block: "start" });
+  if (target === "businesses") {
+    state.cat = "Semua";
+    state.city = "Semua";
+    state.onlyFavs = false;
+    citySelect.value = "Semua";
+    favToggle.setAttribute("aria-pressed", "false");
+    resetPaging();
+    renderChips();
+    renderGrid();
+  } else if (target === "categories") {
+    chipsEl.querySelector("[data-cat='Semua']")?.focus();
+  } else if (target === "locations") {
+    citySelect.focus();
+  }
+});
 
 function renderAll() {
   renderChips();
