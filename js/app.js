@@ -111,7 +111,14 @@ function hl(text, term) {
 }
 
 /* ---------- 2. State ---------- */
-const CATS = ["Semua", "Kuliner", "Fashion", "Kerajinan", "Jasa", "Pertanian", "Lainnya"];
+const CATS = ["Semua", "Kuliner", "Fashion", "Kerajinan", "Jasa", "Pertanian", "Kesehatan", "Pendidikan", "Lainnya"];
+function normalizeCategory(value) {
+  const key = String(value || "").trim().toLowerCase();
+  return CATS.slice(1).find((category) => category.toLowerCase() === key) || "Lainnya";
+}
+function normalizeCity(value) {
+  return String(value || "").trim().normalize("NFC").toLowerCase();
+}
 const EMOJIS = ["🍜", "☕", "🍰", "🥘", "🍡", "🍚", "🍛", "🥟", "🍫", "🧋", "🧵", "👘", "🧶", "🎨", "🪵", "🧺", "💻", "🔧", "🧹", "🌾", "🥬", "🍯", "🐟", "🐔", "🧀", "🛍️", "📦", "🧴", "🪑", "🏪", "⚡", "💼", "🎓", "🩺", "🎁"];
 
 /* Layar kecil memakai tampilan ber halaman, layar besar memakai daftar panjang. */
@@ -241,8 +248,8 @@ function showNotice(type, message) {
 function filteredItems() {
   const term = state.query.trim().toLowerCase();
   let list = state.items.filter((item) => {
-    const catOk = state.cat === "Semua" || item.kategori === state.cat;
-    const cityOk = state.city === "Semua" || (item.kota || "") === state.city;
+    const catOk = state.cat === "Semua" || normalizeCategory(item.kategori) === state.cat;
+    const cityOk = state.city === "Semua" || normalizeCity(item.kota) === normalizeCity(state.city);
     const favOk = !state.onlyFavs || state.favs.includes(item.id);
     const hay = [item.nama, item.deskripsi, item.kota, item.kategori].join(" ").toLowerCase();
     const termOk = !term || hay.indexOf(term) !== -1;
@@ -293,13 +300,14 @@ function cardTemplate(item, term, options = {}) {
   const del = (isMine && options.allowDelete !== false && !preview)
     ? `<button type="button" class="mini danger" data-del="${esc(item.id)}" aria-label="Hapus ${name} dari direktori">Hapus</button>` : "";
 
-  return `<article class="card" data-id="${esc(item.id)}" data-cat="${esc(item.kategori || "Lainnya")}">
+  const category = normalizeCategory(item.kategori);
+  return `<article class="card" data-id="${esc(item.id)}" data-cat="${esc(category)}">
     <div class="card-top">
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
       ${fav}
     </div>
     <div class="tags">
-      <span class="tag">${esc(item.kategori || "Lainnya")}</span>
+      <span class="tag">${esc(category)}</span>
       ${item.kota ? `<span class="tag alt">${esc(item.kota)}</span>` : ""}
     </div>
     <h3>${hl(item.nama, term)}</h3>
@@ -329,7 +337,10 @@ function skeletonTemplate() {
 
 function renderChips() {
   const counts = {};
-  state.items.forEach((i) => { counts[i.kategori || "Lainnya"] = (counts[i.kategori || "Lainnya"] || 0) + 1; });
+  state.items.forEach((i) => {
+    const category = normalizeCategory(i.kategori);
+    counts[category] = (counts[category] || 0) + 1;
+  });
   chipsEl.innerHTML = CATS.map((c) => {
     const n = c === "Semua" ? state.items.length : (counts[c] || 0);
     const label = c === "Semua" ? `Semua kategori, ${n} usaha` : `${c}, ${n} usaha`;
@@ -339,12 +350,17 @@ function renderChips() {
 }
 
 function renderCityOptions() {
-  const cities = Array.from(new Set(state.items.map((i) => (i.kota || "").trim()).filter(Boolean)))
-    .sort((a, b) => a.localeCompare(b, "id"));
+  const cityByKey = new Map();
+  state.items.forEach((item) => {
+    const city = String(item.kota || "").trim().normalize("NFC");
+    const key = normalizeCity(city);
+    if (key && !cityByKey.has(key)) cityByKey.set(key, city);
+  });
+  const cities = Array.from(cityByKey.values()).sort((a, b) => a.localeCompare(b, "id"));
   const current = state.city;
   citySelect.innerHTML = `<option value="Semua">Semua kota</option>` +
     cities.map((c) => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
-  citySelect.value = cities.includes(current) ? current : "Semua";
+  citySelect.value = cities.find((city) => normalizeCity(city) === normalizeCity(current)) || "Semua";
   state.city = citySelect.value;
 }
 
@@ -445,7 +461,7 @@ function renderMyList() {
 }
 
 function renderStats() {
-  const cats = new Set(state.items.map((i) => i.kategori || "Lainnya"));
+  const cats = new Set(state.items.map((i) => normalizeCategory(i.kategori)));
   const cities = new Set(state.items.map((i) => (i.kota || "").trim()).filter(Boolean));
   animateCounter($("#statTotal"), state.items.length);
   animateCounter($("#statCats"), cats.size);
@@ -855,12 +871,12 @@ function renderDetail(item) {
   const phone = item.wa ? "+" + esc(waNumber(item.wa)) : "Belum diisi";
 
   $("#modalBody").innerHTML = `
-    <div class="detail-head" data-cat="${esc(item.kategori || "Lainnya")}">
+    <div class="detail-head" data-cat="${esc(normalizeCategory(item.kategori))}">
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
       <div>
         <h3 id="modalTitle" tabindex="-1">${esc(item.nama)}</h3>
         <div class="tags">
-          <span class="tag">${esc(item.kategori || "Lainnya")}</span>
+          <span class="tag">${esc(normalizeCategory(item.kategori))}</span>
           ${item.kota ? `<span class="tag alt">${esc(item.kota)}</span>` : ""}
           <span class="tag alt" aria-label="Penilaian ${esc(String(rating || "belum ada"))} dari 5">${esc(stars)}${rating ? " " + esc(String(rating)) : ""}</span>
         </div>
