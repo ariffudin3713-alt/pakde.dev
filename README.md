@@ -17,13 +17,13 @@ Direktori gratis untuk pelaku usaha kecil. Pengunjung bisa mencari, memfilter, l
 - Favorit tersimpan di perangkat, tombol “favorit saya” untuk menyaring
 - **Layar lebar:** daftar panjang dengan tombol “muat lebih banyak”
 - **Layar kecil:** daftar ber halaman (4/8/12 usaha per halaman) dengan nomor halaman
-- Status kosong, skeleton saat memuat, dan auto refresh tiap 30 detik
-- Modal detail: deskripsi lengkap, salin nomor, bagikan tautan
+- Status kosong, skeleton saat memuat, dan penyegaran otomatis saat tab kembali aktif
+- Modal detail: deskripsi lengkap, salin nomor, bagikan tautan, serta ulasan pembeli
 
 **Halaman depan**
 - Sapaan hangat, pencarian cepat, dan daftar manfaat singkat
-- Kartu obrolan yang berganti isi (simulasi pembeli menghubungi lewat WhatsApp)
-- Angka statistik dalam kartu melayang
+- Contoh kartu usaha statis (tanpa animasi berulang) sebagai gambaran tampilan
+- Angka statistik yang dihitung dari data nyata
 
 **Daftarkan usaha**
 - Validasi langsung per field dengan pesan error yang jelas
@@ -38,7 +38,8 @@ Direktori gratis untuk pelaku usaha kecil. Pengunjung bisa mencari, memfilter, l
 - **Navigasi bawah khusus mobile** (Beranda, Jelajahi, Daftar, Favorit) dengan tab aktif
 - Tampilan berbeda per ukuran layar: mobile memakai paging + navigasi bawah, desktop memakai daftar panjang + navigasi atas
 - Animasi muncul saat digulir, penghitung statistik, toast notifikasi, konfirmasi hapus
-- Fokus keyboard, label ARIA, dan dukungan `prefers-reduced-motion`
+- Fokus keyboard, label ARIA, kontras tinggi, target sentuh 48px, dan dukungan `prefers-reduced-motion`
+- Tipografi mudah dibaca: Atkinson Hyperlegible untuk teks dan Fraunces untuk judul
 
 ---
 
@@ -46,7 +47,7 @@ Direktori gratis untuk pelaku usaha kecil. Pengunjung bisa mencari, memfilter, l
 
 ```
 .
-├── api/umkm.js        # Serverless Function: GET / POST / DELETE data usaha
+├── api/umkm.js        # Serverless Function: GET / POST / PUT / DELETE data usaha
 ├── css/style.css      # Seluruh gaya (light/dark, responsif, animasi)
 ├── js/app.js          # Logika aplikasi (filter, favorit, modal, formulir)
 ├── index.html         # Halaman utama
@@ -121,6 +122,7 @@ npx vercel blob create-store pasar-umkm --access private --yes
 | --- | --- | --- |
 | `GET` | `/api/umkm` | Mengembalikan `{ items, count }` |
 | `POST` | `/api/umkm` | Menambah usaha baru, mengembalikan `{ item }` |
+| `PUT` | `/api/umkm` | Menambah ulasan `{ id, nama, pesan, bintang }`, mengembalikan `{ item }` |
 | `DELETE` | `/api/umkm?id=<id>&owner=<ownerId>` | Menghapus usaha (hanya pemilik) |
 
 Contoh:

@@ -24,6 +24,16 @@ function debounce(fn, wait = 180) {
   return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
 }
 
+/* Hormati preferensi pengguna yang tidak nyaman dengan animasi. */
+function prefersReduced() {
+  try { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
+  catch (e) { return false; }
+}
+
+function scrollMode() {
+  return prefersReduced() ? "auto" : "smooth";
+}
+
 const store = {
   get(key, fallback) {
     try {
@@ -197,6 +207,7 @@ async function loadItems(silent = false) {
   try {
     state.items = await api.list();
     state.offline = false;
+    if (noticeEl) noticeEl.hidden = true;
   } catch (err) {
     state.items = local.all();
     state.offline = true;
@@ -250,18 +261,42 @@ function filteredItems() {
 function cardTemplate(item, term, options = {}) {
   const isMine = item.ownerId && item.ownerId === state.ownerId;
   const isFav = state.favs.includes(item.id);
-  const ig = item.ig ? `<a class="mini muted" href="${esc(igLink(item.ig))}" target="_blank" rel="noopener">Instagram</a>` : "";
+  const name = esc(item.nama || "usaha ini");
+  const preview = !!options.preview; /* pratinjau: tampilan saja, bukan tombol aktif */
+
+  const ig = item.ig
+    ? (preview
+      ? `<span class="mini muted" aria-hidden="true">Instagram</span>`
+      : `<a class="mini muted" href="${esc(igLink(item.ig))}" target="_blank" rel="noopener" aria-label="Buka Instagram ${name}">Instagram</a>`)
+    : "";
   const wa = item.wa
-    ? `<a class="mini solid" href="${esc(waLink(item))}" target="_blank" rel="noopener">WhatsApp</a>`
-    : `<span class="mini solid" aria-disabled="true" style="opacity:.45;cursor:not-allowed">WhatsApp</span>`;
-  const del = (isMine && options.allowDelete !== false)
-    ? `<button type="button" class="mini danger" data-del="${esc(item.id)}">Hapus</button>` : "";
+    ? (preview
+      ? `<span class="mini solid" aria-hidden="true">WhatsApp</span>`
+      : `<a class="mini solid" href="${esc(waLink(item))}" target="_blank" rel="noopener" aria-label="Hubungi ${name} melalui WhatsApp">WhatsApp</a>`)
+    : `<span class="mini solid" aria-disabled="true">WhatsApp</span>`;
+  const copy = preview
+    ? `<span class="mini muted" aria-hidden="true">Salin nomor</span>`
+    : `<button type="button" class="mini muted" data-copy="${esc(item.wa || "")}" aria-label="Salin nomor WhatsApp ${name}">Salin nomor</button>`;
+  const detail = preview
+    ? `<span class="mini muted" aria-hidden="true">Detail</span>`
+    : `<button type="button" class="mini muted" data-detail="${esc(item.id)}" aria-label="Lihat detail ${name}">Detail</button>`;
+  const fav = preview
+    ? `<span class="fav-btn preview-only" aria-hidden="true">
+        <span class="fav-icon">${isFav ? "♥" : "♡"}</span>
+        <span class="fav-text">Favorit</span>
+      </span>`
+    : `<button type="button" class="fav-btn" data-fav="${esc(item.id)}" aria-pressed="${isFav}"
+        aria-label="Favorit ${name}">
+        <span class="fav-icon" aria-hidden="true">${isFav ? "♥" : "♡"}</span>
+        <span class="fav-text" aria-hidden="true">Favorit</span>
+      </button>`;
+  const del = (isMine && options.allowDelete !== false && !preview)
+    ? `<button type="button" class="mini danger" data-del="${esc(item.id)}" aria-label="Hapus ${name} dari direktori">Hapus</button>` : "";
 
   return `<article class="card" data-id="${esc(item.id)}">
     <div class="card-top">
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
-      <button type="button" class="fav-btn" data-fav="${esc(item.id)}" aria-pressed="${isFav}"
-        aria-label="${isFav ? "Hapus dari" : "Tambahkan ke"} favorit">${isFav ? "♥" : "♡"}</button>
+      ${fav}
     </div>
     <div class="tags">
       <span class="tag">${esc(item.kategori || "Lainnya")}</span>
@@ -272,8 +307,8 @@ function cardTemplate(item, term, options = {}) {
     <div class="actions">
       ${wa}
       ${ig}
-      <button type="button" class="mini muted" data-copy="${esc(item.wa || "")}">Salin no.</button>
-      <button type="button" class="mini muted" data-detail="${esc(item.id)}">Detail</button>
+      ${copy}
+      ${detail}
       ${del}
     </div>
   </article>`;
@@ -297,7 +332,8 @@ function renderChips() {
   state.items.forEach((i) => { counts[i.kategori || "Lainnya"] = (counts[i.kategori || "Lainnya"] || 0) + 1; });
   chipsEl.innerHTML = CATS.map((c) => {
     const n = c === "Semua" ? state.items.length : (counts[c] || 0);
-    return `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${c === state.cat}">
+    const label = c === "Semua" ? `Semua kategori, ${n} usaha` : `${c}, ${n} usaha`;
+    return `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${c === state.cat}" aria-label="${esc(label)}">
       ${esc(c)} <span class="count">${n}</span></button>`;
   }).join("");
 }
@@ -476,9 +512,10 @@ sortSelect.addEventListener("change", () => {
 
 favToggle.addEventListener("click", () => {
   state.onlyFavs = !state.onlyFavs;
-  favToggle.setAttribute("aria-pressed", String(state.onlyFavs));
+  syncFavToggle();
   resetPaging();
   renderGrid();
+  toast(state.onlyFavs ? "Menampilkan usaha favorit saja." : "Menampilkan semua usaha.");
 });
 
 /* Tombol "muat lebih banyak" hanya dipakai di layar lebar */
@@ -506,7 +543,7 @@ if (pager) {
     state.page = target;
     renderGrid();
     const top = grid.getBoundingClientRect().top + window.scrollY - 88;
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    window.scrollTo({ top: Math.max(0, top), behavior: scrollMode() });
   });
 }
 
@@ -515,14 +552,19 @@ $("#refreshBtn").addEventListener("click", async () => {
   btn.disabled = true;
   await loadItems(true);
   btn.disabled = false;
-  toast("Daftar diperbarui.", "ok");
+  if (state.offline) {
+    showNotice("warn", "Server belum aktif, jadi pasar sedang berjalan dalam mode lokal. Data Anda disimpan di perangkat ini sampai server siap.");
+    toast("Server belum aktif. Menampilkan data lokal.", "err");
+  } else {
+    toast("Daftar diperbarui.", "ok");
+  }
 });
 
 grid.addEventListener("click", (e) => {
   if (e.target.closest("[data-reset]")) {
     state.query = ""; state.cat = "Semua"; state.city = "Semua"; state.onlyFavs = false;
     qInput.value = "";
-    favToggle.setAttribute("aria-pressed", "false");
+    syncFavToggle();
     resetPaging();
     renderChips(); renderCityOptions(); renderGrid();
     return;
@@ -601,13 +643,21 @@ function toggleFav(id) {
   }
   store.set("favs", state.favs);
 
-  const isFav = state.favs.includes(id);
   $$(`[data-fav="${cssEscape(id)}"]`).forEach((btn) => {
+    const isFav = state.favs.includes(id);
     btn.setAttribute("aria-pressed", String(isFav));
-    btn.textContent = isFav ? "♥" : "♡";
+    const icon = btn.querySelector(".fav-icon");
+    if (icon) icon.textContent = isFav ? "♥" : "♡";
   });
   if (state.onlyFavs) renderGrid();
   renderMyList();
+}
+
+function syncFavToggle() {
+  const pressed = String(state.onlyFavs);
+  if (favToggle) favToggle.setAttribute("aria-pressed", pressed);
+  const mobileFav = $("#mobileNav [data-fav]");
+  if (mobileFav) mobileFav.setAttribute("aria-pressed", pressed);
 }
 
 function cssEscape(value) {
@@ -644,16 +694,33 @@ let lastFocused = null;
 let currentStars = 5;
 
 const starPicker = document.getElementById("starPicker");
+function setStars(value) {
+  currentStars = Math.min(5, Math.max(1, Number(value) || 5));
+  if (!starPicker) return;
+  $$("button[data-star]", starPicker).forEach((btn) => {
+    const active = Number(btn.getAttribute("data-star")) <= currentStars;
+    btn.setAttribute("aria-pressed", String(active));
+    btn.classList.toggle("active", active);
+  });
+}
 if (starPicker) {
   starPicker.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-star]");
     if (!btn) return;
-    currentStars = Number(btn.getAttribute("data-star"));
-    starPicker.querySelectorAll("button").forEach((b, i) => {
-      b.classList.toggle("active", i < currentStars);
-    });
+    setStars(Number(btn.getAttribute("data-star")));
   });
-  starPicker.querySelectorAll("button").forEach((b, i) => b.classList.toggle("active", i < 5));
+  setStars(5);
+}
+
+const reviewMsgEl = document.getElementById("reviewMsg");
+if (reviewMsgEl) {
+  reviewMsgEl.addEventListener("input", () => {
+    const hint = document.getElementById("reviewHint");
+    if (reviewMsgEl.value.trim().length >= 3) {
+      reviewMsgEl.removeAttribute("aria-invalid");
+      if (hint) hint.textContent = "";
+    }
+  });
 }
 
 const submitReview = document.getElementById("submitReview");
@@ -661,81 +728,151 @@ if (submitReview) {
   submitReview.addEventListener("click", async () => {
     const id = modal.dataset.currentId;
     if (!id) return;
-    const nama = document.getElementById("reviewName").value;
-    const pesan = document.getElementById("reviewMsg").value;
+    const nameEl = document.getElementById("reviewName");
+    const msgEl = document.getElementById("reviewMsg");
     const hint = document.getElementById("reviewHint");
+    const nama = nameEl.value;
+    const pesan = msgEl.value;
     if (pesan.trim().length < 3) {
-      hint.textContent = "Ulasan minimal 3 karakter.";
+      hint.textContent = "Ulasan minimal 3 karakter. Tulis sedikitnya satu kalimat singkat.";
+      msgEl.setAttribute("aria-invalid", "true");
+      msgEl.focus();
       return;
     }
-    hint.textContent = "Mengirim...";
+    msgEl.removeAttribute("aria-invalid");
+    hint.textContent = "Mengirim ulasan…";
     submitReview.disabled = true;
+    const originalLabel = submitReview.textContent;
+    submitReview.textContent = "Mengirim…";
     try {
       const res = await fetch("/api/umkm", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, nama, pesan, bintang: currentStars })
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Gagal mengirim ulasan");
-      const item = state.items.find(x => x.id === id);
+      const item = state.items.find((x) => x.id === id);
       if (item) {
-        item.ulasan = data.item.ulasan;
-        item.rating = data.item.rating;
+        item.ulasan = (data.item && data.item.ulasan) || item.ulasan;
+        item.rating = (data.item && data.item.rating) || item.rating;
+        renderDetail(item);
       }
-      document.getElementById("reviewName").value = "";
-      document.getElementById("reviewMsg").value = "";
-      hint.textContent = "Ulasan berhasil dikirim!";
-      toast("Ulasan berhasil dikirim!", "ok");
-      openDetail(id);
+      nameEl.value = "";
+      msgEl.value = "";
+      setStars(5);
+      hint.textContent = "Ulasan berhasil dikirim. Terima kasih!";
+      toast("Ulasan berhasil dikirim. Terima kasih!", "ok");
     } catch (err) {
-      hint.textContent = err.message;
+      hint.textContent = err.message || "Ulasan gagal dikirim. Periksa koneksi lalu coba lagi.";
     } finally {
       submitReview.disabled = false;
+      submitReview.textContent = originalLabel;
     }
   });
 }
 
+/* Fokus terkunci di dalam modal, latar belakang tidak bisa diakses. */
+let activeModal = null;
+
+function getFocusable(el) {
+  return $$('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])', el);
+}
+
+function setPageInert(on) {
+  ["header.top", "main", "footer.footer", "#mobileNav", "#toTop"].forEach((sel) => {
+    const el = $(sel);
+    if (!el) return;
+    if (on) el.setAttribute("inert", "");
+    else el.removeAttribute("inert");
+  });
+}
+
 function openModal(el) {
+  if (!el) return;
   lastFocused = document.activeElement;
+  activeModal = el;
   el.hidden = false;
+  document.body.classList.add("modal-open");
   document.body.style.overflow = "hidden";
-  const focusable = el.querySelector("button, a[href], input, select, textarea");
-  if (focusable) focusable.focus();
+  setPageInert(true);
+
+  const target = el.querySelector("[data-autofocus]") ||
+    el.querySelector("h3, h2, h4") ||
+    getFocusable(el)[0] || el;
+  if (target && !target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+  if (target && target.focus) {
+    setTimeout(() => {
+      try { target.focus(); } catch (e) { /* abaikan */ }
+    }, 30);
+  }
 }
 
 function closeModal(el) {
+  if (!el || el.hidden) return;
   el.hidden = true;
-  document.body.style.overflow = "";
-  if (lastFocused && lastFocused.focus) lastFocused.focus();
+  if (el === activeModal) {
+    activeModal = null;
+    document.body.classList.remove("modal-open");
+    document.body.style.overflow = "";
+    setPageInert(false);
+  }
+  if (lastFocused && document.contains(lastFocused) && lastFocused.focus) {
+    try { lastFocused.focus(); } catch (e) { /* abaikan */ }
+  }
 }
 
-function openDetail(id) {
-  const item = state.items.find((x) => x.id === id);
-  if (!item) return;
+function renderReviews(item) {
+  const reviewList = document.getElementById("reviewList");
+  const reviewCount = document.getElementById("reviewCount");
+  if (!reviewList || !reviewCount) return;
+  const ulasan = Array.isArray(item.ulasan) ? item.ulasan : [];
+  reviewCount.textContent = ulasan.length + " ulasan";
+  if (ulasan.length === 0) {
+    reviewList.innerHTML = '<p class="hint">Belum ada ulasan. Jadilah yang pertama memberi penilaian.</p>';
+    return;
+  }
+  reviewList.innerHTML = ulasan.map((r) => {
+    const bintang = Math.max(1, Math.min(5, Number(r.bintang) || 5));
+    return `<div class="review-item">
+      <div class="review-top">
+        <span class="review-name">${esc(r.nama || "Pengunjung")}</span>
+        <span class="review-stars" aria-label="Penilaian ${bintang} dari 5 bintang">
+          <span aria-hidden="true">${"★".repeat(bintang)}${"☆".repeat(5 - bintang)}</span>
+        </span>
+      </div>
+      <p class="review-text">${esc(r.pesan)}</p>
+    </div>`;
+  }).join("");
+}
+
+function renderDetail(item) {
   const isFav = state.favs.includes(item.id);
   const ig = item.ig ? `<a class="btn ghost" href="${esc(igLink(item.ig))}" target="_blank" rel="noopener">Buka Instagram</a>` : "";
-  const stars = item.rating ? "★".repeat(Math.round(item.rating)) + "☆".repeat(5 - Math.round(item.rating)) : "Belum ada rating";
-  const ulasan = Array.isArray(item.ulasan) ? item.ulasan : [];
+  const rating = Number(item.rating) || 0;
+  const rounded = Math.max(0, Math.min(5, Math.round(rating)));
+  const stars = rating ? "★".repeat(rounded) + "☆".repeat(5 - rounded) : "Belum ada rating";
+  const phone = item.wa ? "+" + esc(waNumber(item.wa)) : "Belum diisi";
+
   $("#modalBody").innerHTML = `
     <div class="detail-head">
       <div class="ico" aria-hidden="true">${esc(item.ikon || "🏪")}</div>
       <div>
-        <h3 id="modalTitle">${esc(item.nama)}</h3>
+        <h3 id="modalTitle" tabindex="-1">${esc(item.nama)}</h3>
         <div class="tags">
           <span class="tag">${esc(item.kategori || "Lainnya")}</span>
           ${item.kota ? `<span class="tag alt">${esc(item.kota)}</span>` : ""}
-          ${item.rating ? `<span class="tag alt">${stars} ${item.rating}</span>` : ""}
+          <span class="tag alt" aria-label="Penilaian ${esc(String(rating || "belum ada"))} dari 5">${esc(stars)}${rating ? " " + esc(String(rating)) : ""}</span>
         </div>
       </div>
     </div>
-    <p class="detail-desc">${esc(item.deskripsi)}</p>
+    <p class="detail-desc" id="modalDesc">${esc(item.deskripsi)}</p>
     <div class="detail-meta">
       ${item.alamat ? `<div><b>Alamat</b><span>${esc(item.alamat)}</span></div>` : ""}
       ${item.kota ? `<div><b>Lokasi</b><span>${esc(item.kota)}</span></div>` : ""}
-      ${item.jamBuka ? `<div><b>Jam Buka</b><span>${esc(item.jamBuka)}</span></div>` : ""}
-      ${item.harga ? `<div><b>Harga</b><span>${esc(item.harga)}</span></div>` : ""}
-      <div><b>WhatsApp</b><span>+${esc(waNumber(item.wa))}</span></div>
+      ${item.jamBuka ? `<div><b>Jam buka</b><span>${esc(item.jamBuka)}</span></div>` : ""}
+      ${item.harga ? `<div><b>Kisaran harga</b><span>${esc(item.harga)}</span></div>` : ""}
+      <div><b>WhatsApp</b><span>${phone}</span></div>
       ${item.ig ? `<div><b>Instagram</b><span>@${esc(item.ig)}</span></div>` : ""}
       <div><b>Terdaftar</b><span>${esc(formatDate(item.createdAt))}</span></div>
     </div>
@@ -743,29 +880,32 @@ function openDetail(id) {
       <a class="btn" href="${esc(waLink(item))}" target="_blank" rel="noopener">Hubungi via WhatsApp</a>
       ${ig}
       <button type="button" class="btn ghost" data-modal-copy="${esc(item.wa || "")}">Salin nomor</button>
-      <button type="button" class="btn ghost" data-modal-fav="${esc(item.id)}">${isFav ? "♥ Hapus favorit" : "♡ Favorit"}</button>
+      <button type="button" class="btn ghost" data-modal-fav="${esc(item.id)}" aria-pressed="${isFav}">${isFav ? "Hapus dari favorit" : "Simpan ke favorit"}</button>
       <button type="button" class="btn ghost" data-modal-share="${esc(item.id)}">Bagikan</button>
     </div>`;
-  const reviewList = document.getElementById("reviewList");
-  const reviewCount = document.getElementById("reviewCount");
-  if (reviewList) {
-    reviewCount.textContent = ulasan.length + " ulasan";
-    if (ulasan.length === 0) {
-      reviewList.innerHTML = '<p class="hint">Belum ada ulasan. Jadilah yang pertama!</p>';
-    } else {
-      reviewList.innerHTML = ulasan.map(r => `
-        <div class="review-item">
-          <div class="review-top">
-            <span class="review-name">${esc(r.nama || "Pengunjung")}</span>
-            <span class="review-stars">${"★".repeat(Number(r.bintang)||5)}${"☆".repeat(5-(Number(r.bintang)||5))}</span>
-          </div>
-          <p class="review-text">${esc(r.pesan)}</p>
-        </div>
-      `).join("");
+
+  renderReviews(item);
+  modal.dataset.currentId = item.id;
+}
+
+function openDetail(id) {
+  const item = state.items.find((x) => x.id === id);
+  if (!item) return;
+  const wasHidden = modal.hidden;
+  renderDetail(item);
+
+  if (wasHidden) {
+    $("#reviewName").value = "";
+    $("#reviewMsg").value = "";
+    $("#reviewHint").textContent = "";
+    setStars(5);
+    openModal(modal);
+  } else {
+    const title = document.getElementById("modalTitle");
+    if (title && title.focus) {
+      try { title.focus(); } catch (e) { /* abaikan */ }
     }
   }
-  document.getElementById("modal").dataset.currentId = item.id;
-  openModal(modal);
 }
 
 $("#modalBody").addEventListener("click", (e) => {
@@ -790,7 +930,7 @@ async function shareItem(id) {
     try { await navigator.share({ title: text, text, url }); return; } catch (e) { /* dibatalkan pengguna */ }
   }
   copyText(url);
-  toast("Tautan disembunyikan ke papan klip.", "ok");
+  toast("Tautan disalin ke papan klip.", "ok");
 }
 
 function openConfirm(title, message, onConfirm) {
@@ -814,11 +954,33 @@ function openConfirm(title, message, onConfirm) {
 $$("[data-close]").forEach((el) => el.addEventListener("click", () => closeModal(el.closest(".modal"))));
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    if (!modal.hidden) closeModal(modal);
-    if (!confirmModal.hidden) closeModal(confirmModal);
+  if (activeModal) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeModal(activeModal);
+      return;
+    }
+    if (e.key === "Tab") {
+      const focusables = getFocusable(activeModal);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === activeModal)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    return;
   }
-  if (e.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+
+  if (e.key === "Escape") {
+    closeNav();
+    return;
+  }
+  if (e.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) && !document.activeElement.isContentEditable) {
     e.preventDefault();
     qInput.focus();
     qInput.select();
@@ -835,9 +997,17 @@ function setError(name, message) {
   const err = form.querySelector(`[data-err="${name}"]`);
   if (message) {
     if (input) input.setAttribute("aria-invalid", "true");
-    if (err) { err.textContent = message; err.classList.add("show"); }
+    if (err) {
+      if (!err.id) err.id = "err-" + name;
+      err.textContent = message;
+      err.classList.add("show");
+      if (input) input.setAttribute("aria-errormessage", err.id);
+    }
   } else {
-    if (input) input.removeAttribute("aria-invalid");
+    if (input) {
+      input.removeAttribute("aria-invalid");
+      input.removeAttribute("aria-errormessage");
+    }
     if (err) { err.textContent = ""; err.classList.remove("show"); }
   }
 }
@@ -893,11 +1063,13 @@ form.addEventListener("submit", async (e) => {
   }
 
   const errors = validate(values);
-  Object.keys(errors).forEach((k) => setError(k, errors[k]));
-  if (Object.keys(errors).length) {
+  const errorKeys = Object.keys(errors);
+  Object.keys({ nama: 1, kategori: 1, kota: 1, wa: 1, ig: 1, ikon: 1, deskripsi: 1, alamat: 1, jamBuka: 1, harga: 1 })
+    .forEach((k) => setError(k, errors[k] || ""));
+  if (errorKeys.length) {
     const first = form.querySelector('[aria-invalid="true"]');
     if (first) first.focus();
-    formHint.textContent = "Periksa kembali bagian yang ditandai merah.";
+    formHint.textContent = `Ada ${errorKeys.length} kolom yang perlu diperbaiki. Periksa pesan berwarna merah di bawah kolom terkait.`;
     toast("Formulir belum lengkap.", "err");
     return;
   }
@@ -933,16 +1105,18 @@ form.addEventListener("submit", async (e) => {
     resetPaging();
     state.query = ""; state.cat = "Semua"; state.city = "Semua"; state.onlyFavs = false;
     qInput.value = "";
-    favToggle.setAttribute("aria-pressed", "false");
+    $("#clearSearch").hidden = true;
+    syncFavToggle();
     form.reset();
     $("#descCount").textContent = "0";
+    formHint.textContent = "";
     renderAll();
     toast("Usaha Anda sudah tampil di daftar.", "ok");
     confetti();
     setTimeout(() => {
-      document.getElementById("jelajahi").scrollIntoView({ behavior: "smooth", block: "start" });
-      const card = grid.querySelector(`[data-id="${CSS.escape(item.id)}"]`);
-      if (card) { card.classList.add("flash"); card.scrollIntoView({ behavior: "smooth", block: "center" }); }
+      document.getElementById("jelajahi").scrollIntoView({ behavior: scrollMode(), block: "start" });
+      const card = grid.querySelector(`[data-id="${cssEscape(item.id)}"]`);
+      if (card) { card.classList.add("flash"); card.scrollIntoView({ behavior: scrollMode(), block: "center" }); }
     }, 120);
   } catch (err) {
     formHint.textContent = err.message || "Gagal menyimpan. Periksa koneksi lalu coba lagi.";
@@ -1032,44 +1206,84 @@ function renderPreview() {
     ig: v.ig,
     ownerId: null
   };
-  $("#previewCard").innerHTML = cardTemplate(preview, "", { allowDelete: false });
+  $("#previewCard").innerHTML = cardTemplate(preview, "", { allowDelete: false, preview: true });
 }
 
 /* ---------- 8. Chrome halaman ---------- */
-/* Tema */
-const themeToggle = $("#themeToggle");
-themeToggle.addEventListener("click", () => {
-  const current = document.documentElement.getAttribute("data-theme");
-  const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const isDark = current ? current === "dark" : systemDark;
-  const next = isDark ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  store.set("theme", next);
-  toast(next === "dark" ? "Mode gelap aktif." : "Mode terang aktif.");
-});
-
-/* Navigasi mobile */
+const mobileNav = $("#mobileNav");
 const nav = $("#nav");
 const menuToggle = $("#menuToggle");
-menuToggle.addEventListener("click", () => {
-  const open = nav.classList.toggle("open");
-  menuToggle.setAttribute("aria-expanded", String(open));
-  menuToggle.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
-});
-nav.addEventListener("click", (e) => {
-  if (e.target.tagName === "A") {
-    nav.classList.remove("open");
+
+/* Tema */
+const themeToggle = $("#themeToggle");
+const darkQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+
+function storedTheme() {
+  const value = store.get("theme", null);
+  return value === "light" || value === "dark" ? value : null;
+}
+
+function currentTheme() {
+  return document.documentElement.getAttribute("data-theme") ||
+    (darkQuery && darkQuery.matches ? "dark" : "light");
+}
+
+function syncThemeButton() {
+  if (!themeToggle) return;
+  const dark = currentTheme() === "dark";
+  themeToggle.setAttribute("aria-pressed", String(dark));
+  themeToggle.setAttribute("aria-label", dark ? "Tema gelap" : "Tema terang");
+  themeToggle.title = dark ? "Ganti ke tema terang" : "Ganti ke tema gelap";
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    store.set("theme", next);
+    syncThemeButton();
+    toast(next === "dark" ? "Mode gelap aktif." : "Mode terang aktif.");
+  });
+}
+
+/* Ikuti perubahan tema sistem selama pengguna belum memilih tema sendiri. */
+if (darkQuery && typeof darkQuery.addEventListener === "function") {
+  darkQuery.addEventListener("change", () => {
+    if (!storedTheme()) syncThemeButton();
+  });
+}
+
+/* Navigasi mobile */
+function closeNav() {
+  if (!nav) return;
+  nav.classList.remove("open");
+  if (menuToggle) {
     menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Buka menu navigasi");
   }
-});
+}
+
+if (menuToggle && nav) {
+  menuToggle.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "Tutup menu navigasi" : "Buka menu navigasi");
+  });
+  nav.addEventListener("click", (e) => {
+    if (e.target.closest("a")) closeNav();
+  });
+}
 
 /* Header scroll */
 const header = $("header.top");
-window.addEventListener("scroll", () => {
-  header.classList.toggle("scrolled", window.scrollY > 8);
-  const top = $("#toTop");
-  top.hidden = window.scrollY < 600;
-}, { passive: true });
+const toTop = $("#toTop");
+
+function updateScrollChrome() {
+  if (header) header.classList.toggle("scrolled", window.scrollY > 8);
+  if (toTop) toTop.hidden = window.scrollY < 600;
+}
+window.addEventListener("scroll", updateScrollChrome, { passive: true });
+updateScrollChrome();
 
 /* Tab aktif pada navigasi bawah */
 window.addEventListener("scroll", debounce(() => {
@@ -1085,33 +1299,32 @@ window.addEventListener("scroll", debounce(() => {
   setActiveTab(tab);
 }, 140), { passive: true });
 
-$("#toTop").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+if (toTop) {
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: scrollMode() }));
+}
 
-/* Steps accordion */
-$$(".step").forEach((step) => {
-  step.addEventListener("click", () => {
-    const isOpen = step.getAttribute("aria-expanded") === "true";
-    $$(".step").forEach((s) => s.setAttribute("aria-expanded", "false"));
-    step.setAttribute("aria-expanded", String(!isOpen));
-  });
-});
-
-/* Reveal on scroll */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("in");
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15 });
-$$("[data-reveal]").forEach((el) => revealObserver.observe(el));
+/* Reveal on scroll. Bila IntersectionObserver tidak tersedia, konten langsung tampil. */
+const revealEls = $$("[data-reveal]");
+if ("IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in");
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach((el) => revealObserver.observe(el));
+} else {
+  revealEls.forEach((el) => el.classList.add("in"));
+}
 
 /* Counter */
 function animateCounter(el, target) {
   if (!el) return;
-  const from = Number(el.textContent.replace(/\D/g, "")) || 0;
   const to = Number(target) || 0;
+  if (prefersReduced()) { el.textContent = String(to); return; }
+  const from = Number(el.textContent.replace(/\D/g, "")) || 0;
   if (from === to) { el.textContent = String(to); return; }
   const duration = 900;
   const start = performance.now();
@@ -1124,56 +1337,6 @@ function animateCounter(el, target) {
   requestAnimationFrame(step);
 }
 
-/* Kartu obrolan di halaman depan */
-const HERO_SAMPLES = [
-  {
-    nama: "Kopi Randu", kategori: "Kuliner", ikon: "☕", kota: "Bandung",
-    pesan: ["Kak, kopi susu arennya masih ada?",
-            "Masih ada Bang, mau 2 ya — 15 menit lagi siap 👌"]
-  },
-  {
-    nama: "Tenun Adil", kategori: "Kerajinan", ikon: "🧶", kota: "Yogyakarta",
-    pesan: ["Motif warna alamnya ada yang baru?",
-            "Ada kak, minggu lalu baru selesai dijemur 🌿"]
-  },
-  {
-    nama: "Batik Soko", kategori: "Fashion", ikon: "👘", kota: "Solo",
-    pesan: ["Bisa jahit seragam sekolah 30 pcs?",
-            "Bisa kak, sekitar 4 hari selesai ✂️"]
-  },
-  {
-    nama: "Sayur Segar", kategori: "Pertanian", ikon: "🥬", kota: "Bandung",
-    pesan: ["Tomatonya masih ada hari ini?",
-            "Masih ada Bang, baru dipanen pagi ini 🍅"]
-  }
-];
-let heroIndex = 0;
-function renderHeroCard() {
-  const el = $("#heroCard");
-  if (!el) return;
-  const s = HERO_SAMPLES[heroIndex % HERO_SAMPLES.length];
-  el.innerHTML = `<div class="chat-inner">
-      <div class="chat-head">
-        <div class="chat-avatar" aria-hidden="true">${esc(s.ikon)}</div>
-        <div class="chat-id">
-          <strong>${esc(s.nama)}</strong>
-          <span class="chat-sub">${esc(s.kategori)} · ${esc(s.kota)}</span>
-        </div>
-        <span class="chat-online">aktif</span>
-      </div>
-      <div class="chat-body">
-        <div class="bubble in">${esc(s.pesan[0])}</div>
-        <div class="bubble out">${esc(s.pesan[1])}</div>
-      </div>
-      <div class="chat-foot">
-        <span class="typing" aria-hidden="true"><i></i><i></i><i></i></span> Sedang mengetik…
-      </div>
-    </div>`;
-  heroIndex += 1;
-}
-renderHeroCard();
-setInterval(renderHeroCard, 4500);
-
 /* Pencarian cepat di halaman depan */
 const heroSearch = $("#heroSearch");
 if (heroSearch) {
@@ -1185,12 +1348,11 @@ if (heroSearch) {
     resetPaging();
     $("#clearSearch").hidden = !value;
     renderGrid();
-    $("#jelajahi").scrollIntoView({ behavior: "smooth", block: "start" });
+    $("#jelajahi").scrollIntoView({ behavior: scrollMode(), block: "start" });
   });
 }
 
 /* Navigasi bawah untuk layar kecil */
-const mobileNav = $("#mobileNav");
 function setActiveTab(tab) {
   if (!mobileNav) return;
   $$(".mnav-item", mobileNav).forEach((btn) => {
@@ -1205,12 +1367,13 @@ if (mobileNav) {
     if (!btn) return;
     if (btn.hasAttribute("data-fav")) {
       state.onlyFavs = !state.onlyFavs;
-      favToggle.setAttribute("aria-pressed", String(state.onlyFavs));
+      syncFavToggle();
       resetPaging();
       renderGrid();
+      toast(state.onlyFavs ? "Menampilkan usaha favorit saja." : "Menampilkan semua usaha.");
     }
     const target = document.querySelector(btn.getAttribute("data-go"));
-    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (target) target.scrollIntoView({ behavior: scrollMode(), block: "start" });
     setActiveTab(btn.getAttribute("data-tab"));
   });
   setActiveTab("top");
@@ -1220,6 +1383,7 @@ if (mobileNav) {
 let lastMobile = isMobile();
 window.addEventListener("resize", debounce(() => {
   const mobile = isMobile();
+  if (!mobile) closeNav();
   if (mobile === lastMobile) return;
   lastMobile = mobile;
   resetPaging();
@@ -1231,7 +1395,7 @@ function confetti() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const wrap = document.createElement("div");
   wrap.className = "confetti";
-  const colors = ["#5A6E50", "#AEC3A0", "#D3A283", "#E3D6BE"];
+  const colors = ["#1E6B3A", "#A63D18", "#D9B382", "#6F7D73"];
   for (let i = 0; i < 60; i++) {
     const piece = document.createElement("i");
     piece.style.left = Math.random() * 100 + "%";
@@ -1246,12 +1410,11 @@ function confetti() {
   setTimeout(() => wrap.remove(), 4200);
 }
 
-/* Auto refresh */
-setInterval(() => {
-  if (document.visibilityState === "visible" && !state.loading) loadItems(true);
-}, 30000);
+/* Segarkan saat tab kembali aktif, bukan lewat pengatur waktu otomatis. */
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") loadItems(true);
+  if (document.visibilityState === "visible" && !state.loading && Date.now() - state.lastSync > 60000) {
+    loadItems(true);
+  }
 });
 
 /* Año */
@@ -1272,10 +1435,13 @@ function openFromQuery() {
 
 /* Init */
 (async function init() {
+  syncThemeButton();
+  syncFavToggle();
   renderPreview();
   syncEmojiSelection();
-  $("#startedAt") && ($("#startedAt").value = String(Date.now()));
+  const startedAt = $("#startedAt");
+  if (startedAt) startedAt.value = String(Date.now());
   await loadItems();
   openFromQuery();
-  setInterval(renderUpdated, 15000);
+  setInterval(renderUpdated, 60000);
 })();

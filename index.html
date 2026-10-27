@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pasar UMKM — Tampilkan usaha Anda ke pembeli sekitar</title>
 <meta name="description" content="Pasar UMKM: direktori gratis untuk pelaku usaha kecil. Tampilkan usaha Anda, ditemukan pembeli sekitar, dan hubungi langsung lewat WhatsApp.">
-<meta name="theme-color" content="#5A6E50" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1D1F19" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FDFBF7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101612" media="(prefers-color-scheme: dark)">
 <meta property="og:title" content="Pasar UMKM">
 <meta property="og:description" content="Usaha kecil, kabar yang sampai lebih jauh. Daftar usaha Anda secara gratis.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%235A6E50'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='%23FBF8F0' font-family='Georgia,serif'%3EP%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%231E6B3A'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle' fill='%23FDFBF7' font-family='Georgia,serif'%3EP%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400&family=Nunito+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <script>
   (function () {
@@ -27,217 +27,261 @@
 <body>
 <a class="skip-link" href="#jelajahi">Langsung ke daftar usaha</a>
 
+<noscript>
+  <p class="noscript">Pasar UMKM memerlukan JavaScript untuk menampilkan daftar usaha. Aktifkan JavaScript di browser Anda, lalu muat ulang halaman ini.</p>
+</noscript>
+
 <header class="top" id="top">
   <div class="wrap header-inner">
-    <a class="brand" href="#top">
+    <a class="brand" href="#top" aria-label="Pasar UMKM, kembali ke beranda">
       <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18l-1.6 10.2a2 2 0 0 1-2 1.8H6.6a2 2 0 0 1-2-1.8L3 9Z"/><path d="M8 9 11 3M16 9 13 3"/></svg>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18l-1.6 10.2a2 2 0 0 1-2 1.8H6.6a2 2 0 0 1-2-1.8L3 9Z"/><path d="M8 9 11 3M16 9 13 3"/></svg>
       </span>
-      Pasar<span class="brand-accent">UMKM</span>
+      <span class="brand-text">Pasar<span class="brand-accent">UMKM</span></span>
     </a>
 
     <nav class="nav" id="nav" aria-label="Navigasi utama">
-      <a href="#jelajahi">Jelajahi</a>
+      <a href="#jelajahi">Jelajahi usaha</a>
       <a href="#cara-kerja">Cara kerja</a>
-      <a href="#faq">FAQ</a>
+      <a href="#faq">Pertanyaan umum</a>
       <a href="#daftar" class="nav-cta">Daftarkan usaha</a>
     </nav>
 
     <div class="header-actions">
-      <button type="button" class="icon-btn" id="themeToggle" aria-label="Ganti tema terang/gelap" title="Ganti tema">
-        <span class="ico-sun" aria-hidden="true">☀</span><span class="ico-moon" aria-hidden="true">☾</span>
+      <button type="button" class="icon-btn theme-btn" id="themeToggle" aria-label="Tema terang" aria-pressed="false" title="Ganti ke tema gelap">
+        <span class="ico-sun" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+        </span>
+        <span class="ico-moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7Z"/></svg>
+        </span>
+        <span class="icon-btn-text">Tema</span>
       </button>
-      <button type="button" class="icon-btn nav-toggle" id="menuToggle" aria-expanded="false" aria-controls="nav" aria-label="Buka menu">
-        <span aria-hidden="true">☰</span>
+      <button type="button" class="icon-btn nav-toggle" id="menuToggle" aria-expanded="false" aria-controls="nav" aria-label="Buka menu navigasi">
+        <span aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </span>
+        <span class="icon-btn-text">Menu</span>
       </button>
     </div>
   </div>
 </header>
 
-<main>
-  <!-- ============ HERO ============ -->
-  <section class="hero">
+<main id="konten">
+  <!-- ============ SAMBUTAN ============ -->
+  <section class="hero" aria-labelledby="heroTitle">
     <div class="hero-bg" aria-hidden="true">
       <div class="grid-overlay"></div>
     </div>
 
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <div class="kicker reveal" data-reveal>
-          <span class="kicker-line"></span>
-          <span>Direktori UMKM</span>
-        </div>
+        <p class="kicker reveal" data-reveal>
+          <span class="kicker-dot" aria-hidden="true"></span>
+          Direktori UMKM gratis
+        </p>
 
-        <h1 class="reveal" data-reveal>
-          Usaha Kecil.<br>
-          <span class="emphasis">Terlihat Lebih Jauh.</span>
+        <h1 class="reveal" id="heroTitle" data-reveal>
+          Usaha kecil,<br>
+          <span class="emphasis">terhubung langsung</span> dengan pembeli.
         </h1>
 
         <p class="lead reveal" data-reveal>
-          Daftar sekali, lalu orang di sekitar Anda bisa menemukan usaha Anda lewat pencarian
-          yang sederhana. Gratis, tanpa komisi, tanpa ribet.
+          Daftarkan usaha Anda tanpa biaya. Pembeli di sekitar bisa menemukan, melihat informasi lengkap, memberi ulasan, dan menghubungi Anda langsung lewat WhatsApp.
         </p>
 
-        <form class="hero-search reveal" data-reveal id="heroSearch" role="search">
-          <label class="sr-only" for="heroQ">Cari usaha</label>
-          <input id="heroQ" name="heroQ" type="search" placeholder="Cari nama usaha, kategori, atau lokasi..." autocomplete="off">
-          <button class="btn" type="submit">Cari →</button>
+        <form class="hero-search reveal" data-reveal id="heroSearch" role="search" aria-label="Cari usaha di direktori">
+          <span class="hero-search-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+          </span>
+          <label class="sr-only" for="heroQ">Cari usaha berdasarkan nama, kategori, atau kota</label>
+          <input id="heroQ" name="heroQ" type="search" placeholder="Contoh: kopi, batik, atau Surakarta" autocomplete="off" aria-describedby="heroSearchHint">
+          <button class="btn" type="submit">Cari usaha</button>
         </form>
+        <p class="hero-search-hint reveal" data-reveal id="heroSearchHint">
+          Gunakan kata singkat agar hasil pencarian lebih banyak.
+        </p>
 
         <div class="btns hero-cta reveal" data-reveal>
-          <a class="btn" href="#daftar">Daftarkan Usaha</a>
-          <a class="btn ghost" href="#jelajahi">Jelajahi Direktori</a>
+          <a class="btn" href="#daftar">Daftarkan usaha gratis</a>
+          <a class="btn ghost" href="#jelajahi">Lihat semua usaha</a>
         </div>
+
+        <ul class="hero-perks reveal" data-reveal>
+          <li><span class="perk-check" aria-hidden="true">✓</span> Gratis, tanpa komisi</li>
+          <li><span class="perk-check" aria-hidden="true">✓</span> Tanpa perlu aplikasi</li>
+          <li><span class="perk-check" aria-hidden="true">✓</span> Langsung chat WhatsApp</li>
+        </ul>
 
         <div class="hero-meta reveal" data-reveal>
           <div class="meta-item">
             <span class="meta-num" id="liveCountNum">—</span>
-            <span class="meta-label">Usaha Terdaftar</span>
+            <span class="meta-label">Usaha terdaftar</span>
           </div>
-          <div class="meta-divider"></div>
+          <div class="meta-divider" aria-hidden="true"></div>
           <div class="meta-item">
             <span class="meta-num">100%</span>
-            <span class="meta-label">Gratis</span>
+            <span class="meta-label">Gratis selamanya</span>
           </div>
-          <div class="meta-divider"></div>
+          <div class="meta-divider" aria-hidden="true"></div>
           <div class="meta-item">
             <span class="meta-num">Langsung</span>
-            <span class="meta-label">Via WhatsApp</span>
+            <span class="meta-label">Hubungi via WhatsApp</span>
           </div>
         </div>
       </div>
 
-      <div class="hero-side reveal" data-reveal>
-        <div class="showcase-card" aria-label="Pratinjau usaha">
+      <aside class="hero-side reveal" data-reveal aria-labelledby="contohKartu">
+        <div class="showcase-card">
           <div class="showcase-header">
-            <span class="showcase-dot"></span>
-            <span class="showcase-dot"></span>
-            <span class="showcase-dot"></span>
+            <span class="showcase-label" id="contohKartu">Contoh kartu usaha</span>
+            <span class="showcase-badge">Gratis</span>
           </div>
           <div class="showcase-body">
             <div class="showcase-row">
-              <span class="showcase-ico">☕</span>
+              <span class="showcase-ico" aria-hidden="true">☕</span>
               <div>
                 <div class="showcase-name">Kopi Randu</div>
                 <div class="showcase-meta">Kuliner · Bandung</div>
               </div>
             </div>
-            <div class="showcase-desc">Kopi susu gula aren dan single origin pilihan. Roasting mingguan.</div>
-            <div class="showcase-actions">
-              <span class="showcase-tag">WhatsApp</span>
-              <span class="showcase-tag">Instagram</span>
+            <p class="showcase-rating" aria-label="Contoh penilaian 4,8 dari 5 bintang">
+              <span aria-hidden="true">★★★★★</span> <b>4,8</b> <span class="showcase-rating-note">(24 ulasan)</span>
+            </p>
+            <p class="showcase-desc">Kopi susu gula aren dan single origin pilihan. Roasting mingguan.</p>
+            <div class="showcase-tags">
+              <span class="showcase-tag">Buka 08.00–22.00</span>
+              <span class="showcase-tag">Rp 12.000–35.000</span>
             </div>
+            <div class="showcase-actions">
+              <span class="showcase-btn primary">Chat WhatsApp</span>
+              <span class="showcase-btn">Lihat detail</span>
+            </div>
+            <p class="showcase-note">Pembeli bisa menghubungi Anda tanpa aplikasi tambahan.</p>
           </div>
         </div>
-      </div>
+      </aside>
     </div>
   </section>
 
-  <!-- ============ STATS ============ -->
-  <section class="stats-wrap">
-    <div class="wrap stats-bar" id="stats">
-      <div class="stat-item"><b class="counter" data-count="0" id="statTotal">0</b><span>Usaha</span></div>
-      <div class="stat-divider"></div>
-      <div class="stat-item"><b class="counter" data-count="0" id="statCats">0</b><span>Kategori</span></div>
-      <div class="stat-divider"></div>
-      <div class="stat-item"><b class="counter" data-count="0" id="statCities">0</b><span>Lokasi</span></div>
+  <!-- ============ STATISTIK ============ -->
+  <section class="stats-wrap" aria-label="Ringkasan direktori">
+    <div class="wrap">
+      <div class="stats-bar" id="stats">
+        <div class="stat-item"><b class="counter" data-count="0" id="statTotal">0</b><span>Usaha</span></div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item"><b class="counter" data-count="0" id="statCats">0</b><span>Kategori</span></div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item"><b class="counter" data-count="0" id="statCities">0</b><span>Lokasi</span></div>
+      </div>
     </div>
   </section>
 
   <!-- ============ CARA KERJA ============ -->
-  <section class="block" id="cara-kerja">
+  <section class="block" id="cara-kerja" aria-labelledby="caraKerjaTitle">
     <div class="wrap">
       <div class="head">
         <div>
-          <span class="eyebrow">Mudah</span>
-          <h2 class="title">Cara kerjanya</h2>
-          <p class="sub">Tiga langkah, tanpa biaya dan tanpa drama.</p>
+          <p class="eyebrow">Mudah dan cepat</p>
+          <h2 class="title" id="caraKerjaTitle">Cara kerja, tiga langkah</h2>
+          <p class="sub">Dirancang agar mudah dipahami semua kalangan, dari anak muda sampai orang tua.</p>
         </div>
       </div>
       <div class="steps-grid">
-        <button type="button" class="step" data-step="0" aria-expanded="false">
-          <span class="step-no">1</span>
-          <span class="step-body">
-            <strong>Isi formulir pendaftaran</strong>
-            <span class="step-more">Tulis nama usaha, kategori, kota, deskripsi singkat, dan nomor WhatsApp. Seluruhnya kurang dari 2 menit.</span>
-          </span>
-        </button>
-        <button type="button" class="step" data-step="1" aria-expanded="false">
-          <span class="step-no">2</span>
-          <span class="step-body">
-            <strong>Usaha langsung tampil di daftar</strong>
-            <span class="step-more">Kartu Anda muncul di direktori publik dan bisa ditemukan lewat pencarian, filter kategori, dan filter kota.</span>
-          </span>
-        </button>
-        <button type="button" class="step" data-step="2" aria-expanded="false">
-          <span class="step-no">3</span>
-          <span class="step-body">
-            <strong>Pembeli menghubungi Anda</strong>
-            <span class="step-more">Pembeli menekan tombol WhatsApp atau Instagram Anda. Nomor otomatis tersimpan di WhatsApp pembeli, jadi obrolan bisa langsung dimulai tanpa perlu saling menambahkan kontak.</span>
-          </span>
-        </button>
+        <article class="step">
+          <span class="step-no" aria-hidden="true">1</span>
+          <h3 class="step-title">Isi formulir pendaftaran</h3>
+          <p class="step-text">Tulis nama usaha, kategori, kota, deskripsi singkat, dan nomor WhatsApp. Kurang dari dua menit.</p>
+        </article>
+        <article class="step">
+          <span class="step-no" aria-hidden="true">2</span>
+          <h3 class="step-title">Usaha langsung tampil</h3>
+          <p class="step-text">Kartu usaha Anda masuk ke direktori dan bisa ditemukan lewat pencarian, kategori, maupun kota.</p>
+        </article>
+        <article class="step">
+          <span class="step-no" aria-hidden="true">3</span>
+          <h3 class="step-title">Pembeli menghubungi Anda</h3>
+          <p class="step-text">Pembeli menekan tombol WhatsApp. Obrolan langsung dimulai tanpa perlu saling menambah kontak.</p>
+        </article>
       </div>
     </div>
   </section>
 
   <!-- ============ JELAJAHI ============ -->
-  <section class="block" id="jelajahi">
+  <section class="block block-soft" id="jelajahi" aria-labelledby="jelajahiTitle">
     <div class="wrap">
       <div class="head">
         <div>
-          <span class="eyebrow">Direktori</span>
-          <h2 class="title">Jelajahi usaha</h2>
-          <p class="sub">Cari nama usaha, produk, atau kota.</p>
+          <p class="eyebrow">Direktori usaha</p>
+          <h2 class="title" id="jelajahiTitle">Jelajahi usaha</h2>
+          <p class="sub">Temukan usaha di sekitar Anda, lalu hubungi langsung tanpa perantara.</p>
         </div>
         <div class="head-tools">
-          <span class="updated" id="updatedAt" aria-live="polite"></span>
+          <span class="updated" id="updatedAt"></span>
           <button type="button" class="btn ghost small" id="refreshBtn">
-            <span aria-hidden="true">↻</span> Muat ulang
+            <span aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 6.7"/><path d="M20 4v7h-7"/></svg>
+            </span>
+            Muat ulang
           </button>
         </div>
       </div>
 
       <div class="tools">
-        <div class="search-wrap">
-          <span class="search-ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-          </span>
-          <input class="search" id="q" type="search" placeholder="Cari kopi, batik, keripik, Surakarta…" aria-label="Cari usaha" autocomplete="off">
-          <button type="button" class="clear-btn" id="clearSearch" aria-label="Bersihkan pencarian" hidden>✕</button>
-          <kbd class="kbd-hint" aria-hidden="true">/</kbd>
+        <div class="tool-field tool-search">
+          <label class="tool-label" for="q">Cari usaha</label>
+          <div class="search-wrap">
+            <span class="search-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+            </span>
+            <input class="search" id="q" type="search" placeholder="Contoh: kopi, batik, keripik..." aria-label="Cari usaha" autocomplete="off" aria-describedby="toolsHint">
+            <button type="button" class="clear-btn" id="clearSearch" aria-label="Bersihkan pencarian" hidden>
+              <span aria-hidden="true">✕</span>
+            </button>
+          </div>
         </div>
 
-        <label class="select-wrap">
-          <span class="sr-only">Urutkan daftar</span>
-          <select id="sort">
-            <option value="terbaru">Terbaru</option>
-            <option value="terlama">Terlama</option>
-            <option value="az">Nama A–Z</option>
-            <option value="za">Nama Z–A</option>
-          </select>
-        </label>
+        <div class="tool-field">
+          <label class="tool-label" for="sort">Urutkan</label>
+          <div class="select-wrap">
+            <select id="sort">
+              <option value="terbaru">Terbaru</option>
+              <option value="terlama">Terlama</option>
+              <option value="az">Nama A–Z</option>
+              <option value="za">Nama Z–A</option>
+            </select>
+          </div>
+        </div>
 
-        <label class="select-wrap">
-          <span class="sr-only">Filter kota</span>
-          <select id="city"><option value="Semua">Semua kota</option></select>
-        </label>
+        <div class="tool-field">
+          <label class="tool-label" for="city">Kota</label>
+          <div class="select-wrap">
+            <select id="city"><option value="Semua">Semua kota</option></select>
+          </div>
+        </div>
 
-        <button type="button" class="chip fav-toggle" id="favToggle" aria-pressed="false">
-          <span aria-hidden="true">♥</span> Favorit saya
-        </button>
+        <div class="tool-field tool-action">
+          <span class="tool-label" id="favLabel">Tampilkan</span>
+          <button type="button" class="chip fav-toggle" id="favToggle" aria-pressed="false" aria-describedby="favLabel">
+            <span aria-hidden="true">♡</span> Favorit saya
+          </button>
+        </div>
       </div>
+      <p class="tools-hint" id="toolsHint">Cari berdasarkan nama usaha, produk, kategori, atau kota. Gunakan filter untuk mempersempit hasil.</p>
 
-      <div class="chips" id="chips" role="group" aria-label="Filter kategori"></div>
+      <h3 class="filter-heading" id="categoryLabel">Kategori usaha</h3>
+      <div class="chips" id="chips" role="group" aria-labelledby="categoryLabel"></div>
 
       <div class="result-bar">
-        <p class="result-info" id="resultInfo" aria-live="polite">Memuat daftar usaha…</p>
+        <p class="result-info" id="resultInfo" role="status" aria-live="polite">Memuat daftar usaha…</p>
         <label class="per-page" id="perPageWrap">
-          <span class="sr-only">Jumlah usaha per halaman</span>
+          <span>Tampilkan</span>
           <select id="perPage" aria-label="Jumlah usaha per halaman">
-            <option value="4">4 per halaman</option>
-            <option value="8">8 per halaman</option>
-            <option value="12">12 per halaman</option>
+            <option value="4">4</option>
+            <option value="8">8</option>
+            <option value="12">12</option>
           </select>
+          <span>per halaman</span>
         </label>
       </div>
 
@@ -252,29 +296,35 @@
   </section>
 
   <!-- ============ DAFTAR ============ -->
-  <section class="block" id="daftar">
+  <section class="block" id="daftar" aria-labelledby="formTitle">
     <div class="wrap">
       <div class="head">
         <div>
-          <span class="eyebrow">Gratis</span>
-          <h2 class="title">Daftarkan usaha Anda</h2>
-          <p class="sub">Data yang Anda isi akan tampil untuk semua pengunjung.</p>
+          <p class="eyebrow">Gratis selamanya</p>
+          <h2 class="title" id="formTitle">Daftarkan usaha Anda</h2>
+          <p class="sub">Isi data di bawah. Kolom bertanda <span class="req">*</span> wajib diisi, sisanya boleh dikosongkan.</p>
         </div>
       </div>
 
-      <div class="notice" id="notice" hidden></div>
+      <div class="notice" id="notice" role="status" hidden></div>
 
       <div class="daftar-grid">
-        <form class="reg" id="form" novalidate>
+        <form class="reg" id="form" novalidate aria-labelledby="formTitle">
+          <p class="form-note full">
+            Butuh bantuan? Lihat <a href="#faq">pertanyaan umum</a> atau tekan
+            <strong>Isi data contoh</strong> untuk mencoba formulir.
+          </p>
+
           <div class="field">
-            <label for="f-nama">Nama usaha <span class="req">*</span></label>
-            <input id="f-nama" name="nama" required maxlength="80" placeholder="Contoh: Warung Bu Sri" autocomplete="organization">
-            <p class="err" data-err="nama"></p>
+            <label for="f-nama">Nama usaha <span class="req" aria-hidden="true">*</span><span class="sr-only">(wajib diisi)</span></label>
+            <input id="f-nama" name="nama" required maxlength="80" placeholder="Contoh: Warung Bu Sri" autocomplete="organization" aria-describedby="hint-nama err-nama">
+            <p class="hint" id="hint-nama">Nama yang mudah dikenali pembeli.</p>
+            <p class="err" id="err-nama" data-err="nama" role="alert"></p>
           </div>
 
           <div class="field">
-            <label for="f-kategori">Kategori <span class="req">*</span></label>
-            <select id="f-kategori" name="kategori" required>
+            <label for="f-kategori">Kategori <span class="req" aria-hidden="true">*</span><span class="sr-only">(wajib diisi)</span></label>
+            <select id="f-kategori" name="kategori" required aria-describedby="hint-kategori err-kategori">
               <option value="Kuliner">Kuliner</option>
               <option value="Fashion">Fashion</option>
               <option value="Kerajinan">Kerajinan</option>
@@ -284,56 +334,65 @@
               <option value="Pendidikan">Pendidikan</option>
               <option value="Lainnya">Lainnya</option>
             </select>
-            <p class="err" data-err="kategori"></p>
+            <p class="hint" id="hint-kategori">Pilih yang paling sesuai dengan usaha Anda.</p>
+            <p class="err" id="err-kategori" data-err="kategori" role="alert"></p>
           </div>
 
           <div class="field">
-            <label for="f-kota">Kota/Kabupaten</label>
-            <input id="f-kota" name="kota" maxlength="80" placeholder="Contoh: Surakarta" autocomplete="address-level2">
-            <p class="err" data-err="kota"></p>
+            <label for="f-kota">Kota atau kabupaten</label>
+            <input id="f-kota" name="kota" maxlength="80" placeholder="Contoh: Surakarta" autocomplete="address-level2" aria-describedby="hint-kota err-kota">
+            <p class="hint" id="hint-kota">Membantu pembeli menemukan usaha di sekitar.</p>
+            <p class="err" id="err-kota" data-err="kota" role="alert"></p>
           </div>
 
           <div class="field">
             <label for="f-alamat">Alamat lengkap</label>
-            <input id="f-alamat" name="alamat" maxlength="200" placeholder="Jl. Contoh No. 123">
-            <p class="err" data-err="alamat"></p>
+            <input id="f-alamat" name="alamat" maxlength="200" placeholder="Contoh: Jl. Diponegoro No. 45" autocomplete="street-address" aria-describedby="hint-alamat err-alamat">
+            <p class="hint" id="hint-alamat">Boleh nama jalan, nomor, atau patokan yang mudah ditemukan.</p>
+            <p class="err" id="err-alamat" data-err="alamat" role="alert"></p>
           </div>
 
           <div class="field">
             <label for="f-jam">Jam buka</label>
-            <input id="f-jam" name="jamBuka" maxlength="60" placeholder="Contoh: 08.00 - 17.00">
+            <input id="f-jam" name="jamBuka" maxlength="60" placeholder="Contoh: Senin–Sabtu, 08.00–17.00" aria-describedby="hint-jam err-jam">
+            <p class="hint" id="hint-jam">Tulis hari dan jam agar pembeli tidak datang saat tutup.</p>
+            <p class="err" id="err-jam" data-err="jamBuka" role="alert"></p>
           </div>
 
           <div class="field">
-            <label for="f-harga">Range harga</label>
-            <input id="f-harga" name="harga" maxlength="40" placeholder="Contoh: Rp 10.000 - Rp 50.000">
+            <label for="f-harga">Kisaran harga</label>
+            <input id="f-harga" name="harga" maxlength="40" placeholder="Contoh: Rp 10.000 – Rp 50.000" aria-describedby="hint-harga err-harga">
+            <p class="hint" id="hint-harga">Opsional. Membantu pembeli memperkirakan budget.</p>
+            <p class="err" id="err-harga" data-err="harga" role="alert"></p>
           </div>
 
           <div class="field">
-            <label for="f-wa">Nomor WhatsApp <span class="req">*</span></label>
-            <input id="f-wa" name="wa" required inputmode="tel" maxlength="20" placeholder="0812xxxxxxx" autocomplete="tel">
-            <p class="hint" id="waHint">Boleh pakai 08xx atau +62xx.</p>
-            <p class="err" data-err="wa"></p>
+            <label for="f-wa">Nomor WhatsApp <span class="req" aria-hidden="true">*</span><span class="sr-only">(wajib diisi)</span></label>
+            <input id="f-wa" name="wa" required inputmode="tel" maxlength="20" placeholder="Contoh: 081234567890" autocomplete="tel" aria-describedby="waHint err-wa">
+            <p class="hint" id="waHint">Boleh memakai 08xx atau +62xx.</p>
+            <p class="err" id="err-wa" data-err="wa" role="alert"></p>
           </div>
 
           <div class="field">
-            <label for="f-ig">Instagram <span class="hint-inline">opsional, tanpa @</span></label>
-            <input id="f-ig" name="ig" maxlength="40" placeholder="namausaha" autocomplete="off">
-            <p class="err" data-err="ig"></p>
-          </div>
-
-          <div class="field">
-            <label for="f-ikon">Ikon usaha <span class="hint-inline">pilih satu emoji</span></label>
-            <input id="f-ikon" name="ikon" maxlength="4" placeholder="🏪" autocomplete="off">
-            <div class="emoji-grid" id="emojiGrid" role="group" aria-label="Pilihan ikon emoji"></div>
-            <p class="err" data-err="ikon"></p>
+            <label for="f-ig">Instagram <span class="hint-inline">opsional</span></label>
+            <input id="f-ig" name="ig" maxlength="40" placeholder="Contoh: namausaha" autocomplete="off" aria-describedby="hint-ig err-ig">
+            <p class="hint" id="hint-ig">Tanpa tanda @. Kosongkan jika belum ada.</p>
+            <p class="err" id="err-ig" data-err="ig" role="alert"></p>
           </div>
 
           <div class="field full">
-            <label for="f-deskripsi">Deskripsi usaha <span class="req">*</span></label>
-            <textarea id="f-deskripsi" name="deskripsi" required maxlength="500" placeholder="Ceritakan produk/jasa, keunggulan, dan hal menarik lainnya."></textarea>
-            <p class="hint counter"><span id="descCount">0</span>/500 karakter</p>
-            <p class="err" data-err="deskripsi"></p>
+            <label for="f-ikon">Ikon usaha <span class="hint-inline">pilih satu emoji</span></label>
+            <input id="f-ikon" name="ikon" maxlength="4" placeholder="Pilih emoji di bawah" autocomplete="off" aria-describedby="hint-ikon err-ikon">
+            <div class="emoji-grid" id="emojiGrid" role="group" aria-label="Pilihan ikon emoji"></div>
+            <p class="hint" id="hint-ikon">Emoji membantu kartu usaha Anda lebih mudah dikenali.</p>
+            <p class="err" id="err-ikon" data-err="ikon" role="alert"></p>
+          </div>
+
+          <div class="field full">
+            <label for="f-deskripsi">Deskripsi usaha <span class="req" aria-hidden="true">*</span><span class="sr-only">(wajib diisi)</span></label>
+            <textarea id="f-deskripsi" name="deskripsi" required maxlength="500" placeholder="Ceritakan produk atau jasa, keunggulan, dan hal menarik lainnya." aria-describedby="hint-deskripsi err-deskripsi"></textarea>
+            <p class="hint counter" id="hint-deskripsi"><span id="descCount">0</span>/500 karakter</p>
+            <p class="err" id="err-deskripsi" data-err="deskripsi" role="alert"></p>
           </div>
 
           <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -342,33 +401,35 @@
           <div class="full actions">
             <button class="btn" type="submit" id="submit">Tampilkan usaha saya</button>
             <button class="btn ghost" type="button" id="fillDemo">Isi data contoh</button>
-            <button class="btn ghost" type="reset" id="resetForm">Bersihkan</button>
+            <button class="btn ghost" type="reset" id="resetForm">Bersihkan formulir</button>
           </div>
           <p class="hint full" id="formHint" role="status" aria-live="polite"></p>
         </form>
 
-        <aside class="preview" aria-label="Pratinjau kartu usaha">
-          <h3 class="preview-title">Pratinjau kartu</h3>
+        <aside class="preview" aria-labelledby="previewTitle">
+          <h3 class="preview-title" id="previewTitle">Pratinjau kartu</h3>
+          <p class="preview-hint">Pratinjau ini berubah mengikuti isian Anda.</p>
           <div id="previewCard"></div>
-          <p class="hint">Kartu ini akan tampil persis seperti di daftar utama.</p>
+          <p class="hint">Kartu akan tampil seperti ini di direktori.</p>
         </aside>
       </div>
 
       <div class="my-list" id="myListWrap" hidden>
         <h3 class="preview-title">Usaha saya <span class="pill" id="myCount">0</span></h3>
-        <p class="hint">Hanya terlihat oleh Anda. Tekan “Hapus” untuk mencabut dari direktori publik.</p>
+        <p class="hint">Hanya terlihat oleh Anda. Tekan <strong>Hapus</strong> untuk mencabut dari direktori publik.</p>
         <div class="grid" id="myGrid"></div>
       </div>
     </div>
   </section>
 
   <!-- ============ FAQ ============ -->
-  <section class="block" id="faq">
+  <section class="block block-soft" id="faq" aria-labelledby="faqTitle">
     <div class="wrap">
       <div class="head">
         <div>
-          <span class="eyebrow">Tanya dulu</span>
-          <h2 class="title">Pertanyaan umum</h2>
+          <p class="eyebrow">Tanya dulu</p>
+          <h2 class="title" id="faqTitle">Pertanyaan umum</h2>
+          <p class="sub">Pilih pertanyaan untuk melihat jawabannya.</p>
         </div>
       </div>
       <div class="faq" id="faqList">
@@ -378,7 +439,7 @@
         </details>
         <details class="faq-item">
           <summary>Data usaha saya bisa dihapus?<span class="faq-ico" aria-hidden="true"></span></summary>
-          <div class="faq-body"><p>Bisa. Setiap pendaftaran tersimpan di perangkat Anda sebagai penanda, sehingga Anda bisa menghapus usaha sendiri kapan saja lewat bagian “Usaha saya”.</p></div>
+          <div class="faq-body"><p>Bisa. Setiap pendaftaran tersimpan di perangkat Anda sebagai penanda, sehingga Anda bisa menghapus usaha sendiri kapan saja lewat bagian <strong>Usaha saya</strong>.</p></div>
         </details>
         <details class="faq-item">
           <summary>Bagaimana pembeli menghubungi saya?<span class="faq-ico" aria-hidden="true"></span></summary>
@@ -386,7 +447,7 @@
         </details>
         <details class="faq-item">
           <summary>Apakah ada biaya iklan?<span class="faq-ico" aria-hidden="true"></span></summary>
-          <div class="faq-body"><p>Tidak ada slot iklan berbayar. Urutan tampilan ditentukan oleh tanggal pendaftaran, kategori, dan pencarian — bukan oleh siapa yang membayar paling banyak.</p></div>
+          <div class="faq-body"><p>Tidak ada slot iklan berbayar. Urutan tampilan ditentukan oleh tanggal pendaftaran, kategori, dan pencarian, bukan oleh siapa yang membayar paling banyak.</p></div>
         </details>
         <details class="faq-item">
           <summary>Saya punya banyak jenis usaha, apa yang harus saya lakukan?<span class="faq-ico" aria-hidden="true"></span></summary>
@@ -399,73 +460,98 @@
 
 <footer class="footer">
   <div class="wrap footer-grid">
-    <div>
-      <a class="brand" href="#top">PASAR UMKM</a>
-      <p class="hint" style="margin-top: 12px;">Direktori gratis untuk pelaku usaha kecil di Indonesia.</p>
+    <div class="footer-about">
+      <a class="brand" href="#top" aria-label="Pasar UMKM, kembali ke beranda">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h18l-1.6 10.2a2 2 0 0 1-2 1.8H6.6a2 2 0 0 1-2-1.8L3 9Z"/><path d="M8 9 11 3M16 9 13 3"/></svg>
+        </span>
+        <span class="brand-text">Pasar<span class="brand-accent">UMKM</span></span>
+      </a>
+      <p class="footer-desc">Direktori gratis untuk pelaku usaha kecil di Indonesia. Terhubung langsung dengan pembeli tanpa komisi.</p>
     </div>
-    <div>
-      <h4>Jelajahi</h4>
-      <a href="#jelajahi">Semua Usaha</a>
-      <a href="#cara-kerja">Cara Kerja</a>
-      <a href="#faq">FAQ</a>
-    </div>
-    <div>
-      <h4>Mulai</h4>
-      <a href="#daftar">Daftarkan Usaha</a>
-    </div>
-    <div>
-      <h4>Kontak</h4>
-      <a href="https://wa.me/" target="_blank" rel="noopener">WhatsApp</a>
-      <a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
-    </div>
+    <nav class="footer-col" aria-labelledby="footerJelajahi">
+      <h4 id="footerJelajahi">Jelajahi</h4>
+      <a href="#jelajahi">Semua usaha</a>
+      <a href="#cara-kerja">Cara kerja</a>
+      <a href="#faq">Pertanyaan umum</a>
+    </nav>
+    <nav class="footer-col" aria-labelledby="footerMulai">
+      <h4 id="footerMulai">Mulai</h4>
+      <a href="#daftar">Daftarkan usaha gratis</a>
+    </nav>
+    <nav class="footer-col" aria-labelledby="footerBantuan">
+      <h4 id="footerBantuan">Bantuan</h4>
+      <a href="#faq">Bantuan dan FAQ</a>
+      <a href="#top">Kembali ke atas</a>
+    </nav>
   </div>
   <div class="wrap footer-bottom">
     <span>© <span id="year"></span> Pasar UMKM</span>
-    <span>Gratis · Tanpa Komisi</span>
+    <span>Gratis · Tanpa komisi · Mudah digunakan</span>
   </div>
 </footer>
 
 <!-- Navigasi bawah khusus layar kecil -->
 <nav class="mobile-nav" id="mobileNav" aria-label="Navigasi cepat">
   <button type="button" class="mnav-item" data-go="#top" data-tab="top">
-    <span class="mnav-ico" aria-hidden="true">🏠</span><span class="mnav-label">Beranda</span>
+    <span class="mnav-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M9 22V12h6v10"/></svg>
+    </span>
+    <span class="mnav-label">Beranda</span>
   </button>
   <button type="button" class="mnav-item" data-go="#jelajahi" data-tab="jelajahi">
-    <span class="mnav-ico" aria-hidden="true">🔎</span><span class="mnav-label">Jelajahi</span>
+    <span class="mnav-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
+    </span>
+    <span class="mnav-label">Jelajahi</span>
   </button>
   <button type="button" class="mnav-item mnav-main" data-go="#daftar" data-tab="daftar">
-    <span class="mnav-ico" aria-hidden="true">➕</span><span class="mnav-label">Daftar</span>
+    <span class="mnav-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </span>
+    <span class="mnav-label">Daftar</span>
   </button>
-  <button type="button" class="mnav-item" data-go="#jelajahi" data-tab="favorit" data-fav="1">
-    <span class="mnav-ico" aria-hidden="true">♥</span><span class="mnav-label">Favorit</span>
+  <button type="button" class="mnav-item" data-go="#jelajahi" data-tab="favorit" data-fav="1" aria-pressed="false">
+    <span class="mnav-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.4 5.4 0 0 0-7.7 0L12 6.7l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7L12 22l8.8-8.7a5.4 5.4 0 0 0 0-7.7Z"/></svg>
+    </span>
+    <span class="mnav-label">Favorit</span>
   </button>
 </nav>
 
 <!-- Modal detail -->
 <div class="modal" id="modal" hidden>
   <div class="modal-backdrop" data-close></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <button type="button" class="modal-close" data-close aria-label="Tutup">✕</button>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <button type="button" class="modal-close" data-close aria-label="Tutup jendela detail">
+      <span aria-hidden="true">×</span><span class="modal-close-text">Tutup</span>
+    </button>
     <div id="modalBody"></div>
-    <div class="review-section">
+    <div class="review-section" aria-labelledby="reviewHeading">
       <div class="review-header">
-        <h4>Ulasan Pembeli</h4>
+        <h4 id="reviewHeading">Ulasan pembeli</h4>
         <span class="review-count" id="reviewCount">0 ulasan</span>
       </div>
-      <div class="review-list" id="reviewList"></div>
+      <div class="review-list" id="reviewList" aria-live="polite"></div>
       <div class="review-form">
-        <h5>Tulis Ulasan</h5>
-        <div class="star-picker" id="starPicker">
-          <button type="button" data-star="1">★</button>
-          <button type="button" data-star="2">★</button>
-          <button type="button" data-star="3">★</button>
-          <button type="button" data-star="4">★</button>
-          <button type="button" data-star="5">★</button>
-        </div>
-        <input type="text" id="reviewName" placeholder="Nama Anda (opsional)" maxlength="40">
-        <textarea id="reviewMsg" placeholder="Ceritakan pengalaman Anda..." maxlength="200"></textarea>
-        <button type="button" class="btn small" id="submitReview">Kirim Ulasan</button>
-        <p class="hint" id="reviewHint"></p>
+        <h5>Tulis ulasan</h5>
+        <fieldset class="star-field">
+          <legend>Penilaian Anda</legend>
+          <div class="star-picker" id="starPicker">
+            <button type="button" data-star="1" aria-label="Beri 1 bintang" aria-pressed="false"><span aria-hidden="true">★</span></button>
+            <button type="button" data-star="2" aria-label="Beri 2 bintang" aria-pressed="false"><span aria-hidden="true">★</span></button>
+            <button type="button" data-star="3" aria-label="Beri 3 bintang" aria-pressed="false"><span aria-hidden="true">★</span></button>
+            <button type="button" data-star="4" aria-label="Beri 4 bintang" aria-pressed="false"><span aria-hidden="true">★</span></button>
+            <button type="button" data-star="5" aria-label="Beri 5 bintang" aria-pressed="true"><span aria-hidden="true">★</span></button>
+          </div>
+        </fieldset>
+        <label for="reviewName">Nama Anda <span class="hint-inline">opsional</span></label>
+        <input type="text" id="reviewName" placeholder="Contoh: Siti" maxlength="40" autocomplete="name">
+        <label for="reviewMsg">Ulasan Anda <span class="req" aria-hidden="true">*</span><span class="sr-only">(wajib diisi)</span></label>
+        <textarea id="reviewMsg" placeholder="Ceritakan pengalaman Anda saat membeli atau menghubungi usaha ini." maxlength="200" aria-describedby="reviewHelp reviewHint"></textarea>
+        <p class="hint" id="reviewHelp">Maksimal 200 karakter. Ulasan akan tampil untuk semua pengunjung.</p>
+        <button type="button" class="btn small" id="submitReview">Kirim ulasan</button>
+        <p class="hint" id="reviewHint" role="status" aria-live="polite"></p>
       </div>
     </div>
   </div>
@@ -474,18 +560,20 @@
 <!-- Modal konfirmasi -->
 <div class="modal" id="confirmModal" hidden>
   <div class="modal-backdrop" data-close></div>
-  <div class="modal-card small" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal-card small" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
     <h3 id="confirmTitle">Hapus usaha?</h3>
     <p class="hint" id="confirmText">Usaha ini akan dihapus dari direktori publik.</p>
     <div class="modal-actions">
       <button type="button" class="btn ghost" id="confirmCancel">Batal</button>
-      <button type="button" class="btn danger" id="confirmOk">Hapus</button>
+      <button type="button" class="btn danger" id="confirmOk">Hapus usaha</button>
     </div>
   </div>
 </div>
 
-<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
-<button type="button" class="to-top" id="toTop" aria-label="Kembali ke atas" hidden>↑</button>
+<div class="toasts" id="toasts" role="status" aria-live="polite" aria-atomic="false"></div>
+<button type="button" class="to-top" id="toTop" aria-label="Kembali ke atas halaman" hidden>
+  <span aria-hidden="true">↑</span><span class="to-top-text">Atas</span>
+</button>
 
 <script type="module" src="js/app.js"></script>
 </body>
