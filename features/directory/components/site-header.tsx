@@ -25,34 +25,32 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b" style={{ borderColor: "var(--border-subtle)", background: "color-mix(in srgb, var(--bg-surface) 88%, transparent)", backdropFilter: "blur(18px)" }}>
-      <div className="mx-auto flex h-[78px] max-w-7xl items-center justify-between px-5 sm:px-8">
+    <header className="sticky top-0 z-50 border-b" style={{ borderColor: "var(--border-subtle)", background: "color-mix(in srgb, var(--bg-surface) 94%, transparent)", backdropFilter: "blur(16px)" }}>
+      <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="#home" className="group flex items-center gap-3" aria-label="Pasar UMKM, ke beranda">
-          <span className="relative grid size-10 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-[0_25px_60px_-35px_rgba(37,99,235,0.9)] transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105">
-            <StoreIcon />
-          </span>
           <div className="leading-tight">
-            <p className="text-[15px] font-semibold tracking-[-.02em]" style={{ color: "var(--text-primary)" }}>Pasar UMKM</p>
-            <p className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>Direktori usaha lokal</p>
+            <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text-primary)" }}>PASAR UMKM</p>
+            <p className="text-[11px] uppercase tracking-[0.28em]" style={{ color: "var(--text-tertiary)" }}>Business Directory</p>
           </div>
         </Link>
-        <nav className="hidden items-center gap-9 text-[14px] font-medium md:flex" aria-label="Navigasi utama">
-          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#jelajahi">Jelajahi</Link>
-          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#cara-kerja">Cara kerja</Link>
-          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#daftar">Daftarkan usaha</Link>
-          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#faq">FAQ</Link>
+        <nav className="hidden items-center gap-10 text-[14px] md:flex" aria-label="Navigasi utama">
+          <Link className="transition-colors hover:text-blue-700" style={{ color: "var(--text-secondary)" }} href="#home">Home</Link>
+          <Link className="transition-colors hover:text-blue-700" style={{ color: "var(--text-secondary)" }} href="#jelajahi">Directory</Link>
+          <Link className="transition-colors hover:text-blue-700" style={{ color: "var(--text-secondary)" }} href="#cara-kerja">Our Approach</Link>
+          <Link className="transition-colors hover:text-blue-700" style={{ color: "var(--text-secondary)" }} href="#daftar">List Your Business</Link>
+          <Link className="transition-colors hover:text-blue-700" style={{ color: "var(--text-secondary)" }} href="#faq">FAQ</Link>
         </nav>
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="grid size-10 place-items-center rounded-full border transition-all hover:-translate-y-0.5"
-            style={{ borderColor: "var(--border-strong)", color: "var(--text-secondary)", background: "var(--bg-subtle)" }}
+            className="grid size-10 place-items-center rounded-full border transition-all"
+            style={{ borderColor: "var(--border-subtle)", color: "var(--text-secondary)", background: "transparent" }}
             aria-label={theme === "light" ? "Aktifkan mode malam" : "Aktifkan mode siang"}
           >
             {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
-          <Link href="#daftar" className="inline-flex min-h-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-5 text-[13px] font-semibold text-white shadow-[0_30px_70px_-40px_rgba(37,99,235,0.9)] transition-all hover:-translate-y-0.5 hover:shadow-[0_40px_80px_-40px_rgba(29,78,216,0.95)] active:scale-[.98]">
-            Mulai daftar
+          <Link href="#daftar" className="inline-flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-[#1f4ed8] to-[#1a3fbf] px-6 text-[13px] font-semibold text-white shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5">
+            Get Started
           </Link>
         </div>
       </div>
