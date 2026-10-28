@@ -25,32 +25,34 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/60 dark:border-white/5 bg-white/70 dark:bg-[#050510]/70 backdrop-blur-2xl shadow-[0_10px_60px_-40px_rgba(139,92,246,0.9)] transition-colors">
-      <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8">
+    <header className="sticky top-0 z-50 border-b" style={{ borderColor: "var(--border-subtle)", background: "color-mix(in srgb, var(--bg-surface) 88%, transparent)", backdropFilter: "blur(18px)" }}>
+      <div className="mx-auto flex h-[78px] max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="#home" className="group flex items-center gap-3" aria-label="Pasar UMKM, ke beranda">
-          <span className="relative grid size-10 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 text-white shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)] transition-all duration-300 group-hover:-rotate-6 group-hover:scale-110">
-            <span className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
+          <span className="relative grid size-10 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-[0_25px_60px_-35px_rgba(37,99,235,0.9)] transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105">
             <StoreIcon />
           </span>
-          <span className="text-[16px] font-semibold tracking-[-.03em] text-slate-900 dark:text-white">pasar<span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">umkm</span></span>
+          <div className="leading-tight">
+            <p className="text-[15px] font-semibold tracking-[-.02em]" style={{ color: "var(--text-primary)" }}>Pasar UMKM</p>
+            <p className="text-[11px]" style={{ color: "var(--text-tertiary)" }}>Direktori usaha lokal</p>
+          </div>
         </Link>
-        <nav className="hidden items-center gap-8 text-[14px] font-medium text-slate-600 dark:text-slate-300 md:flex" aria-label="Navigasi utama">
-          <Link className="relative transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:rounded-full after:bg-gradient-to-r after:from-violet-500 after:to-fuchsia-500 after:transition-all hover:after:w-full" href="#jelajahi">Jelajahi</Link>
-          <Link className="relative transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:rounded-full after:bg-gradient-to-r after:from-violet-500 after:to-fuchsia-500 after:transition-all hover:after:w-full" href="#cara-kerja">Cara Kerja</Link>
-          <Link className="relative transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:rounded-full after:bg-gradient-to-r after:from-violet-500 after:to-fuchsia-500 after:transition-all hover:after:w-full" href="#faq">FAQ</Link>
+        <nav className="hidden items-center gap-9 text-[14px] font-medium md:flex" aria-label="Navigasi utama">
+          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#jelajahi">Jelajahi</Link>
+          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#cara-kerja">Cara kerja</Link>
+          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#daftar">Daftarkan usaha</Link>
+          <Link className="transition-colors hover:text-blue-600" style={{ color: "var(--text-secondary)" }} href="#faq">FAQ</Link>
         </nav>
         <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
-            className="group relative grid size-10 place-items-center overflow-hidden rounded-full border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-white/5 text-slate-600 dark:text-slate-200 transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-40px_rgba(139,92,246,0.9)]"
+            className="grid size-10 place-items-center rounded-full border transition-all hover:-translate-y-0.5"
+            style={{ borderColor: "var(--border-strong)", color: "var(--text-secondary)", background: "var(--bg-subtle)" }}
             aria-label={theme === "light" ? "Aktifkan mode malam" : "Aktifkan mode siang"}
           >
-            <span className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10" />
             {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
-          <Link href="#daftar" className="group relative inline-flex min-h-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-5 text-[13px] font-semibold text-white shadow-[0_30px_70px_-40px_rgba(236,72,153,0.95)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_40px_80px_-40px_rgba(168,85,247,0.95)] active:scale-[.98]">
-            <span className="absolute inset-0 translate-x-[-120%] bg-gradient-to-r from-white/0 via-white/25 to-white/0 transition-transform duration-[900ms] group-hover:translate-x-[120%]" />
-            <span className="relative flex items-center gap-2">Daftarkan Usaha <span aria-hidden="true">→</span></span>
+          <Link href="#daftar" className="inline-flex min-h-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-700 px-5 text-[13px] font-semibold text-white shadow-[0_30px_70px_-40px_rgba(37,99,235,0.9)] transition-all hover:-translate-y-0.5 hover:shadow-[0_40px_80px_-40px_rgba(29,78,216,0.95)] active:scale-[.98]">
+            Mulai daftar
           </Link>
         </div>
       </div>
