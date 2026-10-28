@@ -124,7 +124,22 @@ body {
 .stats-bar { gap: 14px; }
 .stats-bar button.stat-item { min-height: 158px; padding: 20px 22px; border-color: var(--line); border-radius: 18px; box-shadow: var(--shadow-sm); }
 .stats-bar button.stat-businesses, .stats-bar button.stat-categories, .stats-bar button.stat-locations { background: var(--card-solid); }
-.stats-bar button.stat-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stats-bar button.stat-item:hover,
+.stats-bar button.stat-item:focus-visible {
+  transform: translateY(-3px);
+  border-color: #104d35;
+  background: #145c3d;
+  color: #fff;
+  box-shadow: 0 16px 34px rgba(16, 77, 53, .2);
+}
+.stats-bar button.stat-item:hover .stat-label,
+.stats-bar button.stat-item:hover .stat-link,
+.stats-bar button.stat-item:focus-visible .stat-label,
+.stats-bar button.stat-item:focus-visible .stat-link,
+.stats-bar button.stat-item:hover b,
+.stats-bar button.stat-item:focus-visible b { color: #fff; }
+.stats-bar button.stat-item:hover .stat-icon,
+.stats-bar button.stat-item:focus-visible .stat-icon { border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.12); }
 .stats-bar .stat-icon { width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 13px; background: var(--paper-2); }
 .stats-bar .stat-categories b, .stats-bar .stat-locations b { color: var(--accent); }
 
