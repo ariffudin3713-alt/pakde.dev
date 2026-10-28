@@ -1,153 +1,49 @@
 # Pasar UMKM
 
-Direktori gratis untuk pelaku usaha kecil. Pengunjung bisa mencari, memfilter, lalu menghubungi pelaku usaha lewat WhatsApp — tanpa biaya, tanpa registrasi.
+Direktori usaha lokal Indonesia. Temukan produk dan jasa di sekitar, lalu hubungi pemiliknya langsung tanpa komisi.
 
-> Halaman statis (HTML/CSS/JS) + satu Vercel Serverless Function untuk menyimpan data usaha.
+## Teknologi
 
-**Live:** https://pakdedev.vercel.app
+- Next.js App Router dan React
+- TypeScript strict mode
+- Tailwind CSS v4 dengan token warna terpusat
+- Vercel Functions dan Vercel Blob untuk API serta penyimpanan
 
----
+## Struktur aplikasi
 
-## Fitur
-
-**Jelajahi**
-- Pencarian langsung (nama, produk, kota) dengan penanda kata kunci
-- Filter kategori (dengan jumlah usaha per kategori) dan filter kota
-- Urutkan: terbaru, terlama, nama A–Z, nama Z–A
-- Favorit tersimpan di perangkat, tombol “favorit saya” untuk menyaring
-- **Layar lebar:** daftar panjang dengan tombol “muat lebih banyak”
-- **Layar kecil:** daftar ber halaman (4/8/12 usaha per halaman) dengan nomor halaman
-- Status kosong, skeleton saat memuat, dan penyegaran otomatis saat tab kembali aktif
-- Modal detail: deskripsi lengkap, salin nomor, bagikan tautan, serta ulasan pembeli
-
-**Halaman depan**
-- Sapaan hangat, pencarian cepat, dan daftar manfaat singkat
-- Contoh kartu usaha statis (tanpa animasi berulang) sebagai gambaran tampilan
-- Angka statistik yang dihitung dari data nyata
-
-**Daftarkan usaha**
-- Validasi langsung per field dengan pesan error yang jelas
-- Pemilih emoji untuk ikon usaha
-- Penghitung karakter deskripsi dan pratinjau normalisasi nomor WhatsApp
-- **Pratinjau kartu langsung** yang berubah mengikuti isian formulir
-- Tombol “Isi data contoh” untuk mencoba formulir
-- Section “Usaha saya” untuk melihat dan menghapus usaha yang Anda daftarkan
-
-**Tampilan**
-- Mode terang/gelap (mengikuti sistem, bisa diganti manual dan diingat)
-- **Navigasi bawah khusus mobile** (Beranda, Jelajahi, Daftar, Favorit) dengan tab aktif
-- Tampilan berbeda per ukuran layar: mobile memakai paging + navigasi bawah, desktop memakai daftar panjang + navigasi atas
-- Animasi muncul saat digulir, penghitung statistik, toast notifikasi, konfirmasi hapus
-- Fokus keyboard, label ARIA, kontras tinggi, target sentuh 48px, dan dukungan `prefers-reduced-motion`
-- Tipografi modern dan mudah dibaca: Plus Jakarta Sans untuk teks dan Bricolage Grotesque untuk judul
-- Tampilan “Aurora Glass”: aksen indigo–violet–emerald–amber, glassmorphism halus, border gradasi, dan mikrointeraksi lembut
-
----
-
-## Struktur
-
-```
-.
-├── api/umkm.js        # Serverless Function: GET / POST / PUT / DELETE data usaha
-├── css/style.css      # Seluruh gaya (light/dark, responsif, animasi)
-├── js/app.js          # Logika aplikasi (filter, favorit, modal, formulir)
-├── index.html         # Halaman utama
-├── scripts/check.cjs  # Pemeriksaan cepat: syntax, ID, aset, karakter asing
-├── scripts/seed.mjs   # Mengisi data contoh
-├── legacy/            # Versi pertama (artifact Claude) yang diarsipkan
-└── vercel.json        # Konfigurasi Vercel (header keamanan)
+```text
+app/                                  # Route, metadata, global styles, loading/error UI
+features/directory/                  # Antarmuka fitur direktori
+features/directory/components/       # Kartu, filter, form, status, dan navigasi
+lib/types.ts                         # Model domain dan kontrak API
+lib/directory-api.ts                 # Klien API bertipe
+lib/local-store.ts                   # Favorit, pemilik, dan fallback lokal
+api/umkm.js                          # Vercel Function untuk data usaha
+legacy/static/                       # Arsip frontend HTML lama
 ```
 
----
-
-## Menjalankan secara lokal
+## Menjalankan lokal
 
 ```bash
 npm install
-npx vercel dev --listen 3111
+npm run dev
 ```
 
-Buka http://localhost:3111
+Buka http://localhost:3000. Untuk menjalankan Next.js bersama Vercel Function dan Blob, gunakan `npm run dev:local` dan siapkan `BLOB_READ_WRITE_TOKEN` di `.env.local`. Jika API tidak aktif, direktori beralih ke penyimpanan lokal pada browser.
 
-> `vercel dev` membutuhkan file `.env.local` berisi `BLOB_READ_WRITE_TOKEN`.
-> Jika token tidak tersedia, situs otomatis berjalan dalam **mode lokal**: data disimpan di
-> `localStorage` perangkat dan fitur tetap bisa dicoba.
-
-Pemeriksaan cepat:
+## Pemeriksaan dan build
 
 ```bash
 npm run check
+npm run build
 ```
-
-Pengujian otomatis (butuh server berjalan di `http://localhost:3111` atau URL produksi):
-
-```bash
-npm run test:api -- http://localhost:3111   # menguji API: simpan, baca, hapus, validasi
-npm i --no-save jsdom                        # hanya sekali
-npm run test:ui -- http://localhost:3111     # menguji antarmuka di DOM
-```
-
----
 
 ## Deploy
 
 ```bash
-npx vercel --prod
+npm run deploy
 ```
 
-Situs statis disajikan langsung, sedangkan `/api/umkm` dijalankan sebagai Serverless Function
-(Node.js) dengan runtime bawaan Vercel.
+Penyimpanan data menggunakan Vercel Blob privat di `data/umkm.json`. API mendukung `GET`, `POST`, `PUT`, dan `DELETE` di `/api/umkm`.
 
----
-
-## Penyimpanan data
-
-Data usaha disimpan di **Vercel Blob** (store privat `pasar-umkm`) pada file `data/umkm.json`.
-
-- Penulisan memakai *optimistic concurrency control* (ETag + `ifMatch`) sehingga dua
-  pendaftaran bersamaan tidak saling menimpa data.
-- Penulisan lain akan otomatis mencoba ulang sampai 5 kali.
-- Store dibuat lewat:
-
-```bash
-npx vercel blob create-store pasar-umkm --access private --yes
-```
-
-- Env var `BLOB_READ_WRITE_TOKEN` otomatis ditambahkan ke project Vercel.
-
----
-
-## API
-
-| Metode | URL | Keterangan |
-| --- | --- | --- |
-| `GET` | `/api/umkm` | Mengembalikan `{ items, count }` |
-| `POST` | `/api/umkm` | Menambah usaha baru, mengembalikan `{ item }` |
-| `PUT` | `/api/umkm` | Menambah ulasan `{ id, nama, pesan, bintang }`, mengembalikan `{ item }` |
-| `DELETE` | `/api/umkm?id=<id>&owner=<ownerId>` | Menghapus usaha (hanya pemilik) |
-
-Contoh:
-
-```bash
-curl -X POST http://localhost:3111/api/umkm \
-  -H "Content-Type: application/json" \
-  -d '{"nama":"Warung Bu Sri","kategori":"Kuliner","kota":"Surakarta","ikon":"🍜","deskripsi":"Nasi campur legendaris sejak 1998.","wa":"081234567890","ig":"warungbusri","ownerId":"demo"}'
-```
-
-Data contoh siap pakai:
-
-```bash
-npm run seed -- http://localhost:3111
-```
-
----
-
-## Environment variable
-
-| Nama | Keterangan |
-| --- | --- |
-| `BLOB_READ_WRITE_TOKEN` | Token baca/tulis Vercel Blob (dibuat otomatis saat store dihubungkan) |
-
----
-
-© Pasar UMKM — dibuat untuk mendukung pelaku usaha kecil di Indonesia.
+© Pasar UMKM
