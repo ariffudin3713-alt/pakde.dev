@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { createBusiness, deleteBusiness, listBusinesses } from "@/lib/directory-api";
+import { addBusinessReview, createBusiness, deleteBusiness, listBusinesses } from "@/lib/directory-api";
 import { getFavorites, getLocalBusinesses, getOwnerId, saveFavorites, saveLocalBusinesses } from "@/lib/local-store";
-import { CATEGORIES, type Business, type BusinessInput, type Category, type SortOrder } from "@/lib/types";
+import { CATEGORIES, type Business, type BusinessInput, type Category, type ReviewInput, type SortOrder } from "@/lib/types";
 import { BusinessCard } from "@/features/directory/components/business-card";
+import { BusinessDetailDialog } from "@/features/directory/components/business-detail-dialog";
 import { DirectoryToolbar } from "@/features/directory/components/directory-toolbar";
 import { BusinessSkeletons, EmptyState } from "@/features/directory/components/directory-states";
 import { Hero } from "@/features/directory/components/hero";
@@ -28,6 +29,7 @@ export function DirectoryApp() {
   const [visibleCount, setVisibleCount] = useState(12);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [toast, setToast] = useState("");
+  const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null);
 
   async function loadData(showSkeleton = false) {
     if (showSkeleton) setLoading(true);
@@ -59,6 +61,20 @@ export function DirectoryApp() {
     return () => window.clearTimeout(timeout);
   }, [toast]);
 
+  useEffect(() => {
+    function handleShortcut(event: KeyboardEvent) {
+      if (document.querySelector("dialog[open]")) return;
+      const target = event.target;
+      const isEditing = target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+      if (event.key === "/" && !isEditing && !event.metaKey && !event.ctrlKey && !event.altKey) {
+        event.preventDefault();
+        document.getElementById("directory-query")?.focus();
+      }
+    }
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, []);
+
   const cities = useMemo(() => Array.from(new Set(businesses.map((item) => item.kota.trim()).filter(Boolean))).sort((a, b) => a.localeCompare(b, "id")), [businesses]);
   const filtered = useMemo(() => {
     const term = query.trim().toLocaleLowerCase("id");
@@ -79,6 +95,10 @@ export function DirectoryApp() {
 
   const myBusinesses = businesses.filter((item) => item.ownerId && item.ownerId === ownerId);
   const categoryCount = new Set(businesses.map((item) => item.kategori)).size;
+  const categoryCounts = useMemo(() => CATEGORIES.reduce((counts, item) => {
+    counts[item] = businesses.filter((business) => business.kategori === item).length;
+    return counts;
+  }, {} as Record<Category, number>), [businesses]);
   const clearFilters = () => { setQuery(""); setHeroQuery(""); setCategory("Semua"); setCity("Semua"); setFavoritesOnly(false); setVisibleCount(12); };
   const changeQuery = (value: string) => { setQuery(value); setHeroQuery(value); setVisibleCount(12); };
 
@@ -125,6 +145,23 @@ export function DirectoryApp() {
     }
   }
 
+  async function submitReview(input: ReviewInput): Promise<void> {
+    let updated: Business;
+    if (offline) {
+      const current = businesses.find((item) => item.id === input.id);
+      if (!current) throw new Error("Usaha tidak ditemukan.");
+      const reviews = [{ ...input, id: `r${Date.now().toString(36)}`, createdAt: Date.now() }, ...(current.ulasan ?? [])].slice(0, 20);
+      const rating = Math.round((reviews.reduce((sum, review) => sum + review.bintang, 0) / reviews.length) * 10) / 10;
+      updated = { ...current, ulasan: reviews, rating };
+      saveLocalBusinesses(getLocalBusinesses().map((item) => item.id === updated.id ? updated : item));
+    } else {
+      updated = await addBusinessReview(input);
+    }
+    setBusinesses((current) => current.map((item) => item.id === updated.id ? updated : item));
+    setSelectedBusiness(updated);
+    setToast("Ulasan berhasil dikirim.");
+  }
+
   function searchFromHero() {
     changeQuery(heroQuery);
     document.getElementById("jelajahi")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -134,7 +171,7 @@ export function DirectoryApp() {
     <>
       <SiteHeader />
       <main>
-        <Hero businessCount={businesses.length} query={heroQuery} onQueryChange={setHeroQuery} onSearch={searchFromHero} />
+        <Hero businessCount={businesses.length} query={heroQuery} onQueryChange={setHeroQuery} onSearch={searchFromHero} onSuggestion={(value) => { setHeroQuery(value); changeQuery(value); document.getElementById("jelajahi")?.scrollIntoView({ behavior: "smooth", block: "start" }); }} />
 
         <section className="mx-auto grid max-w-7xl gap-4 px-5 py-8 sm:grid-cols-3 sm:px-8 sm:py-10" aria-label="Ringkasan direktori">
           <StatCard value={businesses.length.toLocaleString("id-ID")} label="Usaha lokal" detail="Cerita dan layanan dari sekitar" />
@@ -159,6 +196,7 @@ export function DirectoryApp() {
               query={query} onQueryChange={changeQuery}
               category={category} onCategoryChange={(value) => { setCategory(value); setVisibleCount(12); }}
               city={city} onCityChange={(value) => { setCity(value); setVisibleCount(12); }} cities={cities}
+              categoryCounts={categoryCounts}
               sort={sort} onSortChange={setSort}
               favoritesOnly={favoritesOnly} onFavoritesChange={() => setFavoritesOnly((value) => !value)}
               onRefresh={() => void loadData()} refreshing={refreshing}
@@ -168,7 +206,7 @@ export function DirectoryApp() {
               {loading ? <BusinessSkeletons /> : filtered.length === 0 ? <EmptyState favoritesOnly={favoritesOnly} onReset={clearFilters} /> : (
                 <div className="grid gap-4 md:grid-cols-2">
                   {filtered.slice(0, visibleCount).map((business, index) => <div key={business.id} className={index === 0 && !query && category === "Semua" && city === "Semua" && !favoritesOnly ? "md:col-span-2" : ""}>
-                    <BusinessCard business={business} favorite={favorites.includes(business.id)} featured={index === 0 && !query && category === "Semua" && city === "Semua" && !favoritesOnly} onToggleFavorite={toggleFavorite} />
+                    <BusinessCard business={business} favorite={favorites.includes(business.id)} featured={index === 0 && !query && category === "Semua" && city === "Semua" && !favoritesOnly} onToggleFavorite={toggleFavorite} onViewDetails={setSelectedBusiness} />
                   </div>)}
                 </div>
               )}
@@ -205,7 +243,7 @@ export function DirectoryApp() {
               <RegistrationForm ownerId={ownerId} onCreate={addBusiness} />
               {myBusinesses.length > 0 && <div>
                 <div className="mb-4 flex items-end justify-between"><div><p className="text-[11px] font-bold uppercase tracking-[.13em] text-accent">Kelola daftar Anda</p><h3 className="mt-1 text-xl font-semibold tracking-[-.04em] text-ink">Usaha saya <span className="text-muted">({myBusinesses.length})</span></h3></div></div>
-                <div className="grid gap-4">{myBusinesses.map((business) => <BusinessCard key={business.id} business={business} favorite={favorites.includes(business.id)} onToggleFavorite={toggleFavorite} onDelete={removeBusiness} deleting={deletingId === business.id} />)}</div>
+                <div className="grid gap-4">{myBusinesses.map((business) => <BusinessCard key={business.id} business={business} favorite={favorites.includes(business.id)} onToggleFavorite={toggleFavorite} onViewDetails={setSelectedBusiness} onDelete={removeBusiness} deleting={deletingId === business.id} />)}</div>
               </div>}
             </div>
           </div>
@@ -235,8 +273,10 @@ export function DirectoryApp() {
         <MobileLink href="#home" label="Beranda" icon="⌂" />
         <MobileLink href="#jelajahi" label="Jelajahi" icon="⌕" />
         <MobileLink href="#daftar" label="Daftar" icon="＋" />
-        <button type="button" onClick={() => { setFavoritesOnly(true); document.getElementById("jelajahi")?.scrollIntoView({ behavior: "smooth" }); }} className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium text-muted transition-colors hover:text-accent"><span className="text-lg leading-5">♡</span>Favorit</button>
+        <button type="button" aria-pressed={favoritesOnly} onClick={() => { setFavoritesOnly((value) => !value); document.getElementById("jelajahi")?.scrollIntoView({ behavior: "smooth" }); }} className={`flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium transition-colors hover:text-accent ${favoritesOnly ? "text-accent" : "text-muted"}`}><span className="text-lg leading-5">♡</span>Favorit</button>
       </nav>
+
+      <BusinessDetailDialog business={selectedBusiness} onClose={() => setSelectedBusiness(null)} onSubmitReview={submitReview} />
 
       {toast && <div className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-[#17211b] px-4 py-3 text-sm font-medium text-white shadow-lg md:bottom-6" role="status">✓ {toast}</div>}
       <div className="h-16 md:hidden" aria-hidden="true" />

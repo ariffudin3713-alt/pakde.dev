@@ -3,9 +3,10 @@ interface HeroProps {
   query: string;
   onQueryChange: (value: string) => void;
   onSearch: () => void;
+  onSuggestion: (value: string) => void;
 }
 
-export function Hero({ businessCount, query, onQueryChange, onSearch }: HeroProps) {
+export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggestion }: HeroProps) {
   return (
     <section id="home" className="relative overflow-hidden border-b border-line bg-[#eef1ed]">
       <div className="absolute -right-36 -top-48 size-[34rem] rounded-full border border-[#dbe2dc]" aria-hidden="true" />
@@ -27,6 +28,7 @@ export function Hero({ businessCount, query, onQueryChange, onSearch }: HeroProp
             <input id="hero-query" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder="Cari kopi, batik, atau kota..." className="min-h-12 min-w-0 flex-1 bg-transparent px-3 text-sm text-ink outline-none placeholder:text-[#919a93] sm:px-2" />
             <button className="min-h-12 rounded-xl bg-accent px-6 text-sm font-semibold text-white transition-all duration-200 ease-in-out hover:bg-accent-deep active:scale-[.98]" type="submit">Cari usaha</button>
           </form>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-muted"><span className="mr-1">Populer:</span>{["Kuliner", "Batik", "Jasa"].map((term) => <button key={term} type="button" onClick={() => onSuggestion(term)} className="rounded-full border border-[#dce2dc] bg-white/75 px-3 py-1.5 font-medium transition-all duration-[250ms] ease-out hover:border-accent hover:bg-white hover:text-accent active:scale-95">{term}</button>)}</div>
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium text-muted">
             <span><CheckIcon /> Gratis tanpa komisi</span>
             <span><CheckIcon /> Hubungi langsung</span>

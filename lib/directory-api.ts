@@ -3,6 +3,7 @@ import type {
   Business,
   BusinessInput,
   BusinessListResponse,
+  ReviewInput,
   BusinessResponse,
 } from "@/lib/types";
 
@@ -40,4 +41,14 @@ export async function deleteBusiness(id: string, ownerId: string): Promise<void>
   const params = new URLSearchParams({ id, owner: ownerId });
   const response = await fetch(`${ENDPOINT}?${params.toString()}`, { method: "DELETE" });
   await readJson<{ ok: boolean }>(response);
+}
+
+export async function addBusinessReview(input: ReviewInput): Promise<Business> {
+  const response = await fetch(ENDPOINT, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const data = await readJson<BusinessResponse>(response);
+  return data.item;
 }

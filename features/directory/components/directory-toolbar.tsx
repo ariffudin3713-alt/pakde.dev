@@ -9,6 +9,7 @@ interface DirectoryToolbarProps {
   city: string;
   onCityChange: (city: string) => void;
   cities: string[];
+  categoryCounts: Record<Category, number>;
   sort: SortOrder;
   onSortChange: (sort: SortOrder) => void;
   favoritesOnly: boolean;
@@ -21,21 +22,22 @@ export function DirectoryToolbar(props: DirectoryToolbarProps) {
   return (
     <div className="rounded-2xl border border-line bg-white p-4 shadow-sm sm:p-5">
       <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
-        <label className="flex min-h-12 items-center gap-3 rounded-xl border border-line bg-[#fbfcfb] px-3.5 transition-all focus-within:border-accent focus-within:ring-4 focus-within:ring-[#176344]/10">
+        <label className="flex min-h-12 items-center gap-3 rounded-xl border border-line bg-[#fbfcfb] px-3.5 transition-all duration-[250ms] ease-out focus-within:border-accent focus-within:ring-4 focus-within:ring-[#176344]/10">
           <span className="text-muted" aria-hidden="true"><SearchIcon /></span>
           <span className="sr-only">Cari usaha</span>
-          <input value={props.query} onChange={(event) => props.onQueryChange(event.target.value)} placeholder="Cari nama, produk, kategori, atau kota" className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-[#929c94]" />
+          <input id="directory-query" value={props.query} onChange={(event) => props.onQueryChange(event.target.value)} placeholder="Cari nama, produk, kategori, atau kota" className="min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-[#929c94]" />
           {props.query && <button type="button" onClick={() => props.onQueryChange("")} className="grid size-8 place-items-center rounded-lg text-muted hover:bg-[#eef1ed]" aria-label="Hapus pencarian">×</button>}
+          {!props.query && <kbd className="hidden rounded-md border border-line bg-white px-2 py-1 text-[10px] text-muted sm:inline">/</kbd>}
         </label>
-        <button type="button" onClick={props.onRefresh} disabled={props.refreshing} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-line px-4 text-xs font-semibold text-ink transition-all duration-200 hover:border-accent hover:text-accent disabled:opacity-60">
+        <button type="button" onClick={props.onRefresh} disabled={props.refreshing} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-line px-4 text-xs font-semibold text-ink transition-all duration-[250ms] ease-out hover:border-accent hover:text-accent active:scale-[.98] disabled:opacity-60">
           <span className={props.refreshing ? "animate-spin" : ""} aria-hidden="true">↻</span>{props.refreshing ? "Memuat…" : "Segarkan"}
         </button>
       </div>
 
       <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter kategori">
-          <CategoryPill active={props.category === "Semua"} onClick={() => props.onCategoryChange("Semua")}>Semua</CategoryPill>
-          {CATEGORIES.map((category) => <CategoryPill key={category} active={props.category === category} onClick={() => props.onCategoryChange(category)}>{category}</CategoryPill>)}
+        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="Filter kategori">
+          <CategoryPill active={props.category === "Semua"} onClick={() => props.onCategoryChange("Semua")}>Semua <span className={props.category === "Semua" ? "text-white/70" : "text-muted/70"}>{Object.values(props.categoryCounts).reduce((sum, count) => sum + count, 0)}</span></CategoryPill>
+          {CATEGORIES.map((category) => <CategoryPill key={category} active={props.category === category} onClick={() => props.onCategoryChange(category)}>{category} <span className={props.category === category ? "text-white/70" : "text-muted/70"}>{props.categoryCounts[category]}</span></CategoryPill>)}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <label className="sr-only" htmlFor="city-filter">Filter kota</label>
@@ -54,6 +56,6 @@ export function DirectoryToolbar(props: DirectoryToolbarProps) {
 }
 
 function CategoryPill({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
-  return <button type="button" onClick={onClick} aria-pressed={active} className={`min-h-9 rounded-full border px-3.5 text-[11px] font-semibold transition-all duration-200 ease-in-out ${active ? "border-accent bg-accent text-white" : "border-line bg-white text-muted hover:border-[#b7cbbd] hover:text-accent"}`}>{children}</button>;
+  return <button type="button" onClick={onClick} aria-pressed={active} className={`min-h-9 shrink-0 rounded-full border px-3.5 text-[11px] font-semibold transition-all duration-[250ms] ease-out active:scale-[.97] ${active ? "border-accent bg-accent text-white shadow-sm" : "border-line bg-white text-muted hover:border-[#b7cbbd] hover:bg-[#f8faf8] hover:text-accent"}`}>{children}</button>;
 }
 function SearchIcon() { return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>; }

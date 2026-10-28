@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import type { Business } from "@/lib/types";
 
 interface BusinessCardProps {
@@ -5,17 +8,19 @@ interface BusinessCardProps {
   favorite: boolean;
   featured?: boolean;
   onToggleFavorite: (id: string) => void;
+  onViewDetails: (business: Business) => void;
   onDelete?: (business: Business) => void;
   deleting?: boolean;
 }
 
-export function BusinessCard({ business, favorite, featured = false, onToggleFavorite, onDelete, deleting = false }: BusinessCardProps) {
+export function BusinessCard({ business, favorite, featured = false, onToggleFavorite, onViewDetails, onDelete, deleting = false }: BusinessCardProps) {
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const digits = business.wa.replace(/\D/g, "");
   const phone = digits.startsWith("0") ? `62${digits.slice(1)}` : digits.startsWith("8") ? `62${digits}` : digits;
   const whatsappMessage = encodeURIComponent(`Halo ${business.nama}, saya melihat usaha Anda di Pasar UMKM.`);
 
   return (
-    <article className={`group relative flex h-full flex-col rounded-2xl border border-line bg-white p-5 shadow-[0_2px_10px_rgba(21,36,26,.025)] transition-all duration-200 ease-in-out hover:-translate-y-1 hover:border-[#cad7ce] hover:shadow-md sm:p-6 ${featured ? "md:flex-row md:items-center md:gap-9 md:p-8" : ""}`}>
+    <article className={`group relative flex h-full flex-col rounded-2xl border border-line bg-white p-5 shadow-[0_2px_10px_rgba(21,36,26,.025)] transition-all duration-[250ms] ease-out hover:-translate-y-1 hover:border-[#cad7ce] hover:shadow-md active:scale-[.995] sm:p-6 ${featured ? "md:flex-row md:items-center md:gap-9 md:p-8" : ""}`}>
       <div className={`flex min-w-0 flex-1 flex-col ${featured ? "md:flex-row md:items-center md:gap-7" : ""}`}>
         <div className={`mb-5 flex items-start justify-between gap-4 ${featured ? "md:mb-0 md:items-center" : ""}`}>
           <div className="flex min-w-0 items-center gap-3.5">
@@ -26,7 +31,7 @@ export function BusinessCard({ business, favorite, featured = false, onToggleFav
               <p className="mt-1 flex items-center gap-1 text-xs text-muted"><PinIcon />{business.kota || "Indonesia"}</p>
             </div>
           </div>
-          <button type="button" onClick={() => onToggleFavorite(business.id)} aria-label={favorite ? `Hapus ${business.nama} dari favorit` : `Tambahkan ${business.nama} ke favorit`} aria-pressed={favorite} className={`grid size-10 shrink-0 place-items-center rounded-xl border transition-all duration-200 ease-in-out hover:scale-105 active:scale-95 ${favorite ? "border-[#c6dbcc] bg-accent-soft text-accent" : "border-line bg-white text-muted hover:border-[#cad7ce] hover:text-accent"}`}>
+          <button type="button" onClick={() => onToggleFavorite(business.id)} aria-label={favorite ? `Hapus ${business.nama} dari favorit` : `Tambahkan ${business.nama} ke favorit`} aria-pressed={favorite} className={`grid size-10 shrink-0 place-items-center rounded-xl border transition-all duration-[250ms] ease-out hover:scale-105 active:scale-95 ${favorite ? "border-[#c6dbcc] bg-accent-soft text-accent" : "border-line bg-white text-muted hover:border-[#cad7ce] hover:text-accent"}`}>
             <span className="text-lg leading-none" aria-hidden="true">{favorite ? "♥" : "♡"}</span>
           </button>
         </div>
@@ -36,20 +41,16 @@ export function BusinessCard({ business, favorite, featured = false, onToggleFav
           {business.jamBuka && <span className="rounded-lg bg-[#f5f6f4] px-2.5 py-1.5 text-[11px] font-medium text-muted">Buka {business.jamBuka}</span>}
           {typeof business.rating === "number" && business.rating > 0 && <span className="rounded-lg bg-[#f5f6f4] px-2.5 py-1.5 text-[11px] font-medium text-muted">★ {business.rating.toLocaleString("id-ID")}</span>}
         </div>
-        <details className="mt-4 border-t border-line pt-3 text-xs text-muted">
-          <summary className="w-fit cursor-pointer font-semibold text-ink transition-colors hover:text-accent">Info usaha</summary>
-          <div className="mt-3 space-y-2 leading-5">
-            {business.alamat && <p><span className="font-semibold text-ink">Alamat:</span> {business.alamat}</p>}
-            {business.ig && <p><span className="font-semibold text-ink">Instagram:</span> <a className="text-accent underline decoration-transparent underline-offset-2 hover:decoration-current" href={`https://instagram.com/${encodeURIComponent(business.ig.replace(/^@+/, ""))}`} target="_blank" rel="noreferrer">@{business.ig.replace(/^@+/, "")}</a></p>}
-            <p>Terdaftar {new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(new Date(business.createdAt))}</p>
-          </div>
-        </details>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
+          <button type="button" onClick={() => onViewDetails(business)} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-xs font-semibold text-ink transition-all duration-[250ms] ease-out hover:bg-[#f5f7f5] hover:text-accent active:scale-[.98]">Lihat detail <span aria-hidden="true">↗</span></button>
+          <span className="text-[10px] text-muted">{business.ulasan?.length ? `${business.ulasan.length} ulasan` : "Belum ada ulasan"}</span>
+        </div>
       </div>
       <div className={`mt-5 flex items-center gap-2 border-t border-line pt-4 ${featured ? "md:mt-0 md:w-48 md:shrink-0 md:flex-col md:items-stretch md:border-l md:border-t-0 md:pl-8 md:pt-0" : ""}`}>
-        <a href={`https://wa.me/${phone}?text=${whatsappMessage}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-4 text-xs font-semibold text-white transition-all duration-200 ease-in-out hover:bg-accent-deep active:scale-[.98]">
+        <a href={`https://wa.me/${phone}?text=${whatsappMessage}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-accent px-4 text-xs font-semibold text-white transition-all duration-[250ms] ease-out hover:bg-accent-deep hover:shadow-sm active:scale-[.98]">
           <WhatsAppIcon /> Chat WhatsApp
         </a>
-        {onDelete && <button type="button" disabled={deleting} onClick={() => onDelete(business)} className="min-h-11 rounded-xl border border-line px-4 text-xs font-semibold text-muted transition-all duration-200 ease-in-out hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:cursor-wait disabled:opacity-60">{deleting ? "Menghapus…" : "Hapus"}</button>}
+        {onDelete && (confirmingDelete ? <div className="flex items-center gap-1.5"><span className="mr-1 text-[10px] font-medium text-red-700">Yakin?</span><button type="button" disabled={deleting} onClick={() => void onDelete(business)} className="min-h-10 rounded-lg bg-red-700 px-3 text-[11px] font-semibold text-white transition-all duration-[250ms] ease-out hover:bg-red-800 disabled:opacity-60">{deleting ? "Menghapus…" : "Ya, hapus"}</button><button type="button" onClick={() => setConfirmingDelete(false)} className="grid size-9 place-items-center rounded-lg border border-line text-muted hover:bg-[#f5f6f4]" aria-label="Batalkan penghapusan">×</button></div> : <button type="button" disabled={deleting} onClick={() => setConfirmingDelete(true)} className="min-h-11 rounded-xl border border-line px-4 text-xs font-semibold text-muted transition-all duration-[250ms] ease-out hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:cursor-wait disabled:opacity-60">Hapus</button>)}
       </div>
     </article>
   );

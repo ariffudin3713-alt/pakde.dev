@@ -52,6 +52,13 @@ export interface BusinessInput {
   ownerId: string;
 }
 
+export interface ReviewInput {
+  id: string;
+  nama: string;
+  pesan: string;
+  bintang: number;
+}
+
 export interface BusinessListResponse {
   items: Business[];
   count: number;
