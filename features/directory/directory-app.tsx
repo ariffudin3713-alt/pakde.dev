@@ -22,15 +22,16 @@ export function DirectoryApp() {
 
         <DirectoryStats businessCount={businesses.length} categoryCount={CATEGORIES.length} cityCount={cities.length} />
 
-        <section id="jelajahi" className="scroll-mt-24 border-y border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 py-16 sm:py-20 lg:py-24 transition-colors">
+        <section id="jelajahi" className="relative scroll-mt-24 py-16 sm:py-20 lg:py-24">
+          <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-violet-500/25 to-transparent" />
           <div className="mx-auto max-w-7xl px-5 sm:px-8">
             <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[.15em] text-blue-600 dark:text-blue-400">Direktori Pilihan</p>
-                <h2 className="mt-2 text-3xl font-bold tracking-[-.06em] text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">Jelajahi Usaha Lokal</h2>
-                <p className="mt-3 max-w-xl text-base leading-6 text-gray-600 dark:text-gray-400">Temukan produk dan jasa yang kamu butuhkan, langsung chat dengan pemiliknya</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-violet-500 dark:text-fuchsia-400">Explore</p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[-.08em] text-slate-900 dark:text-white sm:text-4xl lg:text-5xl">Jelajahi Usaha Kekinian</h2>
+                <p className="mt-3 max-w-xl text-base text-slate-600 dark:text-slate-300">Swipe, cari, chat. Semua ada buat kebutuhan kamu</p>
               </div>
-              <p className="rounded-full bg-blue-50 dark:bg-blue-900/30 px-4 py-2 text-xs font-semibold text-blue-700 dark:text-blue-400" role="status" aria-live="polite">{loading ? "Memuat..." : `${filtered.length} usaha ditemukan`}</p>
+              <p className="rounded-full border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 backdrop-blur-xl" role="status" aria-live="polite">{loading ? "Loading..." : `${filtered.length} usaha ditemukan`}</p>
             </div>
 
             {notice && <div className={`mb-5 rounded-xl border px-4 py-3 text-sm ${offline ? "border-[#d7e3d9] bg-[#f0f5f1] text-[#315540]" : "border-red-200 bg-red-50 text-red-900"}`} role={offline ? "status" : "alert"}>{notice}{offline && <button type="button" onClick={() => void loadData()} className="ml-2 font-semibold underline underline-offset-2">Coba sambungkan</button>}</div>}
@@ -61,13 +62,14 @@ export function DirectoryApp() {
 
         <HowItWorks />
 
-        <section id="daftar" className="scroll-mt-24 border-y border-gray-100 dark:border-slate-800 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-950 py-16 sm:py-20 lg:py-24 transition-colors">
+        <section id="daftar" className="relative scroll-mt-24 py-16 sm:py-20 lg:py-24">
+          <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-fuchsia-500/25 to-transparent" />
           <div className="mx-auto grid max-w-7xl gap-8 px-5 sm:px-8 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
             <RegistrationIntro />
             <div className="space-y-8">
               <RegistrationForm ownerId={ownerId} onCreate={addBusiness} />
               {myBusinesses.length > 0 && <div>
-                <div className="mb-4 flex items-end justify-between"><div><p className="text-[11px] font-bold uppercase tracking-[.13em] text-blue-600 dark:text-blue-400">Kelola Daftar</p><h3 className="mt-1 text-xl font-bold tracking-[-.04em] text-gray-900 dark:text-white">Usaha Saya <span className="text-gray-500 dark:text-gray-400">({myBusinesses.length})</span></h3></div></div>
+                <div className="mb-4 flex items-end justify-between"><div><p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-violet-500 dark:text-fuchsia-400">My Space</p><h3 className="mt-1 text-xl font-semibold tracking-[-.04em] text-slate-900 dark:text-white">Usaha Saya <span className="text-slate-500 dark:text-slate-400">({myBusinesses.length})</span></h3></div></div>
                 <div className="grid gap-4">{myBusinesses.map((business) => <BusinessCard key={business.id} business={business} favorite={favorites.includes(business.id)} onToggleFavorite={toggleFavorite} onViewDetails={setSelectedBusiness} onDelete={removeBusiness} deleting={deletingId === business.id} />)}</div>
               </div>}
             </div>
