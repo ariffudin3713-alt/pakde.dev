@@ -3,19 +3,19 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pasar UMKM — Temukan usaha lokal, dukung sekitar",
+  title: "Pasar UMKM - Temukan & Dukung Usaha Lokal Indonesia",
   description:
-    "Direktori usaha lokal Indonesia. Temukan produk dan jasa dari tetangga, lalu hubungi penjual langsung tanpa komisi.",
+    "Direktori usaha lokal Indonesia. Temukan produk dan jasa dari UMKM di sekitar, hubungi langsung via WhatsApp tanpa komisi. Gratis untuk semua!",
   openGraph: {
-    title: "Pasar UMKM",
-    description: "Usaha lokal yang lebih mudah ditemukan.",
+    title: "Pasar UMKM - Dukung Usaha Lokal",
+    description: "Temukan usaha lokal terdekat, hubungi langsung tanpa perantara.",
     type: "website",
     locale: "id_ID",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5f6f4",
+  themeColor: "#2563eb",
   width: "device-width",
   initialScale: 1,
 };

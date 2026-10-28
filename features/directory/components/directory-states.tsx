@@ -5,23 +5,25 @@ export function BusinessSkeletons() {
     </div>
   );
 }
-
 interface EmptyStateProps {
   favoritesOnly: boolean;
+  hasListings: boolean;
   onReset: () => void;
 }
 
-export function EmptyState({ favoritesOnly, onReset }: EmptyStateProps) {
+export function EmptyState({ favoritesOnly, hasListings, onReset }: EmptyStateProps) {
+  const title = favoritesOnly ? "Belum Ada Favorit" : hasListings ? "Tidak Ditemukan" : "Jadilah Yang Pertama";
+  const description = favoritesOnly
+    ? "Simpan usaha yang menarik dengan menekan tombol hati untuk menemukannya lagi di sini."
+    : hasListings
+      ? "Coba ubah kata pencarian, kategori, atau filter lainnya untuk menemukan hasil yang sesuai."
+      : "Kenalkan usaha Anda kepada pembeli di sekitar. Pendaftaran gratis dan sangat mudah!";
   return (
-    <div className="rounded-2xl border border-dashed border-[#cfd8d1] bg-white px-6 py-14 text-center sm:py-20">
-      <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-[#f1f3f0] text-2xl" aria-hidden="true">{favoritesOnly ? "♡" : "⌕"}</span>
-      <h3 className="mt-5 text-lg font-semibold tracking-[-.03em] text-ink">{favoritesOnly ? "Belum ada favorit" : "Belum menemukan usaha"}</h3>
-      <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-muted">{favoritesOnly ? "Simpan usaha yang menarik untuk menemukannya lagi di sini." : "Coba kata pencarian atau filter lain untuk melihat lebih banyak hasil."}</p>
-      {!favoritesOnly && <button type="button" onClick={onReset} className="mt-5 rounded-xl border border-line px-4 py-2.5 text-xs font-semibold text-ink transition-all duration-200 hover:border-accent hover:text-accent">Hapus semua filter</button>}
+    <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-14 text-center sm:py-20">
+      <span className="mx-auto grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 text-3xl shadow-sm" aria-hidden="true">{favoritesOnly ? "♥" : hasListings ? "🔍" : "✨"}</span>
+      <h3 className="mt-5 text-xl font-bold tracking-[-.03em] text-gray-900">{title}</h3>
+      <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-gray-600">{description}</p>
+      {!hasListings && !favoritesOnly ? <a href="#daftar" className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-5 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:from-blue-700 hover:to-blue-800 hover:shadow-lg">Daftarkan Usaha Gratis</a> : <button type="button" onClick={onReset} className="mt-6 rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-700 transition-all duration-200 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700">{favoritesOnly ? "Lihat Semua Usaha" : "Hapus Semua Filter"}</button>}
     </div>
   );
-}
-
-export function ErrorNotice({ children, onRetry }: { children: string; onRetry: () => void }) {
-  return <div role="alert" className="flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-900 sm:flex-row sm:items-center sm:justify-between"><p>{children}</p><button type="button" onClick={onRetry} className="w-fit rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold hover:bg-red-100">Coba lagi</button></div>;
 }

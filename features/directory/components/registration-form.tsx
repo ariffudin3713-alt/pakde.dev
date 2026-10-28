@@ -53,14 +53,14 @@ export function RegistrationForm({ ownerId, onCreate }: RegistrationFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-7" noValidate>
-      <div className="mb-7 border-b border-line pb-5">
-        <p className="text-[11px] font-bold uppercase tracking-[.14em] text-accent">Gratis selamanya</p>
-        <h3 className="mt-2 text-2xl font-semibold tracking-[-.05em] text-ink">Daftarkan usaha</h3>
-        <p className="mt-2 text-sm leading-6 text-muted">Ceritakan usaha Anda supaya pembeli sekitar lebih mudah menemukannya.</p>
+    <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7" noValidate>
+      <div className="mb-7 border-b border-gray-100 pb-5">
+        <p className="text-[11px] font-bold uppercase tracking-[.14em] text-green-600">✨ Gratis Selamanya</p>
+        <h3 className="mt-2 text-2xl font-bold tracking-[-.05em] text-gray-900">Daftarkan Usaha Anda</h3>
+        <p className="mt-2 text-sm leading-6 text-gray-600">Ceritakan usaha Anda agar lebih mudah ditemukan oleh pembeli di sekitar</p>
       </div>
 
-      {success && <p className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900" role="status">✓ {success}</p>}
+      {success && <p className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-900" role="status">✓ {success}</p>}
       {error && <p className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900" role="alert">{error}</p>}
 
       <div className="grid gap-x-4 gap-y-5 sm:grid-cols-2">
@@ -97,19 +97,19 @@ export function RegistrationForm({ ownerId, onCreate }: RegistrationFormProps) {
       </div>
 
       <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
-        <button type="submit" disabled={busy} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-accent px-6 text-sm font-semibold text-white shadow-sm transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-accent-deep hover:shadow-md active:scale-[.98] disabled:cursor-wait disabled:opacity-60">
-          {busy ? "Menyimpan…" : "Tampilkan usaha saya"}
+        <button type="submit" disabled={busy} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-6 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:from-blue-700 hover:to-blue-800 hover:shadow-lg active:scale-[.98] disabled:cursor-wait disabled:opacity-60">
+          {busy ? "Menyimpan…" : "Daftarkan Usaha"}
         </button>
-        <p className="text-xs leading-5 text-muted">Gratis, tanpa komisi. Pembeli menghubungi Anda langsung.</p>
+        <p className="text-xs leading-5 text-gray-600">✓ Gratis • ✓ Tanpa komisi • ✓ Pembeli chat langsung</p>
       </div>
     </form>
   );
 }
 
-const inputClass = "mt-2 min-h-11 w-full rounded-xl border border-line bg-[#fbfcfb] px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-200 placeholder:text-[#929c94] focus:border-accent focus:bg-white focus:ring-4 focus:ring-[#176344]/10";
+const inputClass = "mt-2 min-h-11 w-full rounded-xl border border-gray-200 bg-gray-50/50 px-3.5 py-2.5 text-sm text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10";
 
 function Field({ label, required = false, error, className = "", children }: { label: string; required?: boolean; error?: string; className?: string; children: ReactNode }) {
   const id = label.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const field = cloneElement(children as ReactElement<{ id?: string; "aria-invalid"?: boolean }>, { id, "aria-invalid": Boolean(error) });
-  return <div className={className}><label htmlFor={id} className="block text-xs font-semibold text-ink">{label}{required && <span className="ml-1 text-accent" aria-hidden="true">*</span>}</label>{field}{error && <p className="mt-1.5 text-xs text-red-700" role="alert">{error}</p>}</div>;
+  return <div className={className}><label htmlFor={id} className="block text-xs font-semibold text-gray-900">{label}{required && <span className="ml-1 text-blue-600" aria-hidden="true">*</span>}</label>{field}{error && <p className="mt-1.5 text-xs text-red-600" role="alert">{error}</p>}</div>;
 }

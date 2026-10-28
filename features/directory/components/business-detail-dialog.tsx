@@ -75,7 +75,7 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
         <article className="relative max-h-[94dvh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-line bg-white shadow-2xl">
           <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-white/95 px-5 py-4 backdrop-blur sm:px-7">
             <p className="text-xs font-semibold text-muted">Detail usaha</p>
-            <button type="button" autoFocus onClick={onClose} aria-label="Tutup detail usaha" className="grid size-10 place-items-center rounded-xl border border-line text-lg text-muted transition-all duration-[250ms] ease-out hover:border-[#cbd7ce] hover:bg-[#f5f7f5] hover:text-ink active:scale-95">×</button>
+            <button type="button" autoFocus onClick={onClose} aria-label="Tutup detail usaha" className="grid size-10 place-items-center rounded-xl border border-gray-200 text-lg text-gray-500 transition-all duration-200 ease-out hover:border-gray-300 hover:bg-gray-50 hover:text-gray-900 active:scale-95">×</button>
           </div>
 
           <div className="grid gap-8 p-5 sm:p-7 lg:grid-cols-[1.05fr_.95fr] lg:gap-10">
@@ -96,7 +96,7 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
                 {business.harga && <p><span className="block font-semibold text-ink">Kisaran harga</span>{business.harga}</p>}
                 {business.ig && <p><span className="block font-semibold text-ink">Instagram</span><a href={`https://instagram.com/${encodeURIComponent(business.ig.replace(/^@+/, ""))}`} target="_blank" rel="noreferrer" className="text-accent underline decoration-transparent underline-offset-2 hover:decoration-current">@{business.ig.replace(/^@+/, "")}</a></p>}
               </div>
-              <a href={chatLink} target="_blank" rel="noreferrer" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-white transition-all duration-[250ms] ease-out hover:-translate-y-0.5 hover:bg-accent-deep hover:shadow-md active:scale-[.98]"><WhatsAppIcon /> Hubungi lewat WhatsApp</a>
+              <a href={chatLink} target="_blank" rel="noreferrer" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 px-5 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-out hover:-translate-y-0.5 hover:from-green-600 hover:to-emerald-700 hover:shadow-lg active:scale-[.98]"><WhatsAppIcon /> Hubungi via WhatsApp</a>
 
               <div className="mt-8 border-t border-line pt-6">
                 <div className="flex items-end justify-between gap-4">
@@ -117,14 +117,14 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
                 {error && <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-xs text-red-900" role="alert">{error}</p>}
                 <form onSubmit={handleReview} className="mt-5 space-y-4">
                   <fieldset>
-                    <legend className="text-xs font-semibold text-ink">Penilaian Anda</legend>
+                    <legend className="text-xs font-semibold text-gray-900">Penilaian Anda</legend>
                     <div className="mt-2 flex gap-1" role="group" aria-label="Pilih nilai bintang">
-                      {[1, 2, 3, 4, 5].map((star) => <button key={star} type="button" onClick={() => setRating(star)} aria-label={`${star} bintang`} aria-pressed={rating === star} className={`grid size-10 place-items-center rounded-lg text-xl transition-all duration-[250ms] ease-out hover:scale-110 active:scale-95 ${star <= rating ? "text-amber-500" : "text-[#cbd2cc] hover:text-amber-400"}`}>★</button>)}
+                      {[1, 2, 3, 4, 5].map((star) => <button key={star} type="button" onClick={() => setRating(star)} aria-label={`${star} bintang`} aria-pressed={rating === star} className={`grid size-10 place-items-center rounded-lg text-xl transition-all duration-200 ease-out hover:scale-125 active:scale-95 ${star <= rating ? "text-amber-400 drop-shadow" : "text-gray-300 hover:text-amber-300"}`}>★</button>)}
                     </div>
                   </fieldset>
-                  <label className="block text-xs font-semibold text-ink">Nama <span className="font-normal text-muted">(opsional)</span><input value={name} onChange={(event) => setName(event.target.value)} maxLength={40} placeholder="Nama Anda" className={fieldClass} /></label>
-                  <label className="block text-xs font-semibold text-ink">Ulasan<input value={message} onChange={(event) => setMessage(event.target.value)} maxLength={200} minLength={3} required placeholder="Ceritakan pengalaman Anda..." className={fieldClass} /></label>
-                  <div className="flex items-center justify-between gap-4"><span className="text-[11px] text-muted">{message.length}/200</span><button type="submit" disabled={busy} className="min-h-11 rounded-xl bg-[#17211b] px-4 text-xs font-semibold text-white transition-all duration-[250ms] ease-out hover:bg-accent active:scale-[.98] disabled:cursor-wait disabled:opacity-60">{busy ? "Mengirim…" : "Kirim ulasan"}</button></div>
+                  <label className="block text-xs font-semibold text-gray-900">Nama <span className="font-normal text-gray-500">(opsional)</span><input value={name} onChange={(event) => setName(event.target.value)} maxLength={40} placeholder="Nama Anda" className={fieldClass} /></label>
+                  <label className="block text-xs font-semibold text-gray-900">Ulasan<input value={message} onChange={(event) => setMessage(event.target.value)} maxLength={200} minLength={3} required placeholder="Ceritakan pengalaman Anda..." className={fieldClass} /></label>
+                  <div className="flex items-center justify-between gap-4"><span className="text-[11px] text-gray-500">{message.length}/200</span><button type="submit" disabled={busy} className="min-h-11 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-4 text-xs font-semibold text-white transition-all duration-200 ease-out hover:from-blue-700 hover:to-blue-800 active:scale-[.98] disabled:cursor-wait disabled:opacity-60">{busy ? "Mengirim…" : "Kirim ulasan"}</button></div>
                 </form>
               </div>
               <p className="mt-4 text-[11px] leading-5 text-muted">Jaga ulasan tetap sopan, relevan, dan berdasarkan pengalaman nyata.</p>
@@ -136,6 +136,6 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
   );
 }
 
-const fieldClass = "mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm font-normal text-ink outline-none transition-all duration-[250ms] placeholder:text-[#929c94] focus:border-accent focus:ring-4 focus:ring-[#176344]/10";
+const fieldClass = "mt-2 min-h-11 w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm font-normal text-gray-900 outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10";
 function PinIcon() { return <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M13 6.7c0 3.2-5 7.7-5 7.7S3 9.9 3 6.7a5 5 0 1 1 10 0Z"/><circle cx="8" cy="6.5" r="1.5"/></svg>; }
 function WhatsAppIcon() { return <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M16.8 9.7a6.8 6.8 0 0 1-10.1 5.9L3 16.5l.9-3.5A6.8 6.8 0 1 1 16.8 9.7Z"/><path d="M7.2 7.1c.4 2.1 1.7 3.4 3.8 4.2l.8-.8 1.4.7c.3.2.3.7 0 .9-.6.5-1.2.7-2 .5-2.4-.6-4.8-2.6-5.3-4.8-.2-.7.1-1.3.5-1.8.3-.3.8-.2.9.2l.6 1.4-.7.8Z"/></svg>; }

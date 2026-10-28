@@ -59,16 +59,6 @@ export interface ReviewInput {
   bintang: number;
 }
 
-export interface BusinessListResponse {
-  items: Business[];
-  count: number;
-}
-
 export interface BusinessResponse {
   item: Business;
-}
-
-export interface ApiErrorResponse {
-  error?: string;
-  errors?: Partial<Record<keyof BusinessInput, string>>;
 }
