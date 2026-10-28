@@ -16,21 +16,42 @@
   --font-sans: "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
 }
 
-:root { color-scheme: light; }
+:root {
+  color-scheme: light;
+  --bg-gradient-start: #ffffff;
+  --bg-gradient-end: #f8fafc;
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a5568;
+  --border-color: #e2e8f0;
+  --surface-bg: #ffffff;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg-gradient-start: #0f172a;
+  --bg-gradient-end: #020617;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --border-color: #334155;
+  --surface-bg: #1e293b;
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 body { 
   min-height: 100vh; 
   margin: 0; 
-  background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
-  color: #1a1a2e; 
+  background: linear-gradient(to bottom, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  color: var(--text-primary); 
   font-family: var(--font-sans); 
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 ::selection { background: #bfdbfe; color: #1e40af; }
+.dark ::selection { background: #3b82f6; color: #eff6ff; }
 :focus-visible { outline: 3px solid #3b82f6; outline-offset: 2px; border-radius: 4px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

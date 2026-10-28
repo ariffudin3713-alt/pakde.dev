@@ -15,21 +15,22 @@ export function DirectoryStats({ businessCount, categoryCount, cityCount }: Dire
 }
 
 function StatCard({ value, label, detail, icon, color }: { value: string; label: string; detail: string; icon: string; color: "blue" | "purple" | "orange" }) {
-  const colors = {
-    blue: "from-blue-50 to-blue-100 border-blue-200 text-blue-600",
-    purple: "from-purple-50 to-purple-100 border-purple-200 text-purple-600",
-    orange: "from-orange-50 to-amber-100 border-orange-200 text-orange-600"
+  const colorMap = {
+    blue: { border: "border-blue-200 dark:border-blue-800", bg1: "from-blue-50 dark:from-blue-900/40", bg2: "to-blue-100 dark:to-blue-900/60", dot: "bg-blue-500", text: "text-blue-600 dark:text-blue-400" },
+    purple: { border: "border-purple-200 dark:border-purple-800", bg1: "from-purple-50 dark:from-purple-900/40", bg2: "to-purple-100 dark:to-purple-900/60", dot: "bg-purple-500", text: "text-purple-600 dark:text-purple-400" },
+    orange: { border: "border-orange-200 dark:border-orange-800", bg1: "from-orange-50 dark:from-orange-900/40", bg2: "to-amber-100 dark:to-amber-900/60", dot: "bg-orange-500", text: "text-orange-600 dark:text-orange-400" }
   };
+  const c = colorMap[color];
   return (
-    <div className="group relative overflow-hidden min-h-[130px] rounded-2xl border bg-gradient-to-br p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:min-h-[140px] sm:p-6" style={{ borderColor: color === "blue" ? "#bfdbfe" : color === "purple" ? "#e9d5ff" : "#fed7aa" }}>
-      <div className={`absolute inset-0 bg-gradient-to-br ${colors[color].split(' ')[0]} ${colors[color].split(' ')[1]} opacity-60`} />
+    <div className={`group relative overflow-hidden min-h-[130px] rounded-2xl border ${c.border} bg-gradient-to-br p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:shadow-slate-900/50 sm:min-h-[140px] sm:p-6`}>
+      <div className={`absolute inset-0 bg-gradient-to-br ${c.bg1} ${c.bg2} opacity-60`} />
       <div className="relative flex items-start justify-between">
         <div className="flex-1">
-          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-700"><span className={`size-2 rounded-full ${color === "blue" ? "bg-blue-500" : color === "purple" ? "bg-purple-500" : "bg-orange-500"}`} aria-hidden="true" />{label}</p>
-          <p className="mt-2 text-4xl font-bold tracking-[-.06em] text-gray-900">{value}</p>
-          <p className="mt-1 text-xs font-medium text-gray-600">{detail}</p>
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300"><span className={`size-2 rounded-full ${c.dot}`} aria-hidden="true" />{label}</p>
+          <p className="mt-2 text-4xl font-bold tracking-[-.06em] text-gray-900 dark:text-white">{value}</p>
+          <p className="mt-1 text-xs font-medium text-gray-600 dark:text-gray-400">{detail}</p>
         </div>
-        <span className="grid size-12 place-items-center rounded-xl bg-white/80 text-2xl shadow-sm">{icon}</span>
+        <span className="grid size-12 place-items-center rounded-xl bg-white/80 dark:bg-slate-800/80 text-2xl shadow-sm">{icon}</span>
       </div>
     </div>
   );
@@ -38,12 +39,12 @@ function StatCard({ value, label, detail, icon, color }: { value: string; label:
 export function HowItWorks() {
   return (
     <section id="cara-kerja" className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-blue-50/30 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-blue-50/30 dark:via-blue-900/10 to-transparent" />
       <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-20">
         <div className="max-w-md">
-          <p className="text-[11px] font-bold uppercase tracking-[.15em] text-blue-600">Cara Kerja</p>
-          <h2 className="mt-3 text-3xl font-bold leading-tight tracking-[-.06em] text-gray-900 sm:text-4xl lg:text-5xl">Mudah, Cepat, dan Gratis</h2>
-          <p className="mt-4 text-base leading-7 text-gray-600">Hanya 3 langkah untuk menghubungkan usaha lokal Anda dengan pembeli di sekitar.</p>
+          <p className="text-[11px] font-bold uppercase tracking-[.15em] text-blue-600 dark:text-blue-400">Cara Kerja</p>
+          <h2 className="mt-3 text-3xl font-bold leading-tight tracking-[-.06em] text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">Mudah, Cepat, dan Gratis</h2>
+          <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400">Hanya 3 langkah untuk menghubungkan usaha lokal Anda dengan pembeli di sekitar.</p>
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
           <Step number="01" title="Daftar Gratis" text="Isi formulir sederhana, pendaftaran hanya butuh beberapa menit" icon="📝" color="blue" />
@@ -62,15 +63,15 @@ function Step({ number, title, text, icon, color }: { number: string; title: str
     green: "from-green-500 to-emerald-600"
   };
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-      <div className={`absolute -right-8 -top-8 size-24 rounded-full bg-gradient-to-br ${colors[color]} opacity-10`} />
+    <article className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:shadow-slate-900/50">
+      <div className={`absolute -right-8 -top-8 size-24 rounded-full bg-gradient-to-br ${colors[color]} opacity-10 dark:opacity-20`} />
       <div className="relative">
         <div className="flex items-center justify-between mb-4">
           <span className={`grid size-12 place-items-center rounded-xl bg-gradient-to-br ${colors[color]} text-white text-xl shadow-md`}>{icon}</span>
-          <span className="text-3xl font-bold text-gray-200">{number}</span>
+          <span className="text-3xl font-bold text-gray-200 dark:text-slate-700">{number}</span>
         </div>
-        <h3 className="text-lg font-bold tracking-[-.02em] text-gray-900 mb-2">{title}</h3>
-        <p className="text-sm leading-6 text-gray-600">{text}</p>
+        <h3 className="text-lg font-bold tracking-[-.02em] text-gray-900 dark:text-white mb-2">{title}</h3>
+        <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{text}</p>
       </div>
     </article>
   );
@@ -103,12 +104,12 @@ export function RegistrationIntro() {
 export function FaqSection() {
   return (
     <section id="faq" className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-purple-50/20 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-purple-50/20 dark:via-purple-900/10 to-transparent" />
       <div className="grid gap-10 md:grid-cols-[.7fr_1.3fr] md:gap-16">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[.15em] text-purple-600">FAQ</p>
-          <h2 className="mt-3 text-3xl font-bold tracking-[-.06em] text-gray-900 sm:text-4xl lg:text-5xl">Pertanyaan yang Sering Ditanyakan</h2>
-          <p className="mt-4 text-base leading-7 text-gray-600">Semua yang perlu kamu ketahui tentang Pasar UMKM</p>
+          <p className="text-[11px] font-bold uppercase tracking-[.15em] text-purple-600 dark:text-purple-400">FAQ</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-[-.06em] text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">Pertanyaan yang Sering Ditanyakan</h2>
+          <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400">Semua yang perlu kamu ketahui tentang Pasar UMKM</p>
         </div>
         <div className="space-y-3">
           <Faq question="Apakah Pasar UMKM benar-benar gratis?" answer="Ya, sepenuhnya gratis! Tidak ada biaya pendaftaran, tidak ada biaya bulanan, dan kami tidak mengambil komisi dari setiap transaksi." />
@@ -124,13 +125,13 @@ export function FaqSection() {
 
 function Faq({ question, answer }: { question: string; answer: string }) {
   return (
-    <details className="group rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-5 text-sm font-semibold text-gray-900 marker:hidden">
+    <details className="group rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm transition-all hover:shadow-md dark:shadow-slate-900/50">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-5 text-sm font-semibold text-gray-900 dark:text-white marker:hidden">
         <span className="flex-1">{question}</span>
-        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-gray-100 text-gray-600 transition-all duration-200 group-open:rotate-45 group-open:bg-blue-100 group-open:text-blue-600" aria-hidden="true">+</span>
+        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 transition-all duration-200 group-open:rotate-45 group-open:bg-blue-100 dark:group-open:bg-blue-900/50 group-open:text-blue-600 dark:group-open:text-blue-400" aria-hidden="true">+</span>
       </summary>
       <div className="px-5 pb-5">
-        <p className="max-w-2xl text-sm leading-6 text-gray-600">{answer}</p>
+        <p className="max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">{answer}</p>
       </div>
     </details>
   );
@@ -138,7 +139,7 @@ function Faq({ question, answer }: { question: string; answer: string }) {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-gray-800 bg-gradient-to-br from-gray-900 to-gray-950 text-white">
+    <footer className="border-t border-gray-800 dark:border-slate-700 bg-gradient-to-br from-gray-900 to-gray-950 dark:from-slate-950 dark:to-black text-white">
       <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
@@ -165,7 +166,7 @@ export function SiteFooter() {
             </ul>
           </div>
         </div>
-        <div className="mt-8 pt-6 border-t border-gray-800 text-center">
+        <div className="mt-8 pt-6 border-t border-gray-800 dark:border-slate-700 text-center">
           <p className="text-xs text-gray-500">© {new Date().getFullYear()} Pasar UMKM. Dibuat dengan ❤️ untuk mendukung usaha lokal Indonesia</p>
         </div>
       </div>

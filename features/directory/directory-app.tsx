@@ -22,15 +22,15 @@ export function DirectoryApp() {
 
         <DirectoryStats businessCount={businesses.length} categoryCount={CATEGORIES.length} cityCount={cities.length} />
 
-        <section id="jelajahi" className="scroll-mt-24 border-y border-gray-100 bg-white py-16 sm:py-20 lg:py-24">
+        <section id="jelajahi" className="scroll-mt-24 border-y border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 py-16 sm:py-20 lg:py-24 transition-colors">
           <div className="mx-auto max-w-7xl px-5 sm:px-8">
             <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[.15em] text-blue-600">Direktori Pilihan</p>
-                <h2 className="mt-2 text-3xl font-bold tracking-[-.06em] text-gray-900 sm:text-4xl lg:text-5xl">Jelajahi Usaha Lokal</h2>
-                <p className="mt-3 max-w-xl text-base leading-6 text-gray-600">Temukan produk dan jasa yang kamu butuhkan, langsung chat dengan pemiliknya</p>
+                <p className="text-[11px] font-bold uppercase tracking-[.15em] text-blue-600 dark:text-blue-400">Direktori Pilihan</p>
+                <h2 className="mt-2 text-3xl font-bold tracking-[-.06em] text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">Jelajahi Usaha Lokal</h2>
+                <p className="mt-3 max-w-xl text-base leading-6 text-gray-600 dark:text-gray-400">Temukan produk dan jasa yang kamu butuhkan, langsung chat dengan pemiliknya</p>
               </div>
-              <p className="rounded-full bg-blue-50 px-4 py-2 text-xs font-semibold text-blue-700" role="status" aria-live="polite">{loading ? "Memuat..." : `${filtered.length} usaha ditemukan`}</p>
+              <p className="rounded-full bg-blue-50 dark:bg-blue-900/30 px-4 py-2 text-xs font-semibold text-blue-700 dark:text-blue-400" role="status" aria-live="polite">{loading ? "Memuat..." : `${filtered.length} usaha ditemukan`}</p>
             </div>
 
             {notice && <div className={`mb-5 rounded-xl border px-4 py-3 text-sm ${offline ? "border-[#d7e3d9] bg-[#f0f5f1] text-[#315540]" : "border-red-200 bg-red-50 text-red-900"}`} role={offline ? "status" : "alert"}>{notice}{offline && <button type="button" onClick={() => void loadData()} className="ml-2 font-semibold underline underline-offset-2">Coba sambungkan</button>}</div>}
@@ -61,13 +61,13 @@ export function DirectoryApp() {
 
         <HowItWorks />
 
-        <section id="daftar" className="scroll-mt-24 border-y border-gray-100 bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20 lg:py-24">
+        <section id="daftar" className="scroll-mt-24 border-y border-gray-100 dark:border-slate-800 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-950 py-16 sm:py-20 lg:py-24 transition-colors">
           <div className="mx-auto grid max-w-7xl gap-8 px-5 sm:px-8 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
             <RegistrationIntro />
             <div className="space-y-8">
               <RegistrationForm ownerId={ownerId} onCreate={addBusiness} />
               {myBusinesses.length > 0 && <div>
-                <div className="mb-4 flex items-end justify-between"><div><p className="text-[11px] font-bold uppercase tracking-[.13em] text-blue-600">Kelola Daftar</p><h3 className="mt-1 text-xl font-bold tracking-[-.04em] text-gray-900">Usaha Saya <span className="text-gray-500">({myBusinesses.length})</span></h3></div></div>
+                <div className="mb-4 flex items-end justify-between"><div><p className="text-[11px] font-bold uppercase tracking-[.13em] text-blue-600 dark:text-blue-400">Kelola Daftar</p><h3 className="mt-1 text-xl font-bold tracking-[-.04em] text-gray-900 dark:text-white">Usaha Saya <span className="text-gray-500 dark:text-gray-400">({myBusinesses.length})</span></h3></div></div>
                 <div className="grid gap-4">{myBusinesses.map((business) => <BusinessCard key={business.id} business={business} favorite={favorites.includes(business.id)} onToggleFavorite={toggleFavorite} onViewDetails={setSelectedBusiness} onDelete={removeBusiness} deleting={deletingId === business.id} />)}</div>
               </div>}
             </div>
