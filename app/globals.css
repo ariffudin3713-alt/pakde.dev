@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #101828;
-  --color-muted: #475467;
-  --color-line: #eaecf0;
-  --color-paper: #f8f9fb;
+  --color-ink: #0f172a;
+  --color-muted: #475569;
+  --color-line: #e5e7eb;
+  --color-paper: #f8fafc;
   --color-surface: #ffffff;
-  --color-accent: #7c3aed;
-  --color-accent-deep: #6d28d9;
-  --color-accent-soft: #f5f3ff;
+  --color-accent: #2563eb;
+  --color-accent-deep: #1d4ed8;
+  --color-accent-soft: #eff6ff;
   --color-gold: #f59e0b;
-  --font-sans: "Jost", "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Jost", "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
   color-scheme: light;
   --bg-base: #ffffff;
-  --bg-alt: #f7f7fb;
+  --bg-alt: #f8fafc;
   --bg-surface: #ffffff;
   --bg-subtle: #f9fafb;
-  --text-primary: #0f1026;
-  --text-secondary: #1f2937;
-  --text-tertiary: #475467;
-  --border-subtle: #e7e7ee;
-  --border-strong: #d4d4e0;
-  --ring-accent: rgba(139, 92, 246, 0.18);
-  --shadow-soft: 0 10px 60px -40px rgba(139, 92, 246, 0.5);
-  --shadow-card: 0 60px 120px -80px rgba(79, 70, 229, 0.4);
-  --glow-violet: radial-gradient(600px circle at 50% 0, rgba(139, 92, 246, 0.12), transparent);
+  --text-primary: #0f172a;
+  --text-secondary: #1e293b;
+  --text-tertiary: #334155;
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --ring-accent: rgba(37, 99, 235, 0.18);
+  --shadow-soft: 0 10px 40px -30px rgba(15, 23, 42, 0.4);
+  --shadow-card: 0 40px 80px -60px rgba(15, 23, 42, 0.25);
+  --glow-violet: radial-gradient(600px circle at 50% 0, rgba(37, 99, 235, 0.08), transparent);
 }
 
 .dark {
@@ -57,7 +57,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  line-height: 1.8;
+  line-height: 1.7;
   transition: background 320ms ease, color 280ms ease;
 }
 

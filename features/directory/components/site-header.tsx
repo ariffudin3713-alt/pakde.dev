@@ -31,20 +31,20 @@ export function SiteHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b" style={{ borderColor: "var(--border-subtle)", background: "color-mix(in srgb, var(--bg-surface) 94%, transparent)", backdropFilter: "blur(18px) saturate(1.1)" }}>
+    <header className="sticky top-0 z-50 border-b" style={{ borderColor: "var(--border-subtle)", background: "color-mix(in srgb, var(--bg-surface) 98%, transparent)", backdropFilter: "blur(12px)" }}>
       <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="#home" className="group flex items-center gap-3" aria-label="Pasar UMKM, ke beranda">
           <div className="leading-tight">
-            <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text-primary)" }}>PASAR <span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">UMKM</span></p>
-            <p className="text-[11px] uppercase tracking-[0.28em]" style={{ color: "var(--text-tertiary)" }}>Local Directory</p>
+            <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text-primary)" }}>PASAR <span style={{ color: "var(--color-accent)" }}>UMKM</span></p>
+            <p className="text-[11px] uppercase tracking-[0.28em]" style={{ color: "var(--text-tertiary)" }}>Business Directory</p>
           </div>
         </Link>
         <nav className="hidden items-center gap-10 text-[14px] md:flex" aria-label="Navigasi utama">
-          <Link className="transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400" style={{ color: "var(--text-secondary)" }} href="#home">{t("nav.home")}</Link>
-          <Link className="transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400" style={{ color: "var(--text-secondary)" }} href="#jelajahi">{t("nav.directory")}</Link>
-          <Link className="transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400" style={{ color: "var(--text-secondary)" }} href="#cara-kerja">{t("nav.approach")}</Link>
-          <Link className="transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400" style={{ color: "var(--text-secondary)" }} href="#daftar">{t("nav.list")}</Link>
-          <Link className="transition-colors hover:text-violet-500 dark:hover:text-fuchsia-400" style={{ color: "var(--text-secondary)" }} href="#faq">{t("nav.faq")}</Link>
+          <Link className="transition-colors hover:text-[var(--color-accent)]" style={{ color: "var(--text-secondary)" }} href="#home">{t("nav.home")}</Link>
+          <Link className="transition-colors hover:text-[var(--color-accent)]" style={{ color: "var(--text-secondary)" }} href="#jelajahi">{t("nav.directory")}</Link>
+          <Link className="transition-colors hover:text-[var(--color-accent)]" style={{ color: "var(--text-secondary)" }} href="#cara-kerja">{t("nav.approach")}</Link>
+          <Link className="transition-colors hover:text-[var(--color-accent)]" style={{ color: "var(--text-secondary)" }} href="#daftar">{t("nav.list")}</Link>
+          <Link className="transition-colors hover:text-[var(--color-accent)]" style={{ color: "var(--text-secondary)" }} href="#faq">{t("nav.faq")}</Link>
         </nav>
         <div className="flex items-center gap-2">
           <button
@@ -64,7 +64,7 @@ export function SiteHeader() {
           >
             {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
-          <Link href="#daftar" className="hidden sm:inline-flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-6 text-[13px] font-semibold text-white shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)]">
+          <Link href="#daftar" className="hidden sm:inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--color-accent)] px-6 text-[13px] font-semibold text-white shadow-sm transition-all hover:bg-[var(--color-accent-deep)]">
             {t("nav.getStarted")}
           </Link>
         </div>

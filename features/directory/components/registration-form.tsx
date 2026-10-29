@@ -55,14 +55,14 @@ export function RegistrationForm({ ownerId, onCreate }: RegistrationFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-[2rem] border border-slate-200/70 bg-white/95 p-5 shadow-[var(--shadow-card)] sm:p-7 dark:border-white/10 dark:bg-white/5" noValidate>
+    <form onSubmit={handleSubmit} className="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-[var(--shadow-card)] sm:p-7 dark:border-white/10 dark:bg-white/5" noValidate>
       <div className="mb-7 border-b border-slate-100 pb-5 dark:border-white/10">
-        <p className="text-[11px] font-bold uppercase tracking-[.14em] text-violet-600 dark:text-fuchsia-400">✨ {t("reg.free")}</p>
-        <h3 className="mt-2 text-2xl font-bold tracking-[-.05em] text-slate-900 dark:text-white">{t("reg.formTitle")}</h3>
+        <p className="text-[11px] font-semibold uppercase tracking-[.14em] text-[var(--color-accent)]">✨ {t("reg.free")}</p>
+        <h3 className="mt-2 text-2xl font-semibold tracking-[-.05em] text-slate-900 dark:text-white">{t("reg.formTitle")}</h3>
         <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">Ceritakan usaha Anda agar lebih mudah ditemukan oleh pembeli di sekitar</p>
       </div>
 
-      {success && <p className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-200" role="status">✓ {success}</p>}
+      {success && <p className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900 dark:border-emerald-400/40 dark:bg-emerald-400/10 dark:text-emerald-200" role="status">✓ {success}</p>}
       {error && <p className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900 dark:border-red-400/40 dark:bg-red-400/10 dark:text-red-200" role="alert">{error}</p>}
 
       <div className="grid gap-x-4 gap-y-5 sm:grid-cols-2">
@@ -99,19 +99,19 @@ export function RegistrationForm({ ownerId, onCreate }: RegistrationFormProps) {
       </div>
 
       <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
-        <button type="submit" disabled={busy} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-6 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)] active:scale-[.98] disabled:cursor-wait disabled:opacity-60">
+        <button type="submit" disabled={busy} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--color-accent)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-deep)] disabled:cursor-wait disabled:opacity-60">
           {busy ? "Menyimpan…" : t("nav.list")}
         </button>
-        <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">✓ {t("reg.free")} • ✓ {t("reg.freeDesc").includes("komisi") ? "Tanpa komisi" : "No commission"} • ✓ {t("hero.direct")}</p>
+        <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">✓ {t("reg.free")} • ✓ Tanpa komisi • ✓ {t("hero.direct")}</p>
       </div>
     </form>
   );
 }
 
-const inputClass = "mt-2 min-h-11 w-full rounded-xl border border-slate-200/70 bg-white/80 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10 dark:border-white/10 dark:bg-transparent dark:text-white dark:placeholder:text-slate-500 dark:focus:bg-transparent";
+const inputClass = "mt-2 min-h-11 w-full rounded-xl border border-slate-200/70 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-500 focus:border-[var(--color-accent)] focus:ring-4 focus:ring-[rgba(37,99,235,0.08)] dark:border-white/10 dark:bg-transparent dark:text-white dark:placeholder:text-slate-500";
 
 function Field({ label, required = false, error, className = "", children }: { label: string; required?: boolean; error?: string; className?: string; children: ReactNode }) {
   const id = label.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const field = cloneElement(children as ReactElement<{ id?: string; "aria-invalid"?: boolean }>, { id, "aria-invalid": Boolean(error) });
-  return <div className={className}><label htmlFor={id} className="block text-xs font-semibold text-slate-900 dark:text-slate-200">{label}{required && <span className="ml-1 text-violet-600 dark:text-fuchsia-400" aria-hidden="true">*</span>}</label>{field}{error && <p className="mt-1.5 text-xs text-red-600 dark:text-red-300" role="alert">{error}</p>}</div>;
+  return <div className={className}><label htmlFor={id} className="block text-xs font-semibold text-slate-900 dark:text-slate-200">{label}{required && <span className="ml-1 text-[var(--color-accent)]" aria-hidden="true">*</span>}</label>{field}{error && <p className="mt-1.5 text-xs text-red-600 dark:text-red-300" role="alert">{error}</p>}</div>;
 }

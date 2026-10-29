@@ -25,15 +25,15 @@ export function DirectoryApp() {
         <DirectoryStats businessCount={businesses.length} categoryCount={CATEGORIES.length} cityCount={cities.length} />
 
         <section id="jelajahi" className="relative scroll-mt-24 py-16 sm:py-20 lg:py-24">
-          <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-violet-500/25 to-transparent" />
+          <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-slate-300/40 to-transparent dark:via-white/10" />
           <div className="mx-auto max-w-7xl px-5 sm:px-8">
             <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-10 sm:flex-row sm:items-end">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-violet-500 dark:text-fuchsia-400">{t("explore.label")}</p>
-                <h2 className="mt-3 text-3xl font-semibold tracking-[-.08em] text-slate-900 dark:text-white sm:text-4xl lg:text-5xl">{t("explore.title")}</h2>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-500 dark:text-slate-400">{t("explore.label")}</p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[-.06em] text-slate-900 dark:text-white sm:text-4xl lg:text-5xl">{t("explore.title")}</h2>
                 <p className="mt-3 max-w-xl text-base text-slate-600 dark:text-slate-300">{t("explore.desc")}</p>
               </div>
-              <p className="rounded-full border border-slate-200/70 dark:border-white/10 bg-white/70 dark:bg-white/5 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 backdrop-blur-xl" role="status" aria-live="polite">{loading ? t("explore.loading") : `${filtered.length} ${t("explore.found")}`}</p>
+              <p className="rounded-full border border-slate-200/70 bg-white px-4 py-2 text-xs font-semibold text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200" role="status" aria-live="polite">{loading ? t("explore.loading") : `${filtered.length} ${t("explore.found")}`}</p>
             </div>
 
             {notice && <div className={`mb-5 rounded-xl border px-4 py-3 text-sm ${offline ? "border-[#d7e3d9] bg-[#f0f5f1] text-[#315540]" : "border-red-200 bg-red-50 text-red-900"}`} role={offline ? "status" : "alert"}>{notice}{offline && <button type="button" onClick={() => void loadData()} className="ml-2 font-semibold underline underline-offset-2">Coba sambungkan</button>}</div>}
@@ -57,7 +57,7 @@ export function DirectoryApp() {
                   </div>)}
                 </div>
               )}
-              {!loading && filtered.length > visibleCount && <div className="mt-7 text-center"><button type="button" onClick={showMore} className="min-h-11 rounded-xl border border-slate-200/70 dark:border-white/10 bg-white/80 dark:bg-white/5 px-5 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all duration-200 hover:border-violet-400 hover:text-violet-600 dark:hover:text-fuchsia-400">{t("explore.loadMore")}</button></div>}
+              {!loading && filtered.length > visibleCount && <div className="mt-7 text-center"><button type="button" onClick={showMore} className="min-h-11 rounded-xl border border-slate-200/70 bg-white px-5 text-xs font-semibold text-slate-700 transition-all duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] dark:border-white/10 dark:bg-white/5 dark:text-slate-200">{t("explore.loadMore")}</button></div>}
             </div>
           </div>
         </section>
@@ -65,13 +65,13 @@ export function DirectoryApp() {
         <HowItWorks />
 
         <section id="daftar" className="relative scroll-mt-24 py-16 sm:py-20 lg:py-24">
-          <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-fuchsia-500/25 to-transparent" />
+          <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-slate-300/40 to-transparent dark:via-white/10" />
           <div className="mx-auto grid max-w-7xl gap-8 px-5 sm:px-8 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
             <RegistrationIntro />
             <div className="space-y-8">
               <RegistrationForm ownerId={ownerId} onCreate={addBusiness} />
               {myBusinesses.length > 0 && <div>
-                <div className="mb-4 flex items-end justify-between"><div><p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-violet-500 dark:text-fuchsia-400">{t("reg.mySpace")}</p><h3 className="mt-1 text-xl font-semibold tracking-[-.04em] text-slate-900 dark:text-white">{t("reg.mySpace")} <span className="text-slate-500 dark:text-slate-400">({myBusinesses.length})</span></h3></div></div>
+                <div className="mb-4 flex items-end justify-between"><div><p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-500 dark:text-slate-400">{t("reg.mySpace")}</p><h3 className="mt-1 text-xl font-semibold tracking-[-.04em] text-slate-900 dark:text-white">{t("reg.mySpace")} <span className="text-slate-500 dark:text-slate-400">({myBusinesses.length})</span></h3></div></div>
                 <div className="grid gap-4">{myBusinesses.map((business) => <BusinessCard key={business.id} business={business} favorite={favorites.includes(business.id)} onToggleFavorite={toggleFavorite} onViewDetails={setSelectedBusiness} onDelete={removeBusiness} deleting={deletingId === business.id} />)}</div>
               </div>}
             </div>
