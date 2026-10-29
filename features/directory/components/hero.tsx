@@ -1,3 +1,7 @@
+"use client";
+
+import { useI18n } from "@/lib/i18n";
+
 interface HeroProps {
   businessCount: number;
   query: string;
@@ -7,57 +11,60 @@ interface HeroProps {
 }
 
 export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggestion }: HeroProps) {
+  const { t, locale } = useI18n();
+
   return (
-    <section id="home" className="relative">
+    <section id="home" className="relative overflow-hidden">
+      <div className="absolute inset-x-0 top-0 -z-10 h-[520px]" style={{ background: "var(--glow-violet)" }} />
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.05fr_.95fr] lg:gap-24 lg:py-28">
         <div className="max-w-2xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.32em]" style={{ borderColor: "var(--border-subtle)", color: "var(--text-tertiary)" }}>
-            Strategic Advisory • Local Commerce
+            {t("hero.badge")}
           </div>
-          <h1 className="text-[clamp(3rem,8vw,6.4rem)] font-semibold leading-[0.98] tracking-[-0.08em]" style={{ color: "var(--text-primary)" }}>
-            Building credibility for
-            <span className="block">local businesses</span>
+          <h1 className="text-[clamp(3rem,8vw,6.2rem)] font-semibold leading-[0.98] tracking-[-0.08em]" style={{ color: "var(--text-primary)" }}>
+            {t("hero.title1")}
+            <span className="block bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">{t("hero.title2")}</span>
           </h1>
           <p className="mt-6 max-w-xl text-[17px] leading-9" style={{ color: "var(--text-secondary)" }}>
-            A refined directory designed to elevate UMKM with clarity, professionalism, and direct connections. Every listing is built to earn trust.
+            {t("hero.desc")}
           </p>
-          <form className="mt-10 flex max-w-[580px] flex-col gap-2 border p-2 sm:flex-row sm:items-center" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)" }} onSubmit={(event) => { event.preventDefault(); onSearch(); }} role="search" aria-label="Cari usaha lokal">
-            <label className="sr-only" htmlFor="hero-query">Cari berdasarkan nama, kategori, atau kota</label>
+          <form className="mt-10 flex max-w-[580px] flex-col gap-2 rounded-2xl border p-2 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)" }} onSubmit={(event) => { event.preventDefault(); onSearch(); }} role="search" aria-label="Cari usaha lokal">
+            <label className="sr-only" htmlFor="hero-query">Cari usaha lokal</label>
             <span className="hidden pl-4 sm:block" style={{ color: "var(--text-tertiary)" }} aria-hidden="true"><SearchIcon /></span>
-            <input id="hero-query" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder="Search businesses, services or locations" className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm outline-none sm:px-2" style={{ color: "var(--text-primary)" }} />
-            <button className="inline-flex min-h-12 items-center justify-center bg-gradient-to-r from-[#1f4ed8] to-[#1a3fbf] px-7 text-sm font-semibold text-white" type="submit">Search</button>
+            <input id="hero-query" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder={t("hero.searchPlaceholder")} className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm outline-none sm:px-2" style={{ color: "var(--text-primary)" }} />
+            <button className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-7 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)]" type="submit">{t("hero.search")}</button>
           </form>
           <div className="mt-6 flex flex-wrap items-center gap-6 text-sm" style={{ color: "var(--text-tertiary)" }}>
-            <span>Free listing</span>
-            <span>Direct WhatsApp</span>
-            <span>Curated for trust</span>
+            <span>✨ {t("hero.free")}</span>
+            <span>💬 {t("hero.direct")}</span>
+            <span>🔥 {t("hero.trust")}</span>
           </div>
         </div>
 
         <div className="relative">
-          <div className="absolute -inset-x-10 -top-10 -z-10 h-[420px] bg-gradient-to-b from-[rgba(31,78,216,0.05)] to-transparent" />
-          <div className="relative overflow-hidden border" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)", boxShadow: "var(--shadow-card)" }}>
+          <div className="absolute -inset-x-10 -top-10 -z-10 h-[420px] bg-gradient-to-b from-[rgba(168,85,247,0.08)] to-transparent" />
+          <div className="relative overflow-hidden rounded-[2rem] border" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)", boxShadow: "var(--shadow-card)" }}>
             <div className="grid gap-0 lg:grid-cols-[1.1fr_.9fr]">
               <div className="p-8 sm:p-10">
-                <p className="text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--text-tertiary)" }}>Featured insight</p>
-                <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl" style={{ color: "var(--text-primary)" }}>A measured approach to visibility</h2>
-                <p className="mt-4 text-[16px] leading-8" style={{ color: "var(--text-secondary)" }}>We help local businesses present their value with precision. Clarity in information builds confidence and drives meaningful conversations.</p>
+                <p className="text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--text-tertiary)" }}>{t("hero.featured")}</p>
+                <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl" style={{ color: "var(--text-primary)" }}>{t("hero.cardTitle")}</h2>
+                <p className="mt-4 text-[16px] leading-8" style={{ color: "var(--text-secondary)" }}>{t("hero.cardDesc")}</p>
                 <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <Metric value={businessCount.toLocaleString("id-ID")} label="Registered businesses" />
-                  <Metric value={String(Math.max(1, Math.floor(businessCount / 10) || 1)) + "+"} label="Cities represented" />
+                  <Metric value={businessCount.toLocaleString(locale === "id" ? "id-ID" : "en-US")} label={t("hero.registered")} />
+                  <Metric value={String(Math.max(1, Math.floor(businessCount / 8) || 1)) + "+"} label={t("hero.cities")} />
                 </div>
               </div>
               <div className="relative border-t lg:border-l lg:border-t-0" style={{ borderColor: "var(--border-subtle)" }}>
                 <div className="flex h-full flex-col justify-between p-8 sm:p-10">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--text-tertiary)" }}>Principles</p>
+                    <p className="text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--text-tertiary)" }}>{t("hero.principles")}</p>
                     <ul className="mt-5 space-y-4">
-                      <Principle title="Transparency" desc="Accurate details, direct contact." />
-                      <Principle title="Professionalism" desc="Structured listings that inspire trust." />
-                      <Principle title="Accessibility" desc="Simple for every generation." />
+                      <Principle title={t("hero.transp")} desc={t("hero.transpDesc")} />
+                      <Principle title={t("hero.pro")} desc={t("hero.proDesc")} />
+                      <Principle title={t("hero.acc")} desc={t("hero.accDesc")} />
                     </ul>
                   </div>
-                  <a href="#daftar" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--color-accent)" }}>List your business <span aria-hidden="true">→</span></a>
+                  <a href="#daftar" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">{t("hero.listCta")}</a>
                 </div>
               </div>
             </div>
@@ -68,7 +75,7 @@ export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggesti
   );
 }
 
-function SearchIcon() { return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>; }
+function SearchIcon() { return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>; }
 function Metric({ value, label }: { value: string; label: string }) {
   return (
     <div className="border-t pt-4" style={{ borderColor: "var(--border-subtle)" }}>
