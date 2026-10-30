@@ -25,7 +25,7 @@ export function BusinessCard({ business, favorite, featured = false, onToggleFav
   const meta = featured ? "text-bone/80" : "text-muted";
 
   return (
-    <article className={`group relative transition-colors duration-150 ${featured ? "bg-blood text-bone" : "text-ink"} hover:bg-bone/60 focus-within:bg-bone/60 ${featured ? "hover:bg-blood focus-within:bg-blood" : ""}`}>
+    <article className={`group relative ${featured ? "bg-blood text-bone" : "text-ink focus-within:bg-bone/60"}`}>
       <div className={`flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:gap-6 ${featured ? "sm:p-7" : ""}`}>
         <span className={`grid size-12 shrink-0 place-items-center sm:size-14 ${featured ? "bg-bone text-blood" : "bg-blood text-bone"}`}>
           <CategoryMark category={business.kategori} tone={featured ? "blood" : "bone"} />
@@ -60,8 +60,8 @@ export function BusinessCard({ business, favorite, featured = false, onToggleFav
                     ? "bg-bone text-blood"
                     : "bg-blood text-bone"
                   : featured
-                    ? "bg-bone/15 text-bone hover:bg-bone/30"
-                    : "bg-paper text-ink hover:bg-blood hover:text-bone"
+                    ? "bg-bone/15 text-bone hover:bg-bone/25"
+                    : "bg-paper text-ink hover:text-blood"
               }`}
             >
               <HeartIcon size={19} filled={favorite} />
@@ -127,14 +127,14 @@ export function BusinessCard({ business, favorite, featured = false, onToggleFav
                   type="button"
                   disabled={deleting}
                   onClick={() => void onDelete(business)}
-                  className={`inline-flex min-h-10 items-center px-3 font-display text-[13px] font-semibold transition-colors duration-150 disabled:cursor-wait disabled:opacity-60 ${featured ? "bg-bone text-blood hover:bg-white" : "bg-blood text-bone hover:bg-blood-deep"}`}
+                  className={`inline-flex min-h-10 items-center px-3 font-display text-[13px] font-semibold transition-colors duration-150 disabled:cursor-wait disabled:opacity-60 ${featured ? "bg-bone text-blood hover:opacity-90" : "bg-blood text-bone hover:opacity-90"}`}
                 >
                   {deleting ? t("card.deleting") : t("card.yesDelete")}
                 </button>
                 <button
                   type="button"
                   onClick={() => setConfirmingDelete(false)}
-                  className={`inline-flex min-h-10 items-center px-3 font-display text-[13px] font-semibold transition-colors duration-150 ${featured ? "bg-bone/15 text-bone hover:bg-bone/30" : "bg-paper text-ink hover:bg-bone"}`}
+                  className={`inline-flex min-h-10 items-center px-3 font-display text-[13px] font-semibold transition-colors duration-150 ${featured ? "bg-bone/15 text-bone hover:bg-bone/25" : "bg-paper text-ink hover:opacity-85"}`}
                 >
                   {t("card.cancel")}
                 </button>

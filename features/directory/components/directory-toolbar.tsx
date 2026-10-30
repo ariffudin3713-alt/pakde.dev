@@ -89,7 +89,7 @@ export function DirectoryToolbar(props: DirectoryToolbarProps) {
           type="button"
           onClick={props.onOpenChange}
           aria-pressed={props.openOnly}
-          className={`inline-flex min-h-10 items-center gap-2 px-3 font-display text-[13px] font-semibold transition-colors duration-150 ${props.openOnly ? "bg-leaf text-bone" : "bg-bone text-ink hover:bg-leaf hover:text-bone"}`}
+          className={`inline-flex min-h-10 items-center gap-2 px-3 font-display text-[13px] font-semibold transition-colors duration-150 ${props.openOnly ? "bg-leaf text-bone" : "bg-bone text-ink hover:text-leaf"}`}
         >
           <ClockIcon size={14} />
           {t("toolbar.openNow")}
@@ -99,7 +99,7 @@ export function DirectoryToolbar(props: DirectoryToolbarProps) {
           type="button"
           onClick={props.onFavoritesChange}
           aria-pressed={props.favoritesOnly}
-          className={`inline-flex min-h-10 items-center gap-2 px-3 font-display text-[13px] font-semibold transition-colors duration-150 ${props.favoritesOnly ? "bg-blood text-bone" : "bg-bone text-ink hover:bg-blood hover:text-bone"}`}
+          className={`inline-flex min-h-10 items-center gap-2 px-3 font-display text-[13px] font-semibold transition-colors duration-150 ${props.favoritesOnly ? "bg-blood text-bone" : "bg-bone text-ink hover:text-blood"}`}
         >
           <HeartIcon size={14} filled={props.favoritesOnly} />
           {t("toolbar.fav")}
@@ -139,7 +139,7 @@ function CategoryFilter({ active, onClick, count, children }: { active: boolean;
 
 function FilterTag({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <button type="button" onClick={onRemove} aria-label={`Hapus filter ${label}`} className="inline-flex min-h-9 items-center gap-2 bg-bone px-3 font-display text-[13px] font-semibold text-ink transition-colors duration-150 hover:bg-blood hover:text-bone">
+    <button type="button" onClick={onRemove} aria-label={`Hapus filter ${label}`} className="inline-flex min-h-9 items-center gap-2 bg-bone px-3 font-display text-[13px] font-semibold text-ink transition-colors duration-150 hover:text-blood">
       {label}
       <span className="text-[16px] leading-none" aria-hidden="true">×</span>
     </button>

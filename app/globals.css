@@ -9,8 +9,9 @@
   --color-blood: #7a1120;
   --color-blood-deep: #5b0c18;
   --color-leaf: #1d5a3a;
-  --font-display: "Libre Franklin", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-display: "DM Sans", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
 :root {
@@ -49,10 +50,10 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
   font-weight: 700;
-  line-height: 0.94;
-  letter-spacing: -0.038em;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
@@ -112,11 +113,11 @@ img {
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1;
-  transition: background-color 180ms ease-out, color 180ms ease-out, transform 180ms ease-out;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
 }
 
 .btn:hover {
-  background: var(--color-blood-deep);
+  background: color-mix(in srgb, var(--color-blood) 94%, var(--color-ink));
 }
 
 .btn:active {
@@ -130,8 +131,7 @@ img {
 }
 
 .btn-quiet:hover {
-  background: var(--color-ink);
-  color: var(--color-ground);
+  color: var(--color-blood);
 }
 
 .btn-bone {

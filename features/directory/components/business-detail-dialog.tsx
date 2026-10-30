@@ -76,7 +76,7 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
         <article className="relative max-h-dvh w-full max-w-4xl overflow-y-auto bg-ground sm:max-h-[92dvh]">
           <div className="sticky top-0 z-10 flex items-center justify-between gap-4 bg-ground px-5 py-4 sm:px-8">
             <p className="font-display text-[16px] font-semibold text-muted">Detail usaha</p>
-            <button type="button" autoFocus onClick={onClose} aria-label="Tutup detail usaha" className="grid size-11 place-items-center bg-paper text-ink transition-colors duration-150 hover:bg-blood hover:text-bone">
+            <button type="button" autoFocus onClick={onClose} aria-label="Tutup detail usaha" className="grid size-11 place-items-center bg-paper text-ink transition-colors duration-150 hover:text-blood">
               <CloseIcon size={20} />
             </button>
           </div>

@@ -212,7 +212,7 @@ export function FaqSection() {
 
         <div className="flex flex-col gap-2" data-reveal-group>
           {items.map((index) => (
-            <details key={index} name="faq" className="group bg-transparent transition-colors duration-150 hover:bg-bone/60 open:bg-blood open:text-bone" data-reveal>
+            <details key={index} name="faq" className="group bg-transparent open:bg-blood open:text-bone" data-reveal>
               <summary className="flex min-h-[68px] cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 text-left font-display text-[20px] font-bold leading-snug [&::-webkit-details-marker]:hidden">
                 <span>{t(`faq.q${index}`)}</span>
                 <span className="grid size-8 shrink-0 place-items-center transition-transform duration-200 group-open:rotate-45" aria-hidden="true">
