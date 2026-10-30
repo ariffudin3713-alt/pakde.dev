@@ -1,36 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #0f172a;
-  --color-muted: #475569;
-  --color-line: #e5e7eb;
-  --color-paper: #f8fafc;
-  --color-surface: #ffffff;
-  --color-accent: #2563eb;
-  --color-accent-deep: #1d4ed8;
-  --color-accent-soft: #eff6ff;
+  --color-ink: #f8fafc;
+  --color-muted: #cbd5f5;
+  --color-line: rgba(148, 163, 184, 0.18);
+  --color-paper: #050510;
+  --color-surface: rgba(15, 16, 38, 0.92);
+  --color-accent: #a855f7;
+  --color-accent-deep: #9333ea;
+  --color-accent-soft: rgba(168, 85, 247, 0.18);
   --color-gold: #f59e0b;
   --font-sans: "Inter", "Jost", "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
-  color-scheme: light;
-  --bg-base: #ffffff;
-  --bg-alt: #f8fafc;
-  --bg-surface: #ffffff;
-  --bg-subtle: #f9fafb;
-  --text-primary: #0f172a;
-  --text-secondary: #1e293b;
-  --text-tertiary: #334155;
-  --border-subtle: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --ring-accent: rgba(37, 99, 235, 0.18);
-  --shadow-soft: 0 10px 40px -30px rgba(15, 23, 42, 0.4);
-  --shadow-card: 0 40px 80px -60px rgba(15, 23, 42, 0.25);
-  --glow-violet: radial-gradient(600px circle at 50% 0, rgba(37, 99, 235, 0.08), transparent);
-}
-
-.dark {
   color-scheme: dark;
   --bg-base: #050510;
   --bg-alt: #0b1026;

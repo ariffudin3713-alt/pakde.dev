@@ -14,36 +14,36 @@ export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggesti
   const { t, locale } = useI18n();
 
   return (
-    <section id="home" className="relative">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[480px]" style={{ background: "var(--glow-violet)" }} />
+    <section id="home" className="relative overflow-hidden">
+      <div className="absolute inset-x-0 top-0 -z-10 h-[520px]" style={{ background: "var(--glow-violet)" }} />
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.05fr_.95fr] lg:gap-24 lg:py-28">
         <div className="max-w-2xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.32em]" style={{ borderColor: "var(--border-subtle)", color: "var(--text-tertiary)" }}>
             {t("hero.badge")}
           </div>
-          <h1 className="text-[clamp(3rem,8vw,5.8rem)] font-semibold leading-[1.02] tracking-[-0.06em]" style={{ color: "var(--text-primary)" }}>
+          <h1 className="text-[clamp(3rem,8vw,6.2rem)] font-semibold leading-[0.98] tracking-[-0.08em]" style={{ color: "var(--text-primary)" }}>
             {t("hero.title1")}
-            <span className="block" style={{ color: "var(--text-primary)" }}>{t("hero.title2")}</span>
+            <span className="block bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">{t("hero.title2")}</span>
           </h1>
-          <p className="mt-6 max-w-xl text-[17px] leading-8" style={{ color: "var(--text-secondary)" }}>
+          <p className="mt-6 max-w-xl text-[17px] leading-9" style={{ color: "var(--text-secondary)" }}>
             {t("hero.desc")}
           </p>
-          <form className="mt-10 flex max-w-[580px] flex-col gap-2 rounded-xl border p-2 sm:flex-row sm:items-center" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)", boxShadow: "var(--shadow-soft)" }} onSubmit={(event) => { event.preventDefault(); onSearch(); }} role="search" aria-label="Cari usaha lokal">
+          <form className="mt-10 flex max-w-[580px] flex-col gap-2 rounded-2xl border p-2 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)" }} onSubmit={(event) => { event.preventDefault(); onSearch(); }} role="search" aria-label="Cari usaha lokal">
             <label className="sr-only" htmlFor="hero-query">Cari usaha lokal</label>
             <span className="hidden pl-4 sm:block" style={{ color: "var(--text-tertiary)" }} aria-hidden="true"><SearchIcon /></span>
             <input id="hero-query" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder={t("hero.searchPlaceholder")} className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm outline-none sm:px-2" style={{ color: "var(--text-primary)" }} />
-            <button className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--color-accent)] px-7 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-deep)]" type="submit">{t("hero.search")}</button>
+            <button className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-7 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)]" type="submit">{t("hero.search")}</button>
           </form>
           <div className="mt-6 flex flex-wrap items-center gap-6 text-sm" style={{ color: "var(--text-tertiary)" }}>
-            <span>{t("hero.free")}</span>
-            <span>{t("hero.direct")}</span>
-            <span>{t("hero.trust")}</span>
+            <span>✨ {t("hero.free")}</span>
+            <span>💬 {t("hero.direct")}</span>
+            <span>🔥 {t("hero.trust")}</span>
           </div>
         </div>
 
         <div className="relative">
-          <div className="absolute -inset-x-10 -top-10 -z-10 h-[420px] bg-gradient-to-b from-[rgba(37,99,235,0.06)] to-transparent" />
-          <div className="relative overflow-hidden rounded-2xl border" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)", boxShadow: "var(--shadow-card)" }}>
+          <div className="absolute -inset-x-10 -top-10 -z-10 h-[420px] bg-gradient-to-b from-[rgba(168,85,247,0.08)] to-transparent" />
+          <div className="relative overflow-hidden rounded-[2rem] border" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)", boxShadow: "var(--shadow-card)" }}>
             <div className="grid gap-0 lg:grid-cols-[1.1fr_.9fr]">
               <div className="p-8 sm:p-10">
                 <p className="text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--text-tertiary)" }}>{t("hero.featured")}</p>
@@ -64,7 +64,7 @@ export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggesti
                       <Principle title={t("hero.acc")} desc={t("hero.accDesc")} />
                     </ul>
                   </div>
-                  <a href="#daftar" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--color-accent)" }}>{t("hero.listCta")}</a>
+                  <a href="#daftar" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">{t("hero.listCta")}</a>
                 </div>
               </div>
             </div>
