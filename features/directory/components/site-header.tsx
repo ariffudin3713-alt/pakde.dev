@@ -15,7 +15,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="#home" className="group flex items-center gap-3" aria-label="Pasar UMKM, ke beranda">
           <div className="leading-tight">
-            <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text-primary)" }}>PASAR <span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">UMKM</span></p>
+            <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text-primary)" }}>PASAR <span className="bg-gradient-to-r from-violet-300 to-fuchsia-200 bg-clip-text text-transparent">UMKM</span></p>
             <p className="text-[11px] uppercase tracking-[0.28em]" style={{ color: "var(--text-tertiary)" }}>Local Directory</p>
           </div>
         </Link>
@@ -36,7 +36,7 @@ export function SiteHeader() {
           >
             <GlobeIcon /> {locale === "id" ? "ID" : "EN"}
           </button>
-          <Link href="#daftar" className="hidden sm:inline-flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-6 text-[13px] font-semibold text-white shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)]">
+          <Link href="#daftar" className="hidden sm:inline-flex min-h-11 items-center justify-center rounded-full bg-gradient-to-r from-violet-300 via-fuchsia-200 to-rose-200 px-6 text-[13px] font-semibold text-[#14121f] shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(196,181,253,0.6)]">
             {t("nav.getStarted")}
           </Link>
         </div>

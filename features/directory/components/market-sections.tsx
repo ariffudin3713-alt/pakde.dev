@@ -141,7 +141,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <a href="#home" className="text-lg font-semibold tracking-[-.03em]">pasar<span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">umkm</span></a>
+            <a href="#home" className="text-lg font-semibold tracking-[-.03em]">pasar<span className="bg-gradient-to-r from-violet-300 to-fuchsia-200 bg-clip-text text-transparent">umkm</span></a>
             <p className="mt-3 max-w-xs text-sm leading-6 text-slate-300">{t("footer.desc")}</p>
           </div>
           <div>

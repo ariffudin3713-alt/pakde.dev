@@ -1,33 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #f8fafc;
-  --color-muted: #cbd5f5;
-  --color-line: rgba(148, 163, 184, 0.18);
-  --color-paper: #050510;
-  --color-surface: rgba(15, 16, 38, 0.92);
-  --color-accent: #a855f7;
-  --color-accent-deep: #9333ea;
-  --color-accent-soft: rgba(168, 85, 247, 0.18);
-  --color-gold: #f59e0b;
+  --color-ink: #f6f3ff;
+  --color-muted: #d9d6fe;
+  --color-line: rgba(196, 181, 253, 0.22);
+  --color-paper: #14121f;
+  --color-surface: rgba(167, 139, 250, 0.09);
+  --color-accent: #c4b5fd;
+  --color-accent-deep: #a78bfa;
+  --color-accent-soft: rgba(196, 181, 253, 0.18);
+  --color-gold: #fef3c7;
   --font-sans: "Inter", "Jost", "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
   color-scheme: dark;
-  --bg-base: #050510;
-  --bg-alt: #0b1026;
-  --bg-surface: rgba(15, 16, 38, 0.92);
-  --bg-subtle: rgba(30, 41, 59, 0.7);
-  --text-primary: #f8fafc;
-  --text-secondary: #e5e7eb;
-  --text-tertiary: #cbd5f5;
-  --border-subtle: rgba(139, 92, 246, 0.22);
-  --border-strong: rgba(168, 85, 247, 0.36);
-  --ring-accent: rgba(168, 85, 247, 0.28);
-  --shadow-soft: 0 80px 140px -90px rgba(168, 85, 247, 0.32);
-  --shadow-card: 0 100px 180px -110px rgba(236, 72, 153, 0.28);
-  --glow-violet: radial-gradient(700px circle at 50% 0, rgba(168, 85, 247, 0.16), transparent);
+  --bg-base: #14121f;
+  --bg-alt: #1a1625;
+  --bg-surface: rgba(167, 139, 250, 0.09);
+  --bg-subtle: rgba(196, 181, 253, 0.14);
+  --text-primary: #f6f3ff;
+  --text-secondary: #ebe7ff;
+  --text-tertiary: #d9d6fe;
+  --border-subtle: rgba(196, 181, 253, 0.28);
+  --border-strong: rgba(196, 181, 253, 0.38);
+  --ring-accent: rgba(196, 181, 253, 0.28);
+  --shadow-soft: 0 80px 140px -90px rgba(196, 181, 253, 0.26);
+  --shadow-card: 0 100px 180px -110px rgba(244, 208, 255, 0.22);
+  --glow-violet: radial-gradient(700px circle at 50% 0, rgba(196, 181, 253, 0.16), transparent);
 }
 
 * { box-sizing: border-box; }

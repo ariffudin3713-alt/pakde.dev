@@ -23,7 +23,7 @@ export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggesti
           </div>
           <h1 className="text-[clamp(3rem,8vw,6.2rem)] font-semibold leading-[0.98] tracking-[-0.08em]" style={{ color: "var(--text-primary)" }}>
             {t("hero.title1")}
-            <span className="block bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent">{t("hero.title2")}</span>
+            <span className="block bg-gradient-to-r from-violet-300 via-fuchsia-200 to-rose-200 bg-clip-text text-transparent">{t("hero.title2")}</span>
           </h1>
           <p className="mt-6 max-w-xl text-[17px] leading-9" style={{ color: "var(--text-secondary)" }}>
             {t("hero.desc")}
@@ -32,7 +32,7 @@ export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggesti
             <label className="sr-only" htmlFor="hero-query">Cari usaha lokal</label>
             <span className="hidden pl-4 sm:block" style={{ color: "var(--text-tertiary)" }} aria-hidden="true"><SearchIcon /></span>
             <input id="hero-query" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder={t("hero.searchPlaceholder")} className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm outline-none sm:px-2" style={{ color: "var(--text-primary)" }} />
-            <button className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-7 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)]" type="submit">{t("hero.search")}</button>
+            <button className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-300 via-fuchsia-200 to-rose-200 px-7 text-sm font-semibold text-[#14121f] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(196,181,253,0.6)]" type="submit">{t("hero.search")}</button>
           </form>
           <div className="mt-6 flex flex-wrap items-center gap-6 text-sm" style={{ color: "var(--text-tertiary)" }}>
             <span>✨ {t("hero.free")}</span>
@@ -64,7 +64,7 @@ export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggesti
                       <Principle title={t("hero.acc")} desc={t("hero.accDesc")} />
                     </ul>
                   </div>
-                  <a href="#daftar" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text text-transparent">{t("hero.listCta")}</a>
+                  <a href="#daftar" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r from-violet-300 to-fuchsia-200 bg-clip-text text-transparent">{t("hero.listCta")}</a>
                 </div>
               </div>
             </div>

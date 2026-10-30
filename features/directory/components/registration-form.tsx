@@ -54,6 +54,7 @@ export function RegistrationForm({ ownerId, onCreate }: RegistrationFormProps) {
     }
   }
 
+  return (
     <form onSubmit={handleSubmit} className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[var(--shadow-card)] sm:p-7" noValidate>
       <div className="mb-7 border-b border-white/10 pb-5">
         <p className="text-[11px] font-bold uppercase tracking-[.14em] text-green-400">✨ {t("reg.free")}</p>
@@ -98,7 +99,7 @@ export function RegistrationForm({ ownerId, onCreate }: RegistrationFormProps) {
       </div>
 
       <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
-        <button type="submit" disabled={busy} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 px-6 text-sm font-semibold text-white shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(236,72,153,0.9)] active:scale-[.98] disabled:cursor-wait disabled:opacity-60">
+        <button type="submit" disabled={busy} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-300 via-fuchsia-200 to-rose-200 px-6 text-sm font-semibold text-[#14121f] shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(196,181,253,0.6)] active:scale-[.98] disabled:cursor-wait disabled:opacity-60">
           {busy ? "Menyimpan…" : t("nav.list")}
         </button>
         <p className="text-xs leading-5 text-slate-300">✓ {t("reg.free")} • ✓ Tanpa komisi • ✓ {t("hero.direct")}</p>
