@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from
 import { addBusinessReview, createBusiness, deleteBusiness, listBusinesses } from "@/lib/directory-api";
 import { getFavorites, getLocalBusinesses, getOwnerId, saveFavorites, saveLocalBusinesses } from "@/lib/local-store";
 import { CATEGORIES, type Business, type BusinessInput, type Category, type ReviewInput, type SortOrder } from "@/lib/types";
+import { isOpenNow, wibClock, wibMinutes } from "@/lib/hours";
 
 export interface DirectoryController {
   businesses: Business[];
@@ -19,6 +20,9 @@ export interface DirectoryController {
   city: string;
   sort: SortOrder;
   favoritesOnly: boolean;
+  openOnly: boolean;
+  openCount: number;
+  nowLabel: string;
   visibleCount: number;
   deletingId: string | null;
   toast: string;
@@ -43,6 +47,7 @@ export interface DirectoryController {
   setCity: (city: string) => void;
   setSort: (sort: SortOrder) => void;
   setFavoritesOnly: (value: boolean) => void;
+  setOpenOnly: (value: boolean) => void;
   showMore: () => void;
 }
 
@@ -60,6 +65,8 @@ export function useDirectoryController(): DirectoryController {
   const [city, setSelectedCity] = useState("Semua");
   const [sort, setSort] = useState<SortOrder>("terbaru");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [openOnly, setOpenOnly] = useState(false);
+  const [nowMinutes, setNowMinutes] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(12);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [toast, setToast] = useState("");
@@ -90,6 +97,13 @@ export function useDirectoryController(): DirectoryController {
   }, []);
 
   useEffect(() => {
+    const tick = () => setNowMinutes(wibMinutes());
+    tick();
+    const interval = window.setInterval(tick, 60_000);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     if (!toast) return;
     const timeout = window.setTimeout(() => setToast(""), 3200);
     return () => window.clearTimeout(timeout);
@@ -117,7 +131,8 @@ export function useDirectoryController(): DirectoryController {
       const matchesCategory = category === "Semua" || item.kategori === category;
       const matchesCity = city === "Semua" || item.kota === city;
       const matchesFavorite = !favoritesOnly || favorites.includes(item.id);
-      return matchesQuery && matchesCategory && matchesCity && matchesFavorite;
+      const matchesOpen = !openOnly || (nowMinutes !== null && isOpenNow(item.jamBuka, nowMinutes) === true);
+      return matchesQuery && matchesCategory && matchesCity && matchesFavorite && matchesOpen;
     });
     return result.sort((a, b) => {
       if (sort === "terlama") return a.createdAt - b.createdAt;
@@ -125,9 +140,11 @@ export function useDirectoryController(): DirectoryController {
       if (sort === "za") return b.nama.localeCompare(a.nama, "id");
       return b.createdAt - a.createdAt;
     });
-  }, [businesses, category, city, favorites, favoritesOnly, query, sort]);
+  }, [businesses, category, city, favorites, favoritesOnly, nowMinutes, openOnly, query, sort]);
 
   const myBusinesses = businesses.filter((item) => item.ownerId && item.ownerId === ownerId);
+  const openCount = useMemo(() => nowMinutes === null ? 0 : businesses.filter((item) => isOpenNow(item.jamBuka, nowMinutes) === true).length, [businesses, nowMinutes]);
+  const nowLabel = nowMinutes === null ? "" : wibClock(nowMinutes);
   const categoryCounts = useMemo(() => CATEGORIES.reduce((counts, item) => {
     counts[item] = businesses.filter((business) => business.kategori === item).length;
     return counts;
@@ -139,6 +156,7 @@ export function useDirectoryController(): DirectoryController {
     setSelectedCategory("Semua");
     setSelectedCity("Semua");
     setFavoritesOnly(false);
+    setOpenOnly(false);
     setVisibleCount(12);
   }
 
@@ -218,13 +236,14 @@ export function useDirectoryController(): DirectoryController {
 
   return {
     businesses, ownerId, favorites, loading, refreshing, offline, notice, query, heroQuery, category, city, sort,
-    favoritesOnly, visibleCount, deletingId, toast, selectedBusiness, setToast, setSelectedBusiness, setHeroQuery, cities, filtered,
+    favoritesOnly, openOnly, openCount, nowLabel, visibleCount, deletingId, toast, selectedBusiness, setToast, setSelectedBusiness, setHeroQuery, cities, filtered,
     myBusinesses, categoryCounts, loadData, clearFilters, changeQuery, toggleFavorite, addBusiness, removeBusiness,
     submitReview, searchFromHero, searchSuggestion,
     setCategory: (value) => { setSelectedCategory(value); setVisibleCount(12); },
     setCity: (value) => { setSelectedCity(value); setVisibleCount(12); },
     setSort,
     setFavoritesOnly: (value) => { setFavoritesOnly(value); setVisibleCount(12); },
+    setOpenOnly: (value) => { setOpenOnly(value); setVisibleCount(12); },
     showMore: () => setVisibleCount((count) => count + 12),
   };
 }

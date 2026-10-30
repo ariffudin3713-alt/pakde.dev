@@ -1,94 +1,122 @@
 "use client";
 
 import { useI18n } from "@/lib/i18n";
+import { ArrowIcon, ClockIcon, SearchIcon } from "./icons";
+import { ScallopEdge } from "./scallop-edge";
 
 interface HeroProps {
-  businessCount: number;
   query: string;
+  openCount: number;
+  nowLabel: string;
   onQueryChange: (value: string) => void;
   onSearch: () => void;
   onSuggestion: (value: string) => void;
+  onOpenNow: () => void;
 }
 
-export function Hero({ businessCount, query, onQueryChange, onSearch, onSuggestion }: HeroProps) {
-  const { t, locale } = useI18n();
+const QUICK_LINKS = ["Kuliner", "Fashion", "Kerajinan", "Jasa"];
+
+export function Hero({ query, openCount, nowLabel, onQueryChange, onSearch, onSuggestion, onOpenNow }: HeroProps) {
+  const { t } = useI18n();
 
   return (
     <section id="home" className="relative overflow-hidden">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[520px]" style={{ background: "var(--glow-violet)" }} />
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.05fr_.95fr] lg:gap-24 lg:py-28">
-        <div className="max-w-2xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.32em]" style={{ borderColor: "var(--border-subtle)", color: "var(--text-tertiary)" }}>
-            {t("hero.badge")}
-          </div>
-          <h1 className="text-[clamp(3rem,8vw,6.2rem)] font-semibold leading-[0.98] tracking-[-0.08em]" style={{ color: "var(--text-primary)" }}>
-            {t("hero.title1")}
-            <span className="block bg-gradient-to-r from-violet-300 via-fuchsia-200 to-rose-200 bg-clip-text text-transparent">{t("hero.title2")}</span>
+      <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-1 px-[var(--page-x)] lg:grid-cols-[1.06fr_.94fr] lg:gap-14">
+        <div className="flex flex-col justify-center pb-12 pt-12 sm:pt-16 lg:min-h-[74svh] lg:py-16">
+          <h1 className="max-w-[18ch] text-[clamp(2.6rem,5.2vw,4.9rem)] uppercase leading-[0.9]">
+            <span className="block">{t("hero.title1")} </span>
+            <span className="block">{t("hero.title2")}</span>
           </h1>
-          <p className="mt-6 max-w-xl text-[17px] leading-9" style={{ color: "var(--text-secondary)" }}>
+
+          <p className="mt-6 max-w-[46ch] text-[20px] leading-[1.55] text-ink/85" data-reveal>
             {t("hero.desc")}
           </p>
-          <form className="mt-10 flex max-w-[580px] flex-col gap-2 rounded-2xl border p-2 shadow-[var(--shadow-soft)] sm:flex-row sm:items-center" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)" }} onSubmit={(event) => { event.preventDefault(); onSearch(); }} role="search" aria-label="Cari usaha lokal">
-            <label className="sr-only" htmlFor="hero-query">Cari usaha lokal</label>
-            <span className="hidden pl-4 sm:block" style={{ color: "var(--text-tertiary)" }} aria-hidden="true"><SearchIcon /></span>
-            <input id="hero-query" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder={t("hero.searchPlaceholder")} className="min-h-12 min-w-0 flex-1 bg-transparent px-4 text-sm outline-none sm:px-2" style={{ color: "var(--text-primary)" }} />
-            <button className="inline-flex min-h-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-300 via-fuchsia-200 to-rose-200 px-7 text-sm font-semibold text-[#14121f] transition-all hover:-translate-y-0.5 hover:shadow-[0_20px_60px_-30px_rgba(196,181,253,0.6)]" type="submit">{t("hero.search")}</button>
+
+          <form
+            className="mt-8 flex w-full max-w-[600px] flex-col gap-2 sm:flex-row"
+            onSubmit={(event) => {
+              event.preventDefault();
+              onSearch();
+            }}
+            role="search"
+            aria-label={t("toolbar.search")}
+            data-reveal
+          >
+            <label className="relative flex min-w-0 flex-1 items-center bg-bone">
+              <span className="pl-4 text-muted" aria-hidden="true"><SearchIcon /></span>
+              <span className="sr-only">{t("toolbar.search")}</span>
+              <input
+                id="hero-query"
+                value={query}
+                onChange={(event) => onQueryChange(event.target.value)}
+                placeholder={t("hero.searchPlaceholder")}
+                className="min-h-[52px] min-w-0 flex-1 bg-transparent px-3 text-base text-ink outline-none placeholder:text-[#8b8377]"
+                autoComplete="off"
+              />
+            </label>
+            <button className="btn min-h-[52px] shrink-0" type="submit">
+              {t("hero.search")}
+            </button>
           </form>
-          <div className="mt-6 flex flex-wrap items-center gap-6 text-sm" style={{ color: "var(--text-tertiary)" }}>
-            <span>✨ {t("hero.free")}</span>
-            <span>💬 {t("hero.direct")}</span>
-            <span>🔥 {t("hero.trust")}</span>
+
+          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[16px]" data-reveal>
+            <span className="text-muted">{t("hero.quick")}</span>
+            {QUICK_LINKS.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => onSuggestion(item)}
+                className="font-medium underline decoration-blood decoration-2 underline-offset-4 transition-colors duration-150 hover:text-blood"
+              >
+                {item}
+              </button>
+            ))}
           </div>
+
+          <button
+            type="button"
+            onClick={onOpenNow}
+            className="mt-8 inline-flex min-h-11 w-fit items-center gap-2.5 text-left text-[16px] transition-colors duration-150 hover:text-blood"
+          >
+            <span className="grid size-6 place-items-center rounded-full bg-leaf text-bone" aria-hidden="true">
+              <ClockIcon size={14} />
+            </span>
+            <span>
+              <span className="font-display font-bold">{openCount}</span> {t("hero.openLine")}
+              {nowLabel && <span className="text-muted"> · {nowLabel} {t("hero.clock")}</span>}
+            </span>
+            <ArrowIcon size={16} />
+          </button>
         </div>
 
-        <div className="relative">
-          <div className="absolute -inset-x-10 -top-10 -z-10 h-[420px] bg-gradient-to-b from-[rgba(168,85,247,0.08)] to-transparent" />
-          <div className="relative overflow-hidden rounded-[2rem] border" style={{ borderColor: "var(--border-strong)", background: "var(--bg-surface)", boxShadow: "var(--shadow-card)" }}>
-            <div className="grid gap-0 lg:grid-cols-[1.1fr_.9fr]">
-              <div className="p-8 sm:p-10">
-                <p className="text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--text-tertiary)" }}>{t("hero.featured")}</p>
-                <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl" style={{ color: "var(--text-primary)" }}>{t("hero.cardTitle")}</h2>
-                <p className="mt-4 text-[16px] leading-8" style={{ color: "var(--text-secondary)" }}>{t("hero.cardDesc")}</p>
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  <Metric value={businessCount.toLocaleString(locale === "id" ? "id-ID" : "en-US")} label={t("hero.registered")} />
-                  <Metric value={String(Math.max(1, Math.floor(businessCount / 8) || 1)) + "+"} label={t("hero.cities")} />
-                </div>
-              </div>
-              <div className="relative border-t lg:border-l lg:border-t-0" style={{ borderColor: "var(--border-subtle)" }}>
-                <div className="flex h-full flex-col justify-between p-8 sm:p-10">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-[0.32em]" style={{ color: "var(--text-tertiary)" }}>{t("hero.principles")}</p>
-                    <ul className="mt-5 space-y-4">
-                      <Principle title={t("hero.transp")} desc={t("hero.transpDesc")} />
-                      <Principle title={t("hero.pro")} desc={t("hero.proDesc")} />
-                      <Principle title={t("hero.acc")} desc={t("hero.accDesc")} />
-                    </ul>
-                  </div>
-                  <a href="#daftar" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r from-violet-300 to-fuchsia-200 bg-clip-text text-transparent">{t("hero.listCta")}</a>
-                </div>
-              </div>
+        <div className="relative mb-12 lg:my-10 lg:mb-14">
+          <ScallopEdge side="left" size={16} className="absolute right-full top-0 hidden h-full w-4 text-blood lg:block" />
+          <div className="relative flex h-full flex-col bg-blood p-4 sm:p-6">
+            <figure className="shutter relative min-h-[340px] flex-1 overflow-hidden">
+              <img
+                src="/foto/rempah-tradisional-di-pasar.jpg"
+                width="1920"
+                height="2560"
+                alt="Bawang putih dan kunyit segar di atas kain di pasar tradisional"
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </figure>
+
+            <figcaption className="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-[13px] leading-5 text-bone/80">
+              <span>{t("hero.photoCaption")}</span>
+            </figcaption>
+
+            <div className="absolute -bottom-6 left-4 -rotate-2 bg-bone px-5 py-4 text-blood sm:left-6" aria-hidden="true">
+              <p className="font-display text-[26px] font-bold uppercase leading-none">{t("hero.ticket1")}</p>
+              <p className="mt-1 font-display text-[13px] font-semibold leading-tight">{t("hero.ticket2")}</p>
+              <p className="font-display text-[13px] font-semibold leading-tight">{t("hero.ticket3")}</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
-}
 
-function SearchIcon() { return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>; }
-function Metric({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="border-t pt-4" style={{ borderColor: "var(--border-subtle)" }}>
-      <p className="text-3xl font-semibold tracking-[-0.04em]" style={{ color: "var(--text-primary)" }}>{value}</p>
-      <p className="mt-1 text-sm" style={{ color: "var(--text-tertiary)" }}>{label}</p>
-    </div>
-  );
-}
-function Principle({ title, desc }: { title: string; desc: string }) {
-  return (
-    <li className="border-t pt-4" style={{ borderColor: "var(--border-subtle)" }}>
-      <p className="text-base font-medium" style={{ color: "var(--text-primary)" }}>{title}</p>
-      <p className="mt-1 text-sm" style={{ color: "var(--text-secondary)" }}>{desc}</p>
-    </li>
+    </section>
   );
 }

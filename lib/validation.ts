@@ -43,7 +43,7 @@ export function parseBusiness(value: unknown): Business | null {
     kategori: readCategory(value.kategori),
     kota: readString(value.kota),
     alamat: readString(value.alamat),
-    ikon: readString(value.ikon, "🏪"),
+    ikon: readString(value.ikon),
     deskripsi: readString(value.deskripsi),
     wa: value.wa,
     ig: readString(value.ig),

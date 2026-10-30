@@ -1,6 +1,12 @@
 "use client";
 
+import Link from "next/link";
+import { CATEGORIES } from "@/lib/types";
 import { useI18n } from "@/lib/i18n";
+import { ArrowIcon, CategoryMark, GridIcon, HeartIcon, HomeIcon, UploadIcon } from "./icons";
+import { ScallopEdge } from "./scallop-edge";
+
+/* ------------------------------------------------------------------ stats */
 
 interface DirectoryStatsProps {
   businessCount: number;
@@ -10,167 +16,322 @@ interface DirectoryStatsProps {
 
 export function DirectoryStats({ businessCount, categoryCount, cityCount }: DirectoryStatsProps) {
   const { t, locale } = useI18n();
+  const number = (value: number) => value.toLocaleString(locale === "id" ? "id-ID" : "en-US");
+
   return (
-    <section className="relative mx-auto grid max-w-7xl gap-4 px-5 py-10 sm:grid-cols-3 sm:px-8 sm:py-14" aria-label="Ringkasan direktori">
-      <div className="absolute inset-x-0 top-1/2 -z-10 h-px bg-gradient-to-r from-transparent via-violet-500/25 to-transparent" />
-      <StatCard value={businessCount.toLocaleString(locale === "id" ? "id-ID" : "en-US")} label={t("stats.business")} detail={t("stats.businessDesc")} icon="✨" glow="from-violet-500/35 via-fuchsia-500/25 to-transparent" />
-      <StatCard value={String(categoryCount)} label={t("stats.cat")} detail={t("stats.catDesc")} icon="🎯" glow="from-fuchsia-500/35 via-pink-500/25 to-transparent" />
-      <StatCard value={String(cityCount)} label={t("stats.city")} detail={t("stats.cityDesc")} icon="📍" glow="from-cyan-400/25 via-violet-500/20 to-transparent" />
+    <section className="relative bg-blood text-bone" aria-label="Ringkasan direktori">
+      <ScallopEdge side="bottom" size={16} className="absolute top-full left-0 z-10 h-4 w-full text-blood" />
+      <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)] pb-16 pt-12 sm:pb-20 sm:pt-14">
+        <h2 className="max-w-[18ch] text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("stats.title")}</h2>
+        <div className="mt-8 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
+          <Stat value={number(businessCount)} label={t("stats.business")} detail={t("stats.businessDesc")} />
+          <Stat value={number(categoryCount)} label={t("stats.cat")} detail={t("stats.catDesc")} />
+          <Stat value={number(cityCount)} label={t("stats.city")} detail={t("stats.cityDesc")} />
+          <Stat value="0%" label={t("stats.fee")} detail={t("stats.feeDesc")} />
+        </div>
+      </div>
     </section>
   );
 }
 
-function StatCard({ value, label, detail, icon, glow }: { value: string; label: string; detail: string; icon: string; glow: string }) {
+function Stat({ value, label, detail }: { value: string; label: string; detail: string }) {
   return (
-    <div className="group relative overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/5 p-6 shadow-[0_60px_120px_-90px_rgba(139,92,246,0.9)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_80px_140px_-90px_rgba(236,72,153,0.9)]">
-      <div className={`absolute -right-20 -top-20 size-40 rounded-full bg-gradient-to-br ${glow} blur-3xl`} />
-      <div className="relative flex items-center gap-4">
-        <span className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-500/90 to-fuchsia-500/90 text-xl text-white shadow-[0_40px_80px_-50px_rgba(236,72,153,0.95)]">{icon}</span>
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-400">{label}</p>
-          <p className="mt-1 text-4xl font-semibold tracking-[-.08em] text-white">{value}</p>
-          <p className="mt-1 text-sm text-slate-300">{detail}</p>
-        </div>
-      </div>
+    <div data-reveal>
+      <p className="font-display text-[clamp(2.6rem,5.2vw,4.9rem)] font-bold leading-[0.9] tracking-[-.05em]">{value}</p>
+      <p className="mt-3 font-display text-[16px] font-bold">{label}</p>
+      <p className="mt-1 text-[16px] leading-5 text-bone/70">{detail}</p>
     </div>
   );
 }
+
+/* -------------------------------------------------------------- how it works */
 
 export function HowItWorks() {
   const { t } = useI18n();
+  const steps = [
+    { title: t("how.step1Title"), text: t("how.step1Text") },
+    { title: t("how.step2Title"), text: t("how.step2Text") },
+    { title: t("how.step3Title"), text: t("how.step3Text") },
+  ];
+
   return (
-    <section id="cara-kerja" className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
-      <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-violet-500/25 to-transparent" />
-      <div className="mx-auto mb-12 max-w-2xl text-center">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-fuchsia-400">{t("how.label")}</p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-[-.08em] text-white sm:text-4xl lg:text-5xl">{t("how.title")}</h2>
-        <p className="mt-4 text-base text-slate-300">{t("how.desc")}</p>
-      </div>
-      <div className="grid gap-6 md:grid-cols-3">
-        <Step number="01" title={t("how.step1Title")} text={t("how.step1Text")} icon="✍️" accent="from-violet-500 to-fuchsia-500" />
-        <Step number="02" title={t("how.step2Title")} text={t("how.step2Text")} icon="🚀" accent="from-fuchsia-500 to-pink-500" />
-        <Step number="03" title={t("how.step3Title")} text={t("how.step3Text")} icon="💬" accent="from-pink-500 to-orange-400" />
+    <section id="cara-kerja" className="relative scroll-mt-24 bg-paper py-20 sm:py-28">
+      <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)]">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end" data-reveal-group>
+          <h2 className="max-w-[14ch] text-[clamp(1.9rem,3.6vw,3.4rem)]" data-reveal>{t("how.title")}</h2>
+          <p className="max-w-[44ch] text-[20px] leading-[1.55]" data-reveal>{t("how.desc")}</p>
+        </div>
+
+        <div className="mt-14 grid gap-8 lg:grid-cols-3 lg:gap-12" aria-hidden="true" data-reveal>
+          <ScatterGroup />
+          <RibbonGroup />
+          <OrderedGroup />
+        </div>
+
+        <ol className="mt-10 grid gap-8 lg:grid-cols-3 lg:gap-12" data-reveal-group>
+          {steps.map((step) => (
+            <li key={step.title} data-reveal>
+              <h3 className="font-display text-[20px] font-bold">{step.title}</h3>
+              <p className="mt-2 max-w-[38ch] text-[16px] leading-[1.55] text-ink/80">{step.text}</p>
+            </li>
+          ))}
+        </ol>
+
+        <figure className="mt-16" data-reveal>
+          <div className="aspect-[21/9] w-full overflow-hidden bg-blood">
+            <img
+              src="/foto/aneka-jajan-pasar-tradisional-jawa.jpg"
+              width="1728"
+              height="1152"
+              alt="Aneka jajan pasar tradisional Jawa: serabi, kue basah, dan camilan pasar"
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <figcaption className="mt-3 text-[13px] leading-5 text-muted">
+            Jajan pasar di Jawa. Foto: Hersy ardianty a, CC BY-SA 4.0.
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
 }
 
-function Step({ number, title, text, icon, accent }: { number: string; title: string; text: string; icon: string; accent: string }) {
+function ScatterGroup() {
   return (
-    <article className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-7 shadow-[0_70px_140px_-100px_rgba(139,92,246,0.9)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_90px_160px_-100px_rgba(236,72,153,0.95)]">
-      <div className={`absolute -right-16 -top-16 size-32 rounded-full bg-gradient-to-br ${accent} opacity-20 blur-3xl`} />
-      <div className="relative">
-        <div className="flex items-center justify-between">
-          <span className={`grid size-12 place-items-center rounded-2xl bg-gradient-to-br ${accent} text-xl text-white shadow-[0_40px_80px_-50px_rgba(236,72,153,0.95)]`}>{icon}</span>
-          <span className="text-4xl font-semibold tracking-[-.1em] text-white/10">{number}</span>
-        </div>
-        <h3 className="mt-6 text-xl font-semibold tracking-[-.04em] text-white">{title}</h3>
-        <p className="mt-2 text-sm leading-6 text-slate-300">{text}</p>
-      </div>
-    </article>
-  );
-}
-
-export function RegistrationIntro() {
-  const { t } = useI18n();
-  return (
-    <div className="lg:sticky lg:top-28 lg:self-start">
-      <p className="text-[11px] font-bold uppercase tracking-[.15em] text-green-400">{t("reg.label")}</p>
-      <h2 className="mt-3 max-w-sm text-3xl font-bold leading-tight tracking-[-.06em] text-white sm:text-4xl lg:text-5xl">{t("reg.title")}</h2>
-      <p className="mt-4 max-w-sm text-base leading-7 text-slate-300">{t("reg.desc")}</p>
-      <div className="mt-8 hidden space-y-4 lg:block">
-        <div className="rounded-2xl border border-emerald-400/30 bg-gradient-to-br from-emerald-400/10 to-green-400/5 p-5 shadow-sm">
-          <p className="flex items-center gap-2 text-sm font-bold text-emerald-200">✅ {t("reg.free")}</p>
-          <p className="mt-2 text-xs leading-5 text-emerald-100/80">{t("reg.freeDesc")}</p>
-        </div>
-        <div className="rounded-2xl border border-violet-400/30 bg-gradient-to-br from-violet-400/10 to-fuchsia-400/5 p-5 shadow-sm">
-          <p className="flex items-center gap-2 text-sm font-bold text-violet-200">🚀 {t("reg.live")}</p>
-          <p className="mt-2 text-xs leading-5 text-violet-100/80">{t("reg.liveDesc")}</p>
-        </div>
-        <div className="rounded-2xl border border-fuchsia-400/30 bg-gradient-to-br from-fuchsia-400/10 to-pink-400/5 p-5 shadow-sm">
-          <p className="flex items-center gap-2 text-sm font-bold text-fuchsia-200">👨‍👩‍👧‍👦 {t("reg.forAll")}</p>
-          <p className="mt-2 text-xs leading-5 text-fuchsia-100/80">{t("reg.forAllDesc")}</p>
-        </div>
-      </div>
+    <div className="relative h-[180px] w-full overflow-hidden bg-ground p-4">
+      <p className="absolute bottom-3 left-4 font-display text-[13px] font-semibold text-muted">Usaha belum terdaftar</p>
+      {Array.from({ length: 26 }).map((_, index) => (
+        <span
+          key={index}
+          className="absolute size-2.5 bg-blood"
+          style={{
+            left: `${6 + ((index * 37) % 86)}%`,
+            top: `${5 + ((index * 53) % 70)}%`,
+            opacity: index % 3 === 0 ? 0.85 : 0.35,
+          }}
+        />
+      ))}
     </div>
   );
 }
 
+function RibbonGroup() {
+  return (
+    <div className="flex h-[180px] w-full flex-col justify-center gap-1 bg-ground p-4">
+      <p className="mb-auto font-display text-[13px] font-semibold text-muted">Satu formulir</p>
+      <div className="flex flex-col items-center gap-1">
+        {Array.from({ length: 3 }).map((_, row) => (
+          <div key={row} className="flex gap-1">
+            {Array.from({ length: 9 }).map((_, column) => (
+              <span key={column} className="size-2.5 bg-blood" />
+            ))}
+          </div>
+        ))}
+      </div>
+      <p className="mt-auto text-center font-display text-[13px] font-semibold text-muted">Masuk ke direktori</p>
+    </div>
+  );
+}
+
+function OrderedGroup() {
+  return (
+    <div className="flex h-[180px] w-full flex-col justify-center gap-2 bg-ground p-4">
+      <p className="mb-auto font-display text-[13px] font-semibold text-muted">Pembeli menemukan</p>
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: 3 }).map((_, row) => (
+          <div key={row} className="flex items-center gap-2">
+            {Array.from({ length: 8 }).map((_, column) => (
+              <span key={column} className="size-2.5 bg-blood" />
+            ))}
+          </div>
+        ))}
+      </div>
+      <p className="mt-auto text-right font-display text-[13px] font-semibold text-blood">Chat WhatsApp</p>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------- register */
+
+export function RegistrationIntro() {
+  const { t } = useI18n();
+  const points = [
+    { title: t("reg.free"), text: t("reg.freeDesc") },
+    { title: t("reg.live"), text: t("reg.liveDesc") },
+    { title: t("reg.forAll"), text: t("reg.forAllDesc") },
+  ];
+
+  return (
+    <div data-reveal>
+      <h2 className="text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("reg.title")}</h2>
+      <p className="mt-5 max-w-[44ch] text-[20px] leading-[1.55] text-ink/80">{t("reg.desc")}</p>
+      <ul className="mt-8 grid gap-5 sm:grid-cols-3 lg:grid-cols-1">
+        {points.map((point) => (
+          <li key={point.title} className="max-w-[40ch]">
+            <p className="font-display text-[16px] font-bold">{point.title}</p>
+            <p className="mt-1 text-[16px] leading-5 text-muted">{point.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/* --------------------------------------------------------------------- faq */
+
 export function FaqSection() {
   const { t } = useI18n();
+  const items = [1, 2, 3, 4, 5];
+
   return (
-    <section id="faq" className="relative mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
-      <div className="absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-fuchsia-500/25 to-transparent" />
-      <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:gap-16">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.4em] text-violet-400">{t("faq.label")}</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-[-.08em] text-white sm:text-4xl lg:text-5xl">{t("faq.title")}</h2>
-          <p className="mt-4 text-base text-slate-300">{t("faq.desc")}</p>
+    <section id="faq" className="relative scroll-mt-24 py-20 sm:py-28">
+      <div className="mx-auto grid max-w-[var(--page-max)] gap-12 px-[var(--page-x)] lg:grid-cols-[.75fr_1.25fr] lg:gap-16">
+        <div className="lg:sticky lg:top-28 lg:self-start" data-reveal>
+          <h2 className="text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("faq.title")}</h2>
+          <p className="mt-4 max-w-[34ch] text-[20px] leading-[1.55] text-ink/80">{t("faq.desc")}</p>
+
+          <figure className="mt-8 hidden lg:block">
+            <div className="aspect-[4/3] w-full overflow-hidden bg-blood">
+              <img
+                src="/foto/jukung-pasar-terapung.jpg"
+                width="1920"
+                height="1280"
+                alt="Perahu jukung berjajar di pasar terapung Banjarmasin"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <figcaption className="mt-3 text-[13px] leading-5 text-muted">
+              Pasar terapung, Banjarmasin. Foto: Muhammad Haris, CC BY-SA 4.0.
+            </figcaption>
+          </figure>
         </div>
-        <div className="space-y-3">
-          <Faq question={t("faq.q1")} answer={t("faq.a1")} />
-          <Faq question={t("faq.q2")} answer={t("faq.a2")} />
-          <Faq question={t("faq.q3")} answer={t("faq.a3")} />
-          <Faq question={t("faq.q4")} answer={t("faq.a4")} />
-          <Faq question={t("faq.q5")} answer={t("faq.a5")} />
+
+        <div className="flex flex-col gap-2" data-reveal-group>
+          {items.map((index) => (
+            <details key={index} name="faq" className="group bg-transparent transition-colors duration-150 hover:bg-bone/60 open:bg-blood open:text-bone" data-reveal>
+              <summary className="flex min-h-[68px] cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 text-left font-display text-[20px] font-bold leading-snug [&::-webkit-details-marker]:hidden">
+                <span>{t(`faq.q${index}`)}</span>
+                <span className="grid size-8 shrink-0 place-items-center transition-transform duration-200 group-open:rotate-45" aria-hidden="true">
+                  <PlusMark />
+                </span>
+              </summary>
+              <p className="max-w-[58ch] px-5 pb-5 text-[16px] leading-[1.6] text-ink/80 group-open:text-bone/85">
+                {t(`faq.a${index}`)}
+              </p>
+            </details>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function Faq({ question, answer }: { question: string; answer: string }) {
+function PlusMark() {
   return (
-    <details className="group overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/5 shadow-[0_60px_120px_-100px_rgba(139,92,246,0.9)] backdrop-blur-xl transition-all hover:shadow-[0_80px_140px_-100px_rgba(236,72,153,0.9)]">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-6 text-base font-semibold text-white marker:hidden">
-        <span className="flex-1">{question}</span>
-        <span className="grid size-9 shrink-0 place-items-center rounded-full border border-white/10 text-slate-400 transition-all group-open:rotate-45 group-open:text-fuchsia-400" aria-hidden="true">+</span>
-      </summary>
-      <div className="px-6 pb-6">
-        <p className="max-w-2xl text-sm leading-6 text-slate-300">{answer}</p>
-      </div>
-    </details>
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
   );
 }
 
+/* ------------------------------------------------------------------ footer */
+
+const PHOTO_CREDITS = [
+  { title: "Rempah tradisional di pasar", author: "Nela Fatimatun", licence: "CC BY 4.0", href: "https://commons.wikimedia.org/wiki/File:Rempah_tradisional_di_pasar.jpg" },
+  { title: "Warung martabak", author: "Lord Mountbatten", licence: "CC BY-SA 3.0", href: "https://commons.wikimedia.org/wiki/File:Warung_martabak.JPG" },
+  { title: "Aneka jajan pasar tradisional jawa", author: "Hersy ardianty a", licence: "CC BY-SA 4.0", href: "https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg" },
+  { title: "Maestro Batik Tulis di Imogiri", author: "Aconkyeah", licence: "CC BY-SA 4.0", href: "https://commons.wikimedia.org/wiki/File:Maestro_Batik_Tulis_di_Imogiri.jpg" },
+  { title: "Jukung Pasar Terapung", author: "Muhammad Haris", licence: "CC BY-SA 4.0", href: "https://commons.wikimedia.org/wiki/File:Jukung_Pasar_Terapung.jpg" },
+];
+
+const WORDMARK = ["PASAR", "UMKM"];
+const BLOCK_HEIGHTS = [100, 78, 92, 68, 84, 96, 72, 88, 64];
+
 export function SiteFooter() {
   const { t } = useI18n();
+
   return (
-    <footer className="relative border-t border-white/10 bg-[#050510]/80 text-white backdrop-blur-2xl">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
-      <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
-        <div className="grid gap-8 md:grid-cols-3">
-          <div>
-            <a href="#home" className="text-lg font-semibold tracking-[-.03em]">pasar<span className="bg-gradient-to-r from-violet-300 to-fuchsia-200 bg-clip-text text-transparent">umkm</span></a>
-            <p className="mt-3 max-w-xs text-sm leading-6 text-slate-300">{t("footer.desc")}</p>
+    <footer className="relative bg-blood text-bone">
+      <ScallopEdge side="top" size={18} className="absolute bottom-full left-0 h-[18px] w-full text-blood" />
+      <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)] pb-10 pt-16 sm:pt-20">
+        <Link href="#home" className="block" aria-label="Pasar UMKM, kembali ke atas">
+          <span className="flex h-[clamp(64px,10vw,150px)] items-end gap-3 sm:gap-5">
+            {WORDMARK.map((word) => (
+              <span key={word} className="flex flex-1 items-end gap-1 sm:gap-1.5">
+                {word.split("").map((letter, index) => (
+                  <span
+                    key={`${word}-${letter}-${index}`}
+                    className="grid flex-1 place-items-center bg-bone font-display font-bold uppercase leading-none text-blood"
+                    style={{ height: `${BLOCK_HEIGHTS[index % BLOCK_HEIGHTS.length]}%`, fontSize: "clamp(2.6rem,5.2vw,4.9rem)" }}
+                  >
+                    {letter}
+                  </span>
+                ))}
+              </span>
+            ))}
+          </span>
+        </Link>
+
+        <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="max-w-[34ch]">
+            <p className="text-[16px] leading-6 text-bone/80">{t("footer.desc")}</p>
           </div>
-          <div>
-            <h4 className="text-sm font-semibold">{t("footer.nav")}</h4>
-            <ul className="mt-3 space-y-2 text-sm text-slate-300">
-              <li><a href="#home" className="transition-colors hover:text-fuchsia-400">{t("nav.home")}</a></li>
-              <li><a href="#jelajahi" className="transition-colors hover:text-fuchsia-400">{t("nav.directory")}</a></li>
-              <li><a href="#cara-kerja" className="transition-colors hover:text-fuchsia-400">{t("nav.approach")}</a></li>
-              <li><a href="#daftar" className="transition-colors hover:text-fuchsia-400">{t("nav.list")}</a></li>
-              <li><a href="#faq" className="transition-colors hover:text-fuchsia-400">{t("nav.faq")}</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold">{t("footer.vibe")}</h4>
-            <ul className="mt-3 space-y-2 text-sm text-slate-300">
-              <li>{t("footer.vibe1")}</li>
-              <li>{t("footer.vibe2")}</li>
-              <li>{t("footer.vibe3")}</li>
-              <li>{t("footer.vibe4")}</li>
-            </ul>
-          </div>
+          <FooterColumn title={t("footer.nav")}>
+            <Link href="#home">{t("nav.home")}</Link>
+            <Link href="#jelajahi">{t("nav.directory")}</Link>
+            <Link href="#cara-kerja">{t("nav.approach")}</Link>
+            <Link href="#daftar">{t("nav.list")}</Link>
+            <Link href="#faq">{t("nav.faq")}</Link>
+          </FooterColumn>
+          <FooterColumn title={t("footer.cat")}>
+            {CATEGORIES.slice(0, 5).map((category) => <Link key={category} href="#jelajahi">{category}</Link>)}
+          </FooterColumn>
+          <FooterColumn title={t("footer.about")}>
+            <span>{t("footer.about1")}</span>
+            <span>{t("footer.about2")}</span>
+            <span>{t("footer.about3")}</span>
+          </FooterColumn>
         </div>
-        <div className="mt-8 border-t border-white/10 pt-6 text-center">
-          <p className="text-xs text-slate-400">© {new Date().getFullYear()} Pasar UMKM • {t("footer.made")}</p>
+
+        <div className="mt-14 flex flex-col gap-6">
+          <p className="text-[13px] leading-6 text-bone/65">
+            <span className="font-display font-bold text-bone/80">{t("footer.credits")} </span>
+            {PHOTO_CREDITS.map((credit, index) => (
+              <span key={credit.href}>
+                <a href={credit.href} target="_blank" rel="noreferrer" className="underline decoration-bone/30 underline-offset-2 transition-colors duration-150 hover:decoration-bone">
+                  {credit.title}
+                </a>{" "}
+                oleh {credit.author} ({credit.licence})
+                {index < PHOTO_CREDITS.length - 1 ? "; " : "."}
+              </span>
+            ))}
+          </p>
+          <div className="flex flex-col gap-2 text-[13px] text-bone/70 sm:flex-row sm:items-center sm:justify-between">
+            <p>{"© "}{new Date().getFullYear()}{" Pasar UMKM"}</p>
+            <p>{t("footer.made")}</p>
+          </div>
         </div>
       </div>
     </footer>
   );
 }
+
+function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h2 className="font-display text-[16px] font-bold">{title}</h2>
+      <div className="mt-4 flex flex-col gap-2 text-[16px] text-bone/80">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------ mobile nav */
 
 interface MobileNavigationProps {
   favoritesOnly: boolean;
@@ -180,15 +341,31 @@ interface MobileNavigationProps {
 export function MobileNavigation({ favoritesOnly, onToggleFavorites }: MobileNavigationProps) {
   const { t } = useI18n();
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-white/10 bg-[#050510]/95 px-2 py-2 shadow-[0_-8px_30px_rgba(139,92,246,.15)] backdrop-blur-lg md:hidden" aria-label="Navigasi cepat">
-      <MobileLink href="#home" label={t("mobile.home")} icon="⌂" />
-      <MobileLink href="#jelajahi" label={t("mobile.explore")} icon="⌕" />
-      <MobileLink href="#daftar" label={t("mobile.list")} icon="＋" />
-      <button type="button" aria-pressed={favoritesOnly} onClick={onToggleFavorites} className={`flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium transition-colors ${favoritesOnly ? "text-fuchsia-400" : "text-slate-400"}`}><span className="text-lg leading-5" aria-hidden="true">♡</span>{t("mobile.fav")}</button>
+    <nav
+      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 bg-paper px-1 pb-[max(6px,env(safe-area-inset-bottom))] pt-1 md:hidden"
+      aria-label="Navigasi cepat"
+    >
+      <MobileLink href="#home" label={t("mobile.home")} icon={<HomeIcon />} />
+      <MobileLink href="#jelajahi" label={t("mobile.explore")} icon={<GridIcon />} />
+      <MobileLink href="#daftar" label={t("mobile.list")} icon={<UploadIcon />} />
+      <button
+        type="button"
+        aria-pressed={favoritesOnly}
+        onClick={onToggleFavorites}
+        className={`flex min-h-12 flex-col items-center justify-center gap-1 text-[13px] font-display font-semibold transition-colors duration-150 ${favoritesOnly ? "text-blood" : "text-ink"}`}
+      >
+        <HeartIcon filled={favoritesOnly} />
+        {t("mobile.fav")}
+      </button>
     </nav>
   );
 }
 
-function MobileLink({ href, label, icon }: { href: string; label: string; icon: string }) {
-  return <a href={href} className="flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium text-slate-400 transition-colors hover:text-fuchsia-400"><span className="text-lg leading-5" aria-hidden="true">{icon}</span>{label}</a>;
+function MobileLink({ href, label, icon }: { href: string; label: string; icon: React.ReactNode }) {
+  return (
+    <a href={href} className="flex min-h-12 flex-col items-center justify-center gap-1 font-display text-[13px] font-semibold text-ink transition-colors duration-150 hover:text-blood">
+      {icon}
+      {label}
+    </a>
+  );
 }
