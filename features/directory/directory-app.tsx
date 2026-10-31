@@ -9,14 +9,14 @@ import { BusinessSkeletons, EmptyState } from "@/features/directory/components/d
 import { Hero } from "@/features/directory/components/hero";
 import { RegistrationForm } from "@/features/directory/components/registration-form";
 import { SiteHeader } from "@/features/directory/components/site-header";
-import { DirectoryStats, FaqSection, HowItWorks, MobileNavigation, RegistrationIntro, SiteFooter } from "@/features/directory/components/market-sections";
+import { ClosingCta, DirectoryStats, FaqSection, HowItWorks, MobileNavigation, RegistrationIntro, SiteFooter } from "@/features/directory/components/market-sections";
 import { MotionLayer } from "@/features/directory/components/motion-layer";
 import { useI18n } from "@/lib/i18n";
 
 export function DirectoryApp() {
   const {
     businesses, ownerId, favorites, loading, refreshing, offline, notice, query, heroQuery, category, city, sort,
-    favoritesOnly, openOnly, openCount, nowLabel, visibleCount, deletingId, toast, selectedBusiness,
+    favoritesOnly, openOnly, openCount, nowLabel, nowMinutes, visibleCount, deletingId, toast, selectedBusiness,
     setToast, setSelectedBusiness, setHeroQuery, cities, filtered, myBusinesses, categoryCounts, loadData, clearFilters,
     changeQuery, toggleFavorite, addBusiness, removeBusiness, submitReview, searchFromHero, searchSuggestion,
     setCategory, setCity, setSort, setFavoritesOnly, setOpenOnly, showMore,
@@ -51,25 +51,13 @@ export function DirectoryApp() {
 
         <section id="jelajahi" className="relative scroll-mt-24 py-20 sm:py-24 lg:py-28">
           <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)]">
-            <div className="grid gap-8 lg:grid-cols-[1fr_minmax(300px,420px)] lg:items-end lg:gap-14" data-reveal-group>
-              <div data-reveal>
-                <h2 className="max-w-[16ch] text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("explore.title")}</h2>
-                <p className="mt-4 max-w-[46ch] text-[20px] leading-[1.55] text-ink/80">{t("explore.desc")}</p>
-              </div>
-              <figure data-reveal>
-                <div className="aspect-[4/3] overflow-hidden bg-paper">
-                  <img
-                    src="/foto/warung-martabak.jpg"
-                    width="1920"
-                    height="1280"
-                    alt="Warung martabak dengan meja dan peralatan masak di pinggir jalan"
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <figcaption className="mt-2 text-[13px] leading-5 text-muted">Warung martabak. Foto: Lord Mountbatten, CC BY-SA 3.0.</figcaption>
-              </figure>
+            <div className="grid gap-6 lg:grid-cols-[.42fr_.58fr] lg:items-end lg:gap-12" data-reveal-group>
+              <h2 className="max-w-[14ch] text-[clamp(1.9rem,3.6vw,3.4rem)]" data-reveal>
+                {t("explore.title")}
+              </h2>
+              <p className="max-w-[46ch] text-[20px] leading-[1.55] text-ink/80" data-reveal>
+                {t("explore.desc")}
+              </p>
             </div>
 
             {notice && (
@@ -102,18 +90,18 @@ export function DirectoryApp() {
                 onClearAll={clearFilters}
                 onRefresh={() => void loadData()}
                 refreshing={refreshing}
+                loading={loading}
+                resultCount={filtered.length}
               />
             </div>
 
-            <p className="mt-6 font-display text-[16px] font-semibold text-muted" role="status" aria-live="polite">
-              {loading ? t("explore.loading") : `${filtered.length} ${t("explore.found")}`}
-            </p>
-
-            <div className="mt-2 grid gap-2">
+            <div className="mt-3 grid gap-3 md:grid-cols-2">
               {loading ? (
                 <BusinessSkeletons />
               ) : filtered.length === 0 ? (
-                <EmptyState favoritesOnly={favoritesOnly} hasListings={businesses.length > 0} onReset={clearFilters} />
+                <div className="md:col-span-2">
+                  <EmptyState favoritesOnly={favoritesOnly} hasListings={businesses.length > 0} onReset={clearFilters} />
+                </div>
               ) : (
                 filtered.slice(0, visibleCount).map((business, index) => (
                   <BusinessCard
@@ -121,6 +109,7 @@ export function DirectoryApp() {
                     business={business}
                     favorite={favorites.includes(business.id)}
                     featured={index === 0 && showFeature}
+                    nowMinutes={nowMinutes}
                     onToggleFavorite={toggleFavorite}
                     onViewDetails={setSelectedBusiness}
                   />
@@ -141,11 +130,11 @@ export function DirectoryApp() {
         <HowItWorks />
 
         <section id="daftar" className="relative scroll-mt-24 bg-paper py-20 sm:py-24 lg:py-28">
-          <div className="mx-auto grid max-w-[var(--page-max)] gap-10 px-[var(--page-x)] lg:grid-cols-[.85fr_1.15fr] lg:gap-16">
-            <div>
+          <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)]">
+            <div className="grid gap-10 lg:grid-cols-[.42fr_.58fr] lg:items-end lg:gap-12">
               <RegistrationIntro />
-              <figure className="mt-10" data-reveal>
-                <div className="aspect-[4/3] overflow-hidden bg-blood">
+              <figure data-reveal>
+                <div className="aspect-[16/10] overflow-hidden bg-blood">
                   <img
                     src="/foto/maestro-batik-tulis-di-imogiri.jpg"
                     width="1920"
@@ -160,34 +149,41 @@ export function DirectoryApp() {
               </figure>
             </div>
 
-            <div className="flex flex-col gap-8">
+            <div className="mt-12">
               <RegistrationForm ownerId={ownerId} onCreate={addBusiness} />
+            </div>
 
-              {myBusinesses.length > 0 && (
-                <div>
-                  <h3 className="text-[clamp(1.45rem,2.2vw,1.95rem)]">
+            {myBusinesses.length > 0 && (
+              <div className="mt-14">
+                <div className="grid gap-3 lg:grid-cols-[.42fr_.58fr] lg:items-baseline">
+                  <h3 className="text-[clamp(1.25rem,2.2vw,1.95rem)]">
                     {t("reg.mySpace")} <span className="text-muted">({myBusinesses.length})</span>
                   </h3>
-                  <div className="mt-4 grid gap-2">
-                    {myBusinesses.map((business) => (
-                      <BusinessCard
-                        key={business.id}
-                        business={business}
-                        favorite={favorites.includes(business.id)}
-                        onToggleFavorite={toggleFavorite}
-                        onViewDetails={setSelectedBusiness}
-                        onDelete={removeBusiness}
-                        deleting={deletingId === business.id}
-                      />
-                    ))}
-                  </div>
+                  <p className="text-[16px] leading-6 text-ink/75">
+                    Usaha yang kamu daftarkan dari perangkat ini. Bisa dihapus kapan saja.
+                  </p>
                 </div>
-              )}
-            </div>
+                <div className="mt-5 grid gap-3 md:grid-cols-2">
+                  {myBusinesses.map((business) => (
+                    <BusinessCard
+                      key={business.id}
+                      business={business}
+                      favorite={favorites.includes(business.id)}
+                      nowMinutes={nowMinutes}
+                      onToggleFavorite={toggleFavorite}
+                      onViewDetails={setSelectedBusiness}
+                      onDelete={removeBusiness}
+                      deleting={deletingId === business.id}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
         <FaqSection />
+        <ClosingCta />
       </main>
 
       <SiteFooter />

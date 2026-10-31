@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Business, ReviewInput } from "@/lib/types";
+import { useI18n } from "@/lib/i18n";
+import { getIllustration } from "@/features/directory/local-photo";
 import { CategoryMark, CloseIcon, PinIcon, StarIcon, WhatsAppIcon } from "./icons";
 
 interface BusinessDetailDialogProps {
@@ -12,6 +14,7 @@ interface BusinessDetailDialogProps {
 
 export function BusinessDetailDialog({ business, onClose, onSubmitReview }: BusinessDetailDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { t } = useI18n();
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [rating, setRating] = useState(5);
@@ -42,6 +45,7 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
   const digits = business.wa.replace(/\D/g, "");
   const phone = digits.startsWith("0") ? `62${digits.slice(1)}` : digits.startsWith("8") ? `62${digits}` : digits;
   const chatLink = `https://wa.me/${phone}?text=${encodeURIComponent(`Halo ${business.nama}, saya melihat usaha Anda di Pasar UMKM.`)}`;
+  const illustration = getIllustration(business);
 
   async function handleReview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -83,6 +87,33 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
 
           <div className="grid gap-8 px-5 pb-8 sm:px-8 lg:grid-cols-[1.05fr_.95fr] lg:gap-12 lg:pb-10">
             <section>
+              {illustration && (
+                <figure className="mb-6">
+                  <div className="aspect-[16/9] w-full overflow-hidden bg-paper">
+                    <img
+                      src={illustration.src}
+                      width={illustration.width}
+                      height={illustration.height}
+                      alt={illustration.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <figcaption className="mt-2 flex flex-wrap items-center justify-between gap-2 text-[13px] leading-5 text-muted">
+                    <span>{t("reg.photoNote")}</span>
+                    <a
+                      href={illustration.creditHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline decoration-muted/40 underline-offset-2 transition-colors duration-150 hover:text-blood"
+                    >
+                      Foto: {illustration.credit}
+                    </a>
+                  </figcaption>
+                </figure>
+              )}
+
               <div className="flex items-start gap-4">
                 <span className="grid size-16 shrink-0 place-items-center bg-blood text-bone" aria-hidden="true">
                   <CategoryMark category={business.kategori} tone="bone" />
@@ -137,7 +168,7 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
 
               <div className="mt-8">
                 <div className="flex items-end justify-between gap-4">
-                  <h3 className="text-[clamp(1.45rem,2.2vw,1.95rem)]">Ulasan pembeli</h3>
+                  <h3 className="text-[clamp(1.25rem,2.2vw,1.95rem)]">Ulasan pembeli</h3>
                   {reviews.length > 0 && (
                     <p className="flex items-center gap-1.5 font-display text-[20px] font-bold">
                       {average.toLocaleString("id-ID", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
@@ -168,7 +199,7 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
             </section>
 
             <section className="bg-paper p-4 sm:p-6 lg:self-start">
-              <h3 className="text-[clamp(1.45rem,2.2vw,1.95rem)]">Tulis ulasan</h3>
+              <h3 className="text-[clamp(1.25rem,2.2vw,1.95rem)]">Tulis ulasan</h3>
               <p className="mt-2 text-[16px] leading-5 text-ink/75">Ulasan yang jujur membantu pembeli lain dan pemilik usaha.</p>
 
               {success && <p className="mt-4 bg-leaf px-3 py-2.5 font-display text-[13px] font-semibold text-bone" role="status">{success}</p>}

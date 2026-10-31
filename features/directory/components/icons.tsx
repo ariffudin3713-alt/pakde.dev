@@ -91,6 +91,23 @@ export function ClockIcon({ size = 15, className = "" }: IconProps) {
   );
 }
 
+export function CheckIcon({ size = 16, className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="m4 12.5 5 5L20 6.5" />
+    </svg>
+  );
+}
+
+export function ArrowUpIcon({ size = 16, className = "" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M12 19V5" />
+      <path d="m6 11 6-6 6 6" />
+    </svg>
+  );
+}
+
 export function GlobeIcon({ size = 16, className = "" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">

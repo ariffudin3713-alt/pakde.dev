@@ -16,10 +16,10 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-7 text-[16px] md:flex" aria-label="Navigasi utama">
-          <Link className="transition-colors duration-150 hover:text-blood" href="#jelajahi">{t("nav.directory")}</Link>
-          <Link className="transition-colors duration-150 hover:text-blood" href="#cara-kerja">{t("nav.approach")}</Link>
-          <Link className="transition-colors duration-150 hover:text-blood" href="#daftar">{t("nav.list")}</Link>
-          <Link className="transition-colors duration-150 hover:text-blood" href="#faq">{t("nav.faq")}</Link>
+          <Link className="underline decoration-transparent decoration-2 underline-offset-[6px] transition-colors duration-150 hover:text-blood hover:decoration-blood" href="#jelajahi">{t("nav.directory")}</Link>
+          <Link className="underline decoration-transparent decoration-2 underline-offset-[6px] transition-colors duration-150 hover:text-blood hover:decoration-blood" href="#cara-kerja">{t("nav.approach")}</Link>
+          <Link className="underline decoration-transparent decoration-2 underline-offset-[6px] transition-colors duration-150 hover:text-blood hover:decoration-blood" href="#daftar">{t("nav.list")}</Link>
+          <Link className="underline decoration-transparent decoration-2 underline-offset-[6px] transition-colors duration-150 hover:text-blood hover:decoration-blood" href="#faq">{t("nav.faq")}</Link>
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-2">

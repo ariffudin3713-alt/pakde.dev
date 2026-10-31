@@ -23,6 +23,7 @@ export interface DirectoryController {
   openOnly: boolean;
   openCount: number;
   nowLabel: string;
+  nowMinutes: number | null;
   visibleCount: number;
   deletingId: string | null;
   toast: string;
@@ -236,7 +237,7 @@ export function useDirectoryController(): DirectoryController {
 
   return {
     businesses, ownerId, favorites, loading, refreshing, offline, notice, query, heroQuery, category, city, sort,
-    favoritesOnly, openOnly, openCount, nowLabel, visibleCount, deletingId, toast, selectedBusiness, setToast, setSelectedBusiness, setHeroQuery, cities, filtered,
+    favoritesOnly, openOnly, openCount, nowLabel, nowMinutes, visibleCount, deletingId, toast, selectedBusiness, setToast, setSelectedBusiness, setHeroQuery, cities, filtered,
     myBusinesses, categoryCounts, loadData, clearFilters, changeQuery, toggleFavorite, addBusiness, removeBusiness,
     submitReview, searchFromHero, searchSuggestion,
     setCategory: (value) => { setSelectedCategory(value); setVisibleCount(12); },

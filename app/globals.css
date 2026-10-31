@@ -18,6 +18,8 @@
   color-scheme: light;
   --page-x: clamp(20px, 4vw, 64px);
   --page-max: 1400px;
+  --header-h: 80px;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 *,
@@ -28,7 +30,8 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 84px;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  scrollbar-gutter: stable both-edges;
 }
 
 body {
@@ -113,11 +116,11 @@ img {
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1;
-  transition: background-color 120ms ease-out, color 120ms ease-out;
+  transition: background-color 150ms ease-out, color 150ms ease-out, transform 150ms var(--ease-out);
 }
 
 .btn:hover {
-  background: color-mix(in srgb, var(--color-blood) 94%, var(--color-ink));
+  background: color-mix(in srgb, var(--color-blood) 92%, var(--color-ink));
 }
 
 .btn:active {
@@ -132,6 +135,7 @@ img {
 
 .btn-quiet:hover {
   color: var(--color-blood);
+  background: transparent;
 }
 
 .btn-bone {
@@ -154,15 +158,26 @@ img {
   color: var(--color-ink);
   font-size: 1rem;
   line-height: 1.4;
+  transition: background-color 150ms ease-out;
+}
+
+/* Compact selects sit in a row; the base field is full width on purpose. */
+.field.field-auto {
+  width: auto;
 }
 
 .field::placeholder {
   color: #8b8377;
 }
 
+.field:hover {
+  background: #faf8f4;
+}
+
 .field:focus-visible {
   outline: 3px solid var(--color-blood);
   outline-offset: 0;
+  background: #fffdf8;
 }
 
 textarea.field {
@@ -171,6 +186,20 @@ textarea.field {
 
 select.field {
   cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Horizontal filter rails keep the thumb moving, not the page. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Skeleton blocks, no looping attention pulse. */
@@ -217,7 +246,24 @@ select.field {
     transition-delay: 350ms;
   }
 
-  /* Signature move: the hero photograph opens like a market shutter. */
+  /* Signature move: the headline rises from behind its own baseline. */
+  .lines .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  .lines .line > span {
+    display: block;
+    animation: line-rise 900ms var(--ease-out) both;
+  }
+
+  .lines .line:nth-child(2) > span {
+    animation-delay: 110ms;
+  }
+
+  /* Second signature move: the hero photograph opens like a market shutter. */
   .shutter {
     clip-path: inset(0 100% 0 0);
     animation: shutter-open 1000ms 120ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
@@ -230,6 +276,28 @@ select.field {
 
   .drift img {
     animation: slow-drift 30s ease-in-out infinite alternate;
+  }
+
+  .card-media img {
+    transition: transform 900ms var(--ease-out);
+  }
+
+  .card-media:hover img,
+  article:hover .card-media img {
+    transform: scale(1.04);
+  }
+
+  .spin-slow {
+    animation: spin-slow 900ms linear infinite;
+  }
+}
+
+@keyframes line-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
   }
 }
 
@@ -251,6 +319,12 @@ select.field {
   }
   to {
     transform: scale(1.08);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
   }
 }
 

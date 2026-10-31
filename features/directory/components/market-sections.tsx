@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/types";
 import { useI18n } from "@/lib/i18n";
-import { ArrowIcon, CategoryMark, GridIcon, HeartIcon, HomeIcon, UploadIcon } from "./icons";
+import { ArrowIcon, ArrowUpIcon, CategoryMark, CheckIcon, GridIcon, HeartIcon, HomeIcon, UploadIcon } from "./icons";
 import { ScallopEdge } from "./scallop-edge";
 
 /* ------------------------------------------------------------------ stats */
@@ -19,15 +19,34 @@ export function DirectoryStats({ businessCount, categoryCount, cityCount }: Dire
   const number = (value: number) => value.toLocaleString(locale === "id" ? "id-ID" : "en-US");
 
   return (
-    <section className="relative bg-blood text-bone" aria-label="Ringkasan direktori">
+    <section className="relative bg-blood text-bone" aria-labelledby="stats-title">
       <ScallopEdge side="bottom" size={16} className="absolute top-full left-0 z-10 h-4 w-full text-blood" />
-      <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)] pb-16 pt-12 sm:pb-20 sm:pt-14">
-        <h2 className="max-w-[18ch] text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("stats.title")}</h2>
-        <div className="mt-8 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
-          <Stat value={number(businessCount)} label={t("stats.business")} detail={t("stats.businessDesc")} />
-          <Stat value={number(categoryCount)} label={t("stats.cat")} detail={t("stats.catDesc")} />
-          <Stat value={number(cityCount)} label={t("stats.city")} detail={t("stats.cityDesc")} />
-          <Stat value="0%" label={t("stats.fee")} detail={t("stats.feeDesc")} />
+      <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)] pb-24 pt-16 sm:pb-28 sm:pt-20">
+        <div className="grid gap-12 lg:grid-cols-[.42fr_.58fr] lg:items-end lg:gap-16">
+          <div data-reveal>
+            <h2 id="stats-title" className="max-w-[14ch] text-[clamp(1.9rem,3.6vw,3.4rem)]">
+              {t("stats.title")}
+            </h2>
+
+            <div className="mt-10 grid max-w-[34rem] grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 lg:grid-cols-1 lg:gap-y-6">
+              <Stat value={number(businessCount)} label={t("stats.business")} detail={t("stats.businessDesc")} />
+              <Stat value={number(categoryCount)} label={t("stats.cat")} detail={t("stats.catDesc")} />
+              <Stat value={number(cityCount)} label={t("stats.city")} detail={t("stats.cityDesc")} />
+            </div>
+          </div>
+
+          <div className="lg:pb-2" data-reveal>
+            <p className="flex items-start font-display text-[clamp(7rem,16vw,16rem)] font-bold leading-[0.78] tracking-[-.06em]">
+              0
+              <span className="mt-[0.14em] text-[0.28em] leading-none" aria-hidden="true">
+                %
+              </span>
+              <span className="sr-only"> {t("stats.fee")}</span>
+            </p>
+            <p className="mt-6 max-w-[36ch] text-[20px] leading-[1.55] text-bone/80">
+              {t("stats.commissionCaption")}
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -36,10 +55,10 @@ export function DirectoryStats({ businessCount, categoryCount, cityCount }: Dire
 
 function Stat({ value, label, detail }: { value: string; label: string; detail: string }) {
   return (
-    <div data-reveal>
-      <p className="font-display text-[clamp(2.6rem,5.2vw,4.9rem)] font-bold leading-[0.9] tracking-[-.05em]">{value}</p>
-      <p className="mt-3 font-display text-[16px] font-bold">{label}</p>
-      <p className="mt-1 text-[16px] leading-5 text-bone/70">{detail}</p>
+    <div>
+      <p className="font-display text-[clamp(1.9rem,2.2vw,1.95rem)] font-bold leading-none tracking-[-.03em]">{value}</p>
+      <p className="mt-2 font-display text-[13px] font-semibold text-bone/65">{label}</p>
+      <p className="mt-0.5 text-[13px] leading-4 text-bone/60">{detail}</p>
     </div>
   );
 }
@@ -55,20 +74,24 @@ export function HowItWorks() {
   ];
 
   return (
-    <section id="cara-kerja" className="relative scroll-mt-24 bg-paper py-20 sm:py-28">
+    <section id="cara-kerja" className="relative scroll-mt-24 bg-paper py-20 sm:py-24 lg:py-28">
       <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)]">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end" data-reveal-group>
-          <h2 className="max-w-[14ch] text-[clamp(1.9rem,3.6vw,3.4rem)]" data-reveal>{t("how.title")}</h2>
-          <p className="max-w-[44ch] text-[20px] leading-[1.55]" data-reveal>{t("how.desc")}</p>
+        <div className="grid gap-8 lg:grid-cols-[.42fr_.58fr] lg:items-end" data-reveal-group>
+          <h2 className="max-w-[14ch] text-[clamp(1.9rem,3.6vw,3.4rem)]" data-reveal>
+            {t("how.title")}
+          </h2>
+          <p className="max-w-[44ch] text-[20px] leading-[1.55]" data-reveal>
+            {t("how.desc")}
+          </p>
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-3 lg:gap-12" aria-hidden="true" data-reveal>
+        <div className="mt-14 grid gap-6 lg:grid-cols-3 lg:gap-8" aria-hidden="true" data-reveal>
           <ScatterGroup />
           <RibbonGroup />
           <OrderedGroup />
         </div>
 
-        <ol className="mt-10 grid gap-8 lg:grid-cols-3 lg:gap-12" data-reveal-group>
+        <ol className="mt-8 grid gap-6 lg:grid-cols-3 lg:gap-8" data-reveal-group>
           {steps.map((step) => (
             <li key={step.title} data-reveal>
               <h3 className="font-display text-[20px] font-bold">{step.title}</h3>
@@ -165,13 +188,18 @@ export function RegistrationIntro() {
 
   return (
     <div data-reveal>
-      <h2 className="text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("reg.title")}</h2>
+      <h2 className="max-w-[16ch] text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("reg.title")}</h2>
       <p className="mt-5 max-w-[44ch] text-[20px] leading-[1.55] text-ink/80">{t("reg.desc")}</p>
-      <ul className="mt-8 grid gap-5 sm:grid-cols-3 lg:grid-cols-1">
+      <ul className="mt-8 grid gap-5 sm:grid-cols-3 sm:gap-6">
         {points.map((point) => (
-          <li key={point.title} className="max-w-[40ch]">
-            <p className="font-display text-[16px] font-bold">{point.title}</p>
-            <p className="mt-1 text-[16px] leading-5 text-muted">{point.text}</p>
+          <li key={point.title} className="flex gap-2.5">
+            <span className="mt-0.5 shrink-0 text-leaf" aria-hidden="true">
+              <CheckIcon size={18} />
+            </span>
+            <div>
+              <p className="font-display text-[16px] font-bold leading-snug">{point.title}</p>
+              <p className="mt-1 text-[16px] leading-5 text-muted">{point.text}</p>
+            </div>
           </li>
         ))}
       </ul>
@@ -186,44 +214,59 @@ export function FaqSection() {
   const items = [1, 2, 3, 4, 5];
 
   return (
-    <section id="faq" className="relative scroll-mt-24 py-20 sm:py-28">
-      <div className="mx-auto grid max-w-[var(--page-max)] gap-12 px-[var(--page-x)] lg:grid-cols-[.75fr_1.25fr] lg:gap-16">
-        <div className="lg:sticky lg:top-28 lg:self-start" data-reveal>
-          <h2 className="text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("faq.title")}</h2>
-          <p className="mt-4 max-w-[34ch] text-[20px] leading-[1.55] text-ink/80">{t("faq.desc")}</p>
+    <section id="faq" className="relative scroll-mt-24 py-20 sm:py-24 lg:py-28">
+      <div className="mx-auto max-w-[var(--page-max)] px-[var(--page-x)]">
+        <div className="grid gap-10 lg:grid-cols-[.42fr_.58fr] lg:gap-16">
+          <div className="lg:sticky lg:top-28 lg:self-start" data-reveal>
+            <h2 className="text-[clamp(1.9rem,3.6vw,3.4rem)]">{t("faq.title")}</h2>
+            <p className="mt-4 max-w-[34ch] text-[20px] leading-[1.55] text-ink/80">{t("faq.desc")}</p>
 
-          <figure className="mt-8 hidden lg:block">
-            <div className="aspect-[4/3] w-full overflow-hidden bg-blood">
-              <img
-                src="/foto/jukung-pasar-terapung.jpg"
-                width="1920"
-                height="1280"
-                alt="Perahu jukung berjajar di pasar terapung Banjarmasin"
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover"
-              />
+            <figure className="mt-8 hidden lg:block">
+              <div className="aspect-[4/5] w-full max-w-[320px] overflow-hidden bg-blood">
+                <img
+                  src="/foto/jukung-pasar-terapung.jpg"
+                  width="1920"
+                  height="1280"
+                  alt="Perahu jukung berjajar di pasar terapung Banjarmasin"
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <figcaption className="mt-3 max-w-[320px] text-[13px] leading-5 text-muted">
+                Pasar terapung, Banjarmasin. Foto: Muhammad Haris, CC BY-SA 4.0.
+              </figcaption>
+            </figure>
+          </div>
+
+          <div>
+            <div className="flex flex-col gap-2" data-reveal-group>
+              {items.map((index) => (
+                <details key={index} name="faq" className="group bg-transparent open:bg-blood open:text-bone" data-reveal>
+                  <summary className="flex min-h-[72px] cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 text-left font-display text-[20px] font-bold leading-snug">
+                    <span>{t(`faq.q${index}`)}</span>
+                    <span className="grid size-9 shrink-0 place-items-center bg-paper text-ink transition-transform duration-200 group-open:rotate-45 group-open:bg-bone group-open:text-blood" aria-hidden="true">
+                      <PlusMark />
+                    </span>
+                  </summary>
+                  <p className="max-w-[58ch] px-5 pb-6 text-[16px] leading-[1.6] text-ink/80 group-open:text-bone/85">
+                    {t(`faq.a${index}`)}
+                  </p>
+                </details>
+              ))}
             </div>
-            <figcaption className="mt-3 text-[13px] leading-5 text-muted">
-              Pasar terapung, Banjarmasin. Foto: Muhammad Haris, CC BY-SA 4.0.
-            </figcaption>
-          </figure>
-        </div>
 
-        <div className="flex flex-col gap-2" data-reveal-group>
-          {items.map((index) => (
-            <details key={index} name="faq" className="group bg-transparent open:bg-blood open:text-bone" data-reveal>
-              <summary className="flex min-h-[68px] cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 text-left font-display text-[20px] font-bold leading-snug [&::-webkit-details-marker]:hidden">
-                <span>{t(`faq.q${index}`)}</span>
-                <span className="grid size-8 shrink-0 place-items-center transition-transform duration-200 group-open:rotate-45" aria-hidden="true">
-                  <PlusMark />
-                </span>
-              </summary>
-              <p className="max-w-[58ch] px-5 pb-5 text-[16px] leading-[1.6] text-ink/80 group-open:text-bone/85">
-                {t(`faq.a${index}`)}
-              </p>
-            </details>
-          ))}
+            <div className="mt-10 flex flex-col gap-5 bg-bone p-6 sm:flex-row sm:items-center sm:justify-between" data-reveal>
+              <div>
+                <h3 className="text-[clamp(1.25rem,2.2vw,1.95rem)]">{t("faq.contact")}</h3>
+                <p className="mt-2 max-w-[46ch] text-[16px] leading-6 text-ink/75">{t("faq.contactDesc")}</p>
+              </div>
+              <a href="#daftar" className="btn shrink-0">
+                {t("nav.getStarted")}
+                <ArrowIcon size={16} />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -235,6 +278,73 @@ function PlusMark() {
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
       <path d="M12 5v14M5 12h14" />
     </svg>
+  );
+}
+
+/* --------------------------------------------------------------- closing cta */
+
+const CLOSING_PHOTOS = [
+  {
+    src: "/foto/warung-martabak.jpg",
+    alt: "Warung martabak di pinggir jalan",
+    width: 1920,
+    height: 1280,
+    credit: "Lord Mountbatten, CC BY-SA 3.0",
+  },
+  {
+    src: "/foto/aneka-jajan-pasar-tradisional-jawa.jpg",
+    alt: "Aneka jajan pasar tradisional Jawa",
+    width: 1728,
+    height: 1152,
+    credit: "Hersy ardianty a, CC BY-SA 4.0",
+  },
+  {
+    src: "/foto/jukung-pasar-terapung.jpg",
+    alt: "Perahu jukung di pasar terapung Banjarmasin",
+    width: 1920,
+    height: 1280,
+    credit: "Muhammad Haris, CC BY-SA 4.0",
+  },
+];
+
+export function ClosingCta() {
+  const { t } = useI18n();
+
+  return (
+    <section aria-labelledby="cta-title">
+      <div className="grid grid-cols-3">
+        {CLOSING_PHOTOS.map((photo) => (
+          <figure key={photo.src} className="relative aspect-[4/3] overflow-hidden bg-paper sm:aspect-[3/2]">
+            <img
+              src={photo.src}
+              width={photo.width}
+              height={photo.height}
+              alt={photo.alt}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover"
+            />
+          </figure>
+        ))}
+      </div>
+
+      <div className="bg-paper">
+        <div className="mx-auto grid max-w-[var(--page-max)] gap-8 px-[var(--page-x)] py-16 sm:py-20 lg:grid-cols-[.6fr_.4fr] lg:items-end">
+          <div data-reveal>
+            <h2 id="cta-title" className="max-w-[15ch] text-[clamp(1.9rem,3.6vw,3.4rem)]">
+              {t("cta.title")}
+            </h2>
+            <p className="mt-4 max-w-[46ch] text-[20px] leading-[1.55] text-ink/80">{t("cta.desc")}</p>
+          </div>
+          <div className="flex lg:justify-end" data-reveal>
+            <a href="#daftar" className="btn min-h-14 w-full px-7 text-[20px] sm:w-auto">
+              {t("cta.action")}
+              <ArrowIcon size={18} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -266,7 +376,7 @@ export function SiteFooter() {
                   <span
                     key={`${word}-${letter}-${index}`}
                     className="grid flex-1 place-items-center bg-bone font-display font-bold uppercase leading-none text-blood"
-                    style={{ height: `${BLOCK_HEIGHTS[index % BLOCK_HEIGHTS.length]}%`, fontSize: "clamp(2.6rem,5.2vw,4.9rem)" }}
+                    style={{ height: `${BLOCK_HEIGHTS[index % BLOCK_HEIGHTS.length]}%`, fontSize: "clamp(2.7rem,5.4vw,5.1rem)" }}
                   >
                     {letter}
                   </span>
@@ -310,9 +420,13 @@ export function SiteFooter() {
               </span>
             ))}
           </p>
-          <div className="flex flex-col gap-2 text-[13px] text-bone/70 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 text-[13px] text-bone/70 sm:flex-row sm:items-center sm:justify-between">
             <p>{"© "}{new Date().getFullYear()}{" Pasar UMKM"}</p>
             <p>{t("footer.made")}</p>
+            <a href="#home" className="inline-flex w-fit items-center gap-1.5 font-display font-semibold text-bone/80 underline decoration-bone/30 underline-offset-4 transition-colors duration-150 hover:text-bone hover:decoration-bone">
+              {t("footer.top")}
+              <ArrowUpIcon size={14} />
+            </a>
           </div>
         </div>
       </div>
@@ -352,7 +466,7 @@ export function MobileNavigation({ favoritesOnly, onToggleFavorites }: MobileNav
         type="button"
         aria-pressed={favoritesOnly}
         onClick={onToggleFavorites}
-        className={`flex min-h-12 flex-col items-center justify-center gap-1 text-[13px] font-display font-semibold transition-colors duration-150 ${favoritesOnly ? "text-blood" : "text-ink"}`}
+        className={`flex min-h-12 flex-col items-center justify-center gap-1 text-[13px] font-display font-semibold transition-colors duration-150 ${favoritesOnly ? "bg-blood text-bone" : "text-ink"}`}
       >
         <HeartIcon filled={favoritesOnly} />
         {t("mobile.fav")}
@@ -369,3 +483,6 @@ function MobileLink({ href, label, icon }: { href: string; label: string; icon: 
     </a>
   );
 }
+
+/* Keep the category mark in the export surface for the empty state. */
+export { CategoryMark };
