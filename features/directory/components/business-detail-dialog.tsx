@@ -194,19 +194,24 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
                   )}
                 </div>
                 {reviews.length ? (
-                  <ul className="mt-4 max-h-64 space-y-2 overflow-y-auto pr-1">
-                    {reviews.map((review) => (
-                      <li key={review.id} className="bg-paper p-4">
-                        <div className="flex items-center justify-between gap-3">
-                          <p className="font-display text-[16px] font-semibold">{review.nama || "Pengunjung"}</p>
-                          <p className="flex items-center gap-0.5 text-blood" aria-label={`${review.bintang} dari 5 bintang`}>
-                            {[1, 2, 3, 4, 5].map((star) => <StarIcon key={star} size={13} filled={star <= review.bintang} />)}
-                          </p>
-                        </div>
-                        <p className="mt-2 text-[16px] leading-5 text-ink/80">{review.pesan}</p>
-                      </li>
-                    ))}
-                  </ul>
+                  <>
+                    {(business.ownerId?.startsWith("seed-") || business.id.startsWith("seed-")) && (
+                      <p className="mt-1 text-[13px] leading-5 text-muted">Contoh ulasan untuk memperlihatkan tampilan, bukan ulasan pelanggan terverifikasi.</p>
+                    )}
+                    <ul className="mt-4 max-h-64 space-y-2 overflow-y-auto pr-1">
+                      {reviews.map((review) => (
+                        <li key={review.id} className="bg-paper p-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <p className="font-display text-[16px] font-semibold">{review.nama || "Pengunjung"}</p>
+                            <p className="flex items-center gap-0.5 text-blood" aria-label={`${review.bintang} dari 5 bintang`}>
+                              {[1, 2, 3, 4, 5].map((star) => <StarIcon key={star} size={13} filled={star <= review.bintang} />)}
+                            </p>
+                          </div>
+                          <p className="mt-2 text-[16px] leading-5 text-ink/80">{review.pesan}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
                 ) : (
                   <p className="mt-4 bg-paper px-4 py-5 text-[16px] leading-5 text-ink/75">
                     Belum ada ulasan. Jadilah yang pertama berbagi pengalaman.
