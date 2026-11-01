@@ -39,15 +39,23 @@ const ILLUSTRATIONS: Record<string, BusinessIllustration> = {
     credit: "Nela Fatimatun, CC BY 4.0",
     creditHref: "https://commons.wikimedia.org/wiki/File:Rempah_tradisional_di_pasar.jpg",
   },
-  "seed-6": {
-    src: "/foto/aneka-jajan-pasar-tradisional-jawa.jpg",
-    width: 1728,
-    height: 1152,
-    alt: "Ilustrasi aneka jajan pasar tradisional Jawa: serabi dan kue basah",
-    credit: "Hersy ardianty a, CC BY-SA 4.0",
-    creditHref: "https://commons.wikimedia.org/wiki/File:Aneka_jajan_pasar_tradisional_jawa.jpg",
+  "seed-4": {
+    src: "/foto/maestro-batik-tulis-di-imogiri.jpg",
+    width: 1920,
+    height: 1280,
+    alt: "Ilustrasi pengrajin batik tulis sedang menggores lilin di kain",
+    credit: "Aconkyeah, CC BY-SA 4.0",
+    creditHref: "https://commons.wikimedia.org/wiki/File:Maestro_Batik_Tulis_di_Imogiri.jpg",
   },
-  "seed-9": {
+  "seed-8": {
+    src: "/foto/rempah-tradisional-di-pasar.jpg",
+    width: 1920,
+    height: 2560,
+    alt: "Ilustrasi rempah segar yang biasa dipakai meracik jamu tradisional",
+    credit: "Nela Fatimatun, CC BY 4.0",
+    creditHref: "https://commons.wikimedia.org/wiki/File:Rempah_tradisional_di_pasar.jpg",
+  },
+  "seed-10": {
     src: "/foto/jukung-pasar-terapung.jpg",
     width: 1920,
     height: 1280,
@@ -68,10 +76,10 @@ export function getIllustration(business: Business): BusinessIllustration | null
  */
 const CATEGORY_PREVIEWS: Partial<Record<Category, BusinessIllustration>> = {
   Kuliner: ILLUSTRATIONS["seed-1"],
-  Fashion: ILLUSTRATIONS["seed-2"],
-  Kerajinan: ILLUSTRATIONS["seed-2"],
+  Fashion: ILLUSTRATIONS["seed-4"],
+  Kerajinan: ILLUSTRATIONS["seed-4"],
   Pertanian: ILLUSTRATIONS["seed-3"],
-  Kesehatan: ILLUSTRATIONS["seed-3"],
+  Kesehatan: ILLUSTRATIONS["seed-8"],
 };
 
 export function getCategoryPreview(category: Category): BusinessIllustration | null {

@@ -125,6 +125,22 @@ async function mutate(mutator) {
   throw lastError || new Error("Gagal menyimpan data.");
 }
 
+function cleanProducts(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .slice(0, 20)
+    .map((raw) => {
+      if (!raw || typeof raw !== "object") return null;
+      const nama = text(raw.nama, 80);
+      if (!nama) return null;
+      const produk = { nama, harga: text(raw.harga, 40) };
+      const catatan = text(raw.catatan, 80);
+      if (catatan) produk.catatan = catatan;
+      return produk;
+    })
+    .filter(Boolean);
+}
+
 /* ---------- validasi ---------- */
 function sanitizeInput(body) {
   const errors = {};
@@ -137,6 +153,7 @@ function sanitizeInput(body) {
   const ig = text(body.ig, 40).replace(/^@+/, "").replace(/[^A-Za-z0-9._]/g, "");
   const jamBuka = text(body.jamBuka, 60);
   const harga = text(body.harga, 40);
+  const produk = cleanProducts(body.produk);
   let ikon = text(body.ikon, 8);
   ikon = Array.from(ikon).slice(0, 4).join("") || "🏪";
 
@@ -146,7 +163,7 @@ function sanitizeInput(body) {
 
   return {
     errors,
-    item: { nama, kategori, kota, alamat, deskripsi, wa, ig, ikon, jamBuka, harga }
+    item: { nama, kategori, kota, alamat, deskripsi, wa, ig, ikon, jamBuka, harga, produk }
   };
 }
 
@@ -174,6 +191,7 @@ export default async function handler(req, res) {
           ig: item.ig,
           jamBuka: item.jamBuka || "",
           harga: item.harga || "",
+          produk: Array.isArray(item.produk) ? item.produk : [],
           ulasan: Array.isArray(item.ulasan) ? item.ulasan : [],
           rating: item.rating || 0,
           ownerId: item.ownerId,

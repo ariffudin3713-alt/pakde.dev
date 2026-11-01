@@ -1,4 +1,4 @@
-import { CATEGORIES, type Business, type Category, type Review } from "@/lib/types";
+import { CATEGORIES, type Business, type Category, type Product, type Review } from "@/lib/types";
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -29,12 +29,22 @@ export function parseReview(value: unknown): Review | null {
   };
 }
 
+export function parseProduct(value: unknown): Product | null {
+  if (!isRecord(value) || typeof value.nama !== "string" || value.nama.trim() === "") return null;
+  const product: Product = { nama: value.nama, harga: readString(value.harga) };
+  if (typeof value.catatan === "string" && value.catatan.trim() !== "") product.catatan = value.catatan;
+  return product;
+}
+
 export function parseBusiness(value: unknown): Business | null {
   if (!isRecord(value)) return null;
   if (typeof value.id !== "string" || typeof value.nama !== "string" || typeof value.wa !== "string") return null;
 
   const reviews = Array.isArray(value.ulasan)
     ? value.ulasan.map(parseReview).filter((review): review is Review => review !== null)
+    : [];
+  const products = Array.isArray(value.produk)
+    ? value.produk.map(parseProduct).filter((product): product is Product => product !== null).slice(0, 20)
     : [];
 
   return {
@@ -49,6 +59,7 @@ export function parseBusiness(value: unknown): Business | null {
     ig: readString(value.ig),
     jamBuka: readString(value.jamBuka),
     harga: readString(value.harga),
+    produk: products,
     ulasan: reviews,
     rating: readNumber(value.rating),
     ownerId: typeof value.ownerId === "string" ? value.ownerId : null,

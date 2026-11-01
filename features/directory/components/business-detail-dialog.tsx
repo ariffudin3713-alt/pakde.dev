@@ -161,6 +161,23 @@ export function BusinessDetailDialog({ business, onClose, onSubmitReview }: Busi
                 )}
               </dl>
 
+              {business.produk && business.produk.length > 0 && (
+                <section className="mt-6">
+                  <h3 className="text-[clamp(1.25rem,2.2vw,1.95rem)]">Produk &amp; layanan</h3>
+                  <ul className="mt-3 divide-y divide-ink/10 bg-paper">
+                    {business.produk.map((product, index) => (
+                      <li key={`${product.nama}-${index}`} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
+                        <div className="min-w-0">
+                          <p className="font-display text-[16px] font-semibold">{product.nama}</p>
+                          {product.catatan && <p className="mt-0.5 text-[13px] leading-5 text-muted">{product.catatan}</p>}
+                        </div>
+                        {product.harga && <p className="shrink-0 font-display text-[16px] font-bold text-blood">{product.harga}</p>}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
               <a href={chatLink} target="_blank" rel="noreferrer" className="btn mt-5 w-full">
                 <WhatsAppIcon size={17} />
                 Hubungi via WhatsApp

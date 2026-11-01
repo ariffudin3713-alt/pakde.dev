@@ -20,6 +20,12 @@ export interface Review {
   createdAt: number;
 }
 
+export interface Product {
+  nama: string;
+  harga: string;
+  catatan?: string;
+}
+
 export interface Business {
   id: string;
   nama: string;
@@ -32,6 +38,7 @@ export interface Business {
   ig: string;
   jamBuka: string;
   harga: string;
+  produk?: Product[];
   ulasan: Review[];
   rating: number;
   ownerId: string | null;
