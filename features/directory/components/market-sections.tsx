@@ -28,7 +28,7 @@ export function DirectoryStats({ businessCount, categoryCount, cityCount }: Dire
               {t("stats.title")}
             </h2>
 
-            <div className="mt-10 grid max-w-[34rem] grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 lg:grid-cols-1 lg:gap-y-6">
+            <div className="mt-10 grid max-w-[36rem] grid-cols-3 gap-x-6 border-t border-bone/25 pt-6 sm:gap-x-10">
               <Stat value={number(businessCount)} label={t("stats.business")} detail={t("stats.businessDesc")} />
               <Stat value={number(categoryCount)} label={t("stats.cat")} detail={t("stats.catDesc")} />
               <Stat value={number(cityCount)} label={t("stats.city")} detail={t("stats.cityDesc")} />
@@ -56,9 +56,9 @@ export function DirectoryStats({ businessCount, categoryCount, cityCount }: Dire
 function Stat({ value, label, detail }: { value: string; label: string; detail: string }) {
   return (
     <div>
-      <p className="font-display text-[clamp(1.9rem,2.2vw,1.95rem)] font-bold leading-none tracking-[-.03em]">{value}</p>
-      <p className="mt-2 font-display text-[13px] font-semibold text-bone/65">{label}</p>
-      <p className="mt-0.5 text-[13px] leading-4 text-bone/60">{detail}</p>
+      <p className="font-heading text-[clamp(2.4rem,4.2vw,3.6rem)] font-bold leading-none tracking-[-.03em]">{value}</p>
+      <p className="mt-3 font-display text-[14px] font-semibold text-bone">{label}</p>
+      <p className="mt-1 text-[13px] leading-[1.35] text-bone/70">{detail}</p>
     </div>
   );
 }

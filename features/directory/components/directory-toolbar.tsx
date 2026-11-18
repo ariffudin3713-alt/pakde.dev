@@ -36,7 +36,7 @@ export function DirectoryToolbar(props: DirectoryToolbarProps) {
   return (
     <div className="z-30 lg:sticky lg:top-[88px]">
       <div className="bg-paper p-4 sm:p-5">
-        <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
           <label className="flex items-center gap-3 bg-bone px-3">
             <SearchIcon size={18} className="shrink-0 text-muted" />
             <span className="sr-only">{t("toolbar.search")}</span>
@@ -76,7 +76,7 @@ export function DirectoryToolbar(props: DirectoryToolbarProps) {
           </button>
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label="Filter kategori">
+        <div className="no-scrollbar -mx-4 mt-3 flex gap-1.5 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" role="group" aria-label="Filter kategori">
           <CategoryChip active={props.category === "Semua"} onClick={() => props.onCategoryChange("Semua")} count={total}>
             {t("toolbar.allCat")}
           </CategoryChip>

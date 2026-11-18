@@ -5,7 +5,7 @@ import type { Business } from "@/lib/types";
 import { isOpenNow } from "@/lib/hours";
 import { useI18n } from "@/lib/i18n";
 import { getIllustration } from "@/features/directory/local-photo";
-import { ArrowIcon, ClockIcon, HeartIcon, PinIcon, StarIcon, WhatsAppIcon } from "./icons";
+import { ArrowIcon, CategoryMark, ClockIcon, HeartIcon, PinIcon, StarIcon, WhatsAppIcon } from "./icons";
 
 interface BusinessCardProps {
   business: Business;
@@ -58,10 +58,15 @@ export function BusinessCard({
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="grid h-full w-full place-items-center bg-blood text-bone">
-              <div className="flex flex-col items-center gap-2">
-                <span className="font-heading text-[clamp(2.6rem,4vw,3.4rem)] leading-none">{initial}</span>
-                <span className="font-display text-[13px] font-semibold">{business.kategori}</span>
+            <div className="signboard grid h-full w-full place-items-center pt-8" aria-hidden="true">
+              <div className="flex flex-col items-center gap-3">
+                <span className="grid size-[clamp(5.5rem,9vw,7rem)] place-items-center border-2 border-blood bg-bone font-heading text-[clamp(2.8rem,4.4vw,3.8rem)] leading-none text-blood shadow-[6px_6px_0_var(--color-blood)]">
+                  {initial}
+                </span>
+                <span className="mt-2 inline-flex items-center gap-2 bg-bone/80 px-2.5 py-1 font-display text-[13px] font-semibold text-blood">
+                  <CategoryMark category={business.kategori} tone="blood" size={16} />
+                  {business.kategori}
+                </span>
               </div>
             </div>
           )}

@@ -121,10 +121,10 @@ export function GlobeIcon({ size = 16, className = "" }: IconProps) {
  * Category marks are drawn in one flat line language, in place of emoji:
  * every listing would otherwise wear a different pictogram from another family.
  */
-export function CategoryMark({ category, tone = "bone" }: { category: Category; tone?: "bone" | "blood" }) {
+export function CategoryMark({ category, tone = "bone", size = 28 }: { category: Category; tone?: "bone" | "blood"; size?: number }) {
   const stroke = tone === "bone" ? "var(--color-bone)" : "var(--color-blood)";
   return (
-    <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke={stroke} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg viewBox="0 0 32 32" width={size} height={size} fill="none" stroke={stroke} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {category === "Kuliner" && (
         <>
           <path d="M5 15h22a11 11 0 0 1-22 0Z" />
